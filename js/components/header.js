@@ -381,5 +381,3 @@ searchInput.addEventListener('input', (event) => {
 /////////END OF CALL 2/////////
 */
 createHeaderBar();
-
-export { createHeaderBar };
