@@ -1,13 +1,10 @@
-import { collectUserName } from "../local-storage-related";
-import {clearStorage} from "../local-storage-related"
-import {getToken} from "../local-storage-related"
+import { collectUserName, clearStorage, getToken } from '../local-storage-related';
 
 const bearerKey = getToken();
 
 function createHeaderBar() {
-  const navBar = document.getElementById("navBar");
-    navBar.innerHTML = 
-    `
+  const navBar = document.getElementById('navBar');
+  navBar.innerHTML = `
     <nav
     class="relative w-full flex flex-wrap items-center justify-between py-3 bg-gray-900 text-gray-200 shadow-lg navbar navbar-expand-lg navbar-light"
   >
@@ -218,17 +215,17 @@ function createHeaderBar() {
     </div>
   </nav>
       `;
-  }
-  
-const logoutbtn = document.getElementById("logout-btn");
+}
+
+const logoutbtn = document.getElementById('logout-btn');
 
 if (logoutbtn) {
-  logoutbtn.addEventListener("click", function () {
-        clearStorage();
-        window.location.replace("/signin.html");
-    })
+  logoutbtn.addEventListener('click', () => {
+    clearStorage();
+    window.location.replace('/signin.html');
+  });
 }
-//Search for usernames starts here
+// Search for usernames starts here
 /*
 const searchApiForProfiles = {
   method: 'GET',
@@ -242,12 +239,10 @@ fetch('https://nf-api.onrender.com/api/v1/social/profiles', searchApiForProfiles
   .then((data) => {
     const people = data;
     //console.log('HERE IS THE RAW DATA RECEIVED',data);
-    
 
     const searchInput = document.getElementById("searchInput");
     const list = document.getElementById("list");
-    
-    
+
 function setList(group){
   clearList();
   for(const person of group){
@@ -270,7 +265,7 @@ function clearList(){
 }
 
 function setNoResults () {
-  
+
     const item=document.createElement('li')
     item.classList.add('list-group-item')
     const text = document.createTextNode("No matching user found");
@@ -297,7 +292,7 @@ searchInput.addEventListener('input', (event) => {
         return person.name.includes(value);
       }).sort((personA, personB)=>{
         return getRelevancy(personB.name, value) -getRelevancy(personA.name, value);
-      })); //her er array som søkes i 
+      })); //her er array som søkes i
   } else {
     clearList();
   }
@@ -326,7 +321,7 @@ function setList(group){
   clearList();
   for(const post of group){
     console.log('GROUP',group);
-    
+
     const item=document.createElement('li')
     item.classList.add('list-group-item')
     //const linkToProfile = `<a href="/profile.html/${person.name}">Profile:${person.name}</a>`;
@@ -336,7 +331,7 @@ function setList(group){
   }
     if (group.length === 0){
       setNoResults();
- 
+
   }
 }
 
@@ -373,7 +368,7 @@ searchInput.addEventListener('input', (event) => {
         return post.title.includes(value);
       }).sort((postA, postB)=>{
         return getRelevancy(postB.title, value) -getRelevancy(postA.title, value);
-      })); //her er array som søkes i 
+      })); //her er array som søkes i
   } else {
     clearList();
   }
@@ -387,4 +382,4 @@ searchInput.addEventListener('input', (event) => {
 */
 createHeaderBar();
 
-export {createHeaderBar};
+export { createHeaderBar };

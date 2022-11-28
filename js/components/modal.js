@@ -1,7 +1,6 @@
 function createModal() {
-    const modalAccount = document.getElementById("modalAccount");
-      modalAccount.innerHTML = 
-      `
+  const modalAccount = document.getElementById('modalAccount');
+  modalAccount.innerHTML = `
       <!-- log in Modal -->
 <div
   class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
@@ -339,8 +338,6 @@ function createModal() {
   </div>
 </div>
       `;
-    }
+}
 
-    createModal();
-
-
+createModal();
