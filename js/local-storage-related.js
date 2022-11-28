@@ -42,6 +42,22 @@ function clearStorage() {
   localStorage.clear();
 }
 
+function saveAmount(amount) {
+  saveToStorage(amountKey, amount);
+}
+
+function getCreditAmount() {
+  const availableCreditAmount = getFromStorage(amountKey);
+  if (availableCreditAmount) {
+    return availableCreditAmount 
+  } else { 
+    return null;
+  }
+}
+
+const amountKey = "amount";
+const creditKey = "credit";
+
 export {
-  getToken, saveToken, storeUserSession, collectUserName, clearStorage,
+  getToken, saveToken, storeUserSession, collectUserName, clearStorage, getCreditAmount,
 };
