@@ -10,8 +10,7 @@ const options = { method: 'GET' };
   if (response.ok) {
     console.log('RESPONS OK', response);
   }
-  const items = response
-    .json()
+  const items = response.json()
     .then((items) => {
       const itemsMapped = items.map((item) => {
         const allItemInfo = items.title;
@@ -35,11 +34,10 @@ const options = { method: 'GET' };
             tags: Array []
 
 */
-
         const cardsContainer = document.getElementById('cardsContainer');
         const newPostData = `
-            <div class="rounded-lg shadow-lg bg-white max-w-sm">
-            <a href="detailspage.html" data-mdb-ripple="true" data-mdb-ripple-color="light">
+            <div class="rounded-lg shadow-lg bg-white max-w-sm rounded shadow-md hover:bg-blue-100">
+            <a href="detailspage.html?item_id=${itemID}" data-mdb-ripple="true" data-mdb-ripple-color="light">
                 
                 <img class="rounded-t-lg max-w-full object-scale-down h-48 w-96 " src="${mainPic}" alt=""/>
             
@@ -56,40 +54,3 @@ const options = { method: 'GET' };
     })
     .catch((err) => console.error(err));
 }());
-
-// getAllListings ()
-
-/*
-const ALL_POST_INFO_URL = "https://nf-api.onrender.com/api/v1/auction/listings";
-
-(async function getAllPosts() {
-    const response = await fetch( ALL_POST_INFO_URL )
-          .then((response) => {
-
-            //console.log('response',response);
-            //return response.json();
-          })
-          .then((response) => {
-            const allPostInfo = response;
-            console.log('allPostInfo',allPostInfo);
-
-            const itemTitle = allPostInfo.title;
-
-            const cardsContainer = document.getElementById("cardsContainer")
-            let newPostData = `dette er en test
-                                <h1>${itemTitle}</h1>
-
-                    `;
-                    cardsContainer.insertAdjacentHTML("beforeend", newPostData);
-          })
-          .catch((err) =>
-            console.error("the following error is returned from the api call to get post details:",err, " (NOTE: if the error is 'TypeError: can't access property name, allPostInfo.author is undefined' then just disregard it, clearly it is defined as you can tell from the feed):"
-            )
-          );
-      })();
-
-    //const err = await response.json();
-    //alert(`Sorry the following error happened: ${err}`, err);
-    //console.log(err);
-
-*/
