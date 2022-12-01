@@ -37,7 +37,7 @@ const options = { method: 'GET' };
         const cardsContainer = document.getElementById('cardsContainer');
         const newPostData = `
             <div class="rounded-lg shadow-lg bg-white max-w-sm rounded shadow-md hover:bg-blue-100">
-            <a href="detailspage.html?item_id=${itemID}" data-mdb-ripple="true" data-mdb-ripple-color="light">
+            <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
                 
                 <img class="rounded-t-lg max-w-full object-scale-down h-48 w-96 " src="${mainPic}" alt=""/>
             
