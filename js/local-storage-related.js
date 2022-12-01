@@ -49,15 +49,19 @@ function saveAmount(amount) {
 function getCreditAmount() {
   const availableCreditAmount = getFromStorage(amountKey);
   if (availableCreditAmount) {
-    return availableCreditAmount 
-  } else { 
-    return null;
+    return availableCreditAmount;
   }
+  return null;
 }
 
-const amountKey = "amount";
-const creditKey = "credit";
+const amountKey = 'amount';
+const creditKey = 'credit';
 
 export {
-  getToken, saveToken, storeUserSession, collectUserName, clearStorage, getCreditAmount,
+  getToken,
+  saveToken,
+  storeUserSession,
+  collectUserName,
+  clearStorage,
+  getCreditAmount,
 };
