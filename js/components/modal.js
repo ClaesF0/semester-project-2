@@ -157,7 +157,7 @@ function createModal() {
       class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current"
     >
       <form
-        id="signin-form"
+        id="signup-form"
         action=""
         class="modal-body p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-2xl"
       >
@@ -172,20 +172,20 @@ function createModal() {
             aria-label="Close"
           ></button>
         </div>
-        <p id="errorMessage" class="text-lg font-medium text-red-600"></p>
+        <p id="signUperrorMessage" class="text-lg font-medium text-red-600"></p>
       <div>
         <label for="name" class="text-sm font-medium ">Name</label>
         <div class="relative mt-1">
           <input
             type=""
-            id="nameField"
+            id="signUpnameField"
             class="w-full p-4 pr-12 text-sm border-2 border-gray-400 rounded-lg shadow-sm"
             placeholder="Enter name (required)"
           />
           <span class="absolute inset-y-0 inline-flex items-center right-4">
           </span>
           <span
-                id="nameFieldError"
+                id="signUpnameFieldError"
                 class="hidden text-sm ml-4 text-red-600"
         >
             Enter a name
@@ -197,7 +197,7 @@ function createModal() {
         <div class="relative mt-1">
           <input
             type="email"
-            id="emailField"
+            id="signUpemailField"
             class="w-full p-4 pr-12 text-sm border-2 border-gray-400 rounded-lg shadow-sm "
             placeholder="Enter email (required)"
           />
@@ -218,12 +218,12 @@ function createModal() {
             </svg>
           </span>
           <span
-                id="emailFieldError"
+                id="signUpemailFieldError"
                 class="hidden text-sm ml-4 text-red-600"
         >
             An email address is required</span>
           <span
-                id="emailInvalidError"
+                id="signUpemailInvalidError"
                 class="hidden text-sm ml-4 text-red-600"
         >
             Enter a valid noroff.no or stud.noroff.no mail adress</span>
@@ -235,7 +235,7 @@ function createModal() {
         <div class="relative mt-1">
           <input
             type="password"
-            id="passwordField"
+            id="signUppasswordField"
             class="w-full p-4 pr-12 text-sm border-2 border-gray-400 rounded-lg shadow-sm"
             placeholder="Enter password"
           />
@@ -262,7 +262,7 @@ function createModal() {
             </svg>
           </span>
           <span
-                id="passwordFieldError"
+                id="signUppasswordFieldError"
                 class="hidden text-sm ml-4 text-red-600"
         >
             </span>
@@ -270,7 +270,7 @@ function createModal() {
         <div class="relative mt-1">
           <input
             type="password"
-            id="passwordConfirmField"
+            id="signUppasswordConfirmField"
             class="w-full p-4 pr-12 text-sm border-2 border-gray-400 rounded-lg shadow-sm"
             placeholder="Confirm password"
           />
@@ -297,7 +297,7 @@ function createModal() {
             </svg>
           </span>
           <span
-                id="passwordConfirmFieldError"
+                id="signUppasswordConfirmFieldError"
                 class="hidden text-sm ml-4 text-red-600"
         >
             Passwords are not matching, try again. </span>
@@ -308,7 +308,7 @@ function createModal() {
         <div class="relative mt-1">
           <input
             type=""
-            id="nameField"
+            id="signUpnameField"
             class="w-full p-4 pr-12 text-sm border-2 border-gray-400 rounded-lg shadow-sm"
             placeholder="Publicly accessible URL for profile pic (optional)"
           />
@@ -318,7 +318,7 @@ function createModal() {
         </div>
       </div>
       <span
-                id="capsLockReminder"
+                id="signUpcapsLockReminder"
                 class="hidden text-sm ml-4 text-red-600"
         >
             CAPS LOCK IS ON </span>
@@ -478,7 +478,7 @@ if (signInForm) {
             const data = await response.json();
             console.log("data:", data);
             console.log("data.accessToken:", data.accessToken);
-            //location.replace("index.html")
+            location.reload()
             // save Token
             saveToken(data.accessToken);
             // token saved in local storage, (const) bearerKey in local-storage-related.js
@@ -488,9 +488,10 @@ if (signInForm) {
             };
             console.log("signInDataToStorage", signInDataToStorage);
             storeUserSession(signInDataToStorage);
-            location.replace("index.html");
+            location.reload();
           } else {
-            otherErrorField.innerHTML = `The following error occured: ${data.message}`;
+            
+            otherErrorField.innerHTML = `The following error occured: ${data.message}`;            
           }
         } catch (e) {
           console.log(e);
@@ -509,20 +510,18 @@ if (signInForm) {
 
 //SIGNUP PAGE
 const signUpForm = document.querySelector("#signup-form");
-const nameField = document.querySelector("#nameField");
-//const emailField = document.querySelector("#emailField")
-//const passwordField = document.querySelector("#passwordField")
-const passwordConfirmField = document.querySelector("#passwordConfirmField");
+const signUpnameField = document.querySelector("#signUpnameField");
+const signUpemailField = document.querySelector("#signUpemailField")
+const signUppasswordField = document.querySelector("#signUppasswordField")
+const signUppasswordConfirmField = document.querySelector("#signUppasswordConfirmField");
 
 const signUpFormError = document.querySelector("#signup-formError");
-const nameFieldError = document.querySelector("#nameFieldError");
-//const emailFieldError = document.querySelector("#emailFieldError")
-//const emailInvalidError = document.querySelector("#emailInvalidError")
-//const passwordFieldError = document.querySelector("#passwordFieldError")
-const passwordConfirmFieldError = document.querySelector(
-  "#passwordConfirmFieldError"
-);
-//const otherErrorField = document.querySelector("#errorMessage")
+const signUpnameFieldError = document.querySelector("#signUpnameFieldError");
+const signUpemailFieldError = document.querySelector("#signUpemailFieldError")
+const signUpemailInvalidError = document.querySelector("#signUpemailInvalidError")
+const signUppasswordFieldError = document.querySelector("#signUppasswordFieldError")
+const signUppasswordConfirmFieldError = document.querySelector("#signUppasswordConfirmFieldError");
+const signUperrorMessage = document.querySelector("#signUperrorMessage")
 
 // checked
 
@@ -532,134 +531,134 @@ const passwordConfirmFieldError = document.querySelector(
 //const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
 
 //cooperates with the regular expression
-    //function validEmail(email) {
-    //  return email.match(regEx) ? true : false;
-    //}
+    function signUpvalidEmail(email) {
+      return email.match(regEx) ? true : false;
+    }
 
-    //function validDomain() {
-  if (emailField.value.trim().length && validEmail(emailField.value) === true) {
-    emailInvalidError.classList.add("hidden");
-    emailField.classList.add("border-green-700");
-    validDomain = true;
+    function signUpvalidDomain() {
+  if (signUpemailField.value.trim().length && signUpvalidEmail(signUpemailField.value) === true) {
+    signUpemailInvalidError.classList.add("hidden");
+    signUpemailField.classList.add("border-green-700");
+    signUpvalidDomain = true;
   } else if (
-    emailField.value.trim().length &&
-    validEmail(emailField.value) !== true
+    signUpemailField.value.trim().length &&
+    signUpvalidEmail(signUpemailField.value) !== true
   ) {
-    emailInvalidError.classList.remove("hidden");
+    signUpemailInvalidError.classList.remove("hidden");
   }
-    //}
+    }
 
-    //function validPassword(password, confirmPassword) {
-      //if (!password) {
-      //  return false;
-      //}
-      //if (!confirmPassword) {
-      //  return false;
-      //}
-      //if (password !== confirmPassword) {
-      //  return false;
-      //} else {
-      //  return true;
-      //}
-    //}
-/*
-const capsLockReminder = document.getElementById("capsLockReminder");
+    function signUpvalidPassword(password, confirmPassword) {
+      if (!password) {
+        return false;
+      }
+      if (!confirmPassword) {
+        return false;
+      }
+      if (password !== confirmPassword) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+const signUpcapsLockReminder = document.getElementById("signUpcapsLockReminder");
 signUpForm.addEventListener('keyup', function (e) {
     if (e.getModifierState('CapsLock')) {
-        capsLockReminder.classList.remove("hidden");
+      signUpcapsLockReminder.classList.remove("hidden");
     } else {
-        capsLockReminder.classList.add("hidden");
+      signUpcapsLockReminder.classList.add("hidden");
     }
 }
 );
-*/
+
 //user can sign up
 signUpForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  let isNameField = false;
-  if (nameField.value.trim().length > 0) {
-    nameFieldError.classList.add("hidden");
-    isNameField = true;
-    nameField.classList.remove("border-red-700");
+  let signUpisNameField = false;
+  if (signUpnameField.value.trim().length > 0) {
+    signUpnameFieldError.classList.add("hidden");
+    signUpisNameField = true;
+    signUpnameField.classList.remove("border-red-700");
   } else {
-    nameFieldError.classList.remove("hidden");
-    nameField.classList.add("border-red-700");
+    signUpnameFieldError.classList.remove("hidden");
+    signUpnameField.classList.add("border-red-700");
   }
 
-  let isEmailField = false;
-  if (emailField.value.trim().length > 0) {
-    emailFieldError.classList.add("hidden");
-    isEmailField = true;
-    emailField.classList.remove("border-red-700");
+  let signUpisEmailField = false;
+  if (signUpemailField.value.trim().length > 0) {
+    signUpemailFieldError.classList.add("hidden");
+    signUpisEmailField = true;
+    signUpemailField.classList.remove("border-red-700");
   } else {
-    emailFieldError.classList.remove("hidden");
-    emailField.classList.add("border-red-700");
+    signUpemailFieldError.classList.remove("hidden");
+    signUpemailField.classList.add("border-red-700");
   }
 
-  let validDomain = false;
-  if (emailField.value.trim().length && validEmail(emailField.value) === true) {
-    emailInvalidError.classList.add("hidden");
-    validDomain = true;
-    emailField.classList.remove("border-red-700");
+  let signUpvalidDomain = false;
+  if (signUpemailField.value.trim().length && signUpvalidEmail(signUpemailField.value) === true) {
+    signUpemailInvalidError.classList.add("hidden");
+    signUpvalidDomain = true;
+    signUpemailField.classList.remove("border-red-700");
   } else if (
-    emailField.value.trim().length &&
-    validEmail(emailField.value) !== true
+    signUpemailField.value.trim().length &&
+    signUpvalidEmail(signUpemailField.value) !== true
   ) {
-    emailInvalidError.classList.remove("hidden");
-    emailField.classList.add("border-red-700");
+    signUpemailInvalidError.classList.remove("hidden");
+    signUpemailField.classList.add("border-red-700");
   }
 
   //const passwordFieldError = document.querySelector("#passwordFieldError")
-  let correctPassword = false;
-  if (passwordField.value.trim().length >= 8) {
-    passwordFieldError.classList.add("hidden");
-    correctPassword = true;
-    passwordField.classList.remove("border-red-700");
+  let signUpcorrectPassword = false;
+  if (signUppasswordField.value.trim().length >= 8) {
+    signUppasswordFieldError.classList.add("hidden");
+    signUpcorrectPassword = true;
+    signUppasswordField.classList.remove("border-red-700");
   } else {
-    passwordFieldError.classList.remove("hidden");
-    passwordField.classList.add("border-red-700");
-    passwordFieldError.innerHTML =
+    signUppasswordFieldError.classList.remove("hidden");
+    signUppasswordField.classList.add("border-red-700");
+    signUppasswordFieldError.innerHTML =
       "Password of at least 8 letters is required. Please add " +
-      (8 - passwordField.value.length) +
+      (8 - signUppasswordField.value.length) +
       " characters.";
   }
 
-  let isPasswordRepeated = false;
-  if (passwordConfirmField.value.trim().length >= 8) {
-    passwordConfirmFieldError.classList.add("hidden");
-    isPasswordRepeated = true;
-    passwordConfirmField.classList.remove("border-red-700");
+  let signUpisPasswordRepeated = false;
+  if (signUppasswordConfirmField.value.trim().length >= 8) {
+    signUppasswordConfirmFieldError.classList.add("hidden");
+    signUpisPasswordRepeated = true;
+    signUppasswordConfirmField.classList.remove("border-red-700");
   } else {
-    passwordConfirmFieldError.classList.remove("hidden");
-    passwordConfirmField.classList.add("border-red-700");
+    signUppasswordConfirmFieldError.classList.remove("hidden");
+    signUppasswordConfirmField.classList.add("border-red-700");
   }
 
-  let isPasswordMatching = false;
-  isPasswordMatching = validPassword(
-    passwordField.value,
-    passwordConfirmField.value
+  let signUpisPasswordMatching = false;
+  signUpisPasswordMatching = signUpvalidPassword(
+    signUppasswordField.value,
+    signUppasswordConfirmField.value
   ); // true // false
-  if (isPasswordMatching) {
-    passwordConfirmFieldError.classList.add("hidden");
-    isPasswordMatching = true;
+  if (signUpisPasswordMatching) {
+    signUppasswordConfirmFieldError.classList.add("hidden");
+    signUpisPasswordMatching = true;
   } else {
-    passwordConfirmFieldError.classList.remove("hidden");
+    signUppasswordConfirmFieldError.classList.remove("hidden");
   }
 
-  let formValidated =
-    isNameField &&
-    isEmailField &&
-    validDomain &&
-    correctPassword &&
-    isPasswordRepeated &&
-    isPasswordMatching;
+  let signUpformValidated =
+  signUpisNameField &&
+  signUpisEmailField &&
+  signUpvalidDomain &&
+  signUpcorrectPassword &&
+  signUpisPasswordRepeated &&
+  signUpisPasswordMatching;
 
-  if (formValidated) {
+  if (signUpformValidated) {
     const userData = {
-      name: nameField.value,
-      email: emailField.value,
-      password: passwordField.value,
+      name: signUpnameField.value,
+      email: signUpemailField.value,
+      password: signUppasswordField.value,
     };
 
     // const REGISTER_USER_URL_ENDPOINT = USER_SIGNUP_URL;
@@ -678,9 +677,9 @@ signUpForm.addEventListener("submit", function (event) {
 
         if (response.ok) {
           console.log("New user sucessfully registered");
-          location.replace("signin.html");
+          location.reload();
         } else {
-          errorMessage.innerHTML = `The following error occured: ${data.message}`;
+          signUperrorMessage.innerHTML = `The following error occured: ${data.message}`;
         }
       } catch (e) {
         console.log(e);

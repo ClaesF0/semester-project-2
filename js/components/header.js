@@ -4,12 +4,14 @@ import {
   getToken,
 } from '../local-storage-related';
 
+
 const bearerKey = getToken();
 
 function clearStorage() {
   localStorage.clear();
   location.replace("index.html")
 }
+
 
 function createHeaderBar() {
   const navBar = document.getElementById('navBar');
@@ -27,6 +29,9 @@ function createHeaderBar() {
   </button>
   `
   if (userName) {
+    
+
+
     headerLinks = 
     `
     <!-- Icon -->
@@ -55,7 +60,7 @@ function createHeaderBar() {
                 <a
                   class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-green-400"
                   href="profile.html"
-                  >Profile</a
+                  >${userName}'s profile</a
                 >
               </li>
               <li>
