@@ -6,6 +6,7 @@ export default {
       input: {
         index: resolve(__dirname, 'index.html'),
         detailspage: resolve(__dirname, 'detailspage.html'),
+        sandbox: resolve(__dirname, 'sandbox.html'),
       },
     },
   },

@@ -12,13 +12,23 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
 
   .then(response => response.json())
   .then(response => { 
-    console.table(response);
+    //console.table(response);
     
     const bidCount = response._count.bids;
     //console.log('bidCount',bidCount);
     const bidsArray = response.bids;
-    //console.log('bidsArray',bidsArray);
-    const price = bidsArray[bidsArray.length - 1].amount;
+    //console.log('bidsArray.pop',bidsArray.pop().amount);
+    
+    //let price = bidsArray[bidsArray.length - 1].amount;
+    
+    let price = "";
+    if (bidCount > 0 ) {
+      price = "Current bid: "+bidsArray.pop().amount;
+    } 
+   // if (bidsArray.length == 1) {
+   //   price = bidsArray[0].amount
+   // } 
+    
     //console.log('P R I S ',price);
     
     const created  = response.created;
@@ -34,8 +44,8 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
       mainPic = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
     }
     let imgArrayLength = response.media.length
-    console.log('mainPic',mainPic);
-    console.log('imgArray',imgArrayLength);
+    //console.log('mainPic',mainPic);
+    //console.log('imgArray',imgArrayLength);
 
     const tags = response.tags;
 
@@ -181,10 +191,10 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
           <br />
           <span class="inline-flex">
             <h5 class="text-green-800 text-md leading-tight font-medium mb-2">
-              Current price: ${price}
+              ${price}
             </h5>
             <h6
-              class="text-green-800 text-md leading-tight font-medium mb-2 px-3"
+              class="text-green-800 text-md leading-tight font-medium mb-2 px-2"
             >
               Bids: ${bidCount}
             </h6>
