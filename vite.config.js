@@ -7,6 +7,7 @@ export default {
         index: resolve(__dirname, 'index.html'),
         detailspage: resolve(__dirname, 'detailspage.html'),
         sandbox: resolve(__dirname, 'sandbox.html'),
+        createlisting: resolve(__dirname, 'createlisting.html'),
       },
     },
   },

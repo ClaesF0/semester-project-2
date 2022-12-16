@@ -1,44 +1,148 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/main.js" defer></script>
-    <script type="module" src="./js/local-storage-related.js" defer></script>
-    <script type="module" src="./js/components/header.js" defer></script>
-    <script type="module" src="./js/log-in-sign-up.js" defer></script>
-    <script type="module" src="./js/components/modal.js" defer></script>
-    <script type="module" src="./js/components/createListingModal.js" ></script>
-    <!--<script type="module" src="./js/components/get-listings-in-feed.js" defer></script>-->
-    <title>SANDBOX</title>
-    <link
-      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://unpkg.com/@yaireo/tagify/dist/tagify.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-  </head>
+import { getToken } from "../local-storage-related"
+import { CREATE_LISTING_URL } from "../api-related"
 
-  <body>
-  <div id="navBar" class=""></div>
-   <div id="modalAccount"></div>
-   <div id="modalCreateListing"></div>
 
-    <!-- Button trigger modal -->
-    <button
-      type="button"
-      class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-      data-bs-toggle="modal"
-      data-bs-target="#newListingModal"
-    >
-      Launch demo modal
-    </button>
 
-      
+const bearerKey = getToken();
+console.log('bearerKey',bearerKey);
+
+
+const newListingForm = document.getElementById("newListingForm")
+
+const newListingTitleField = document.getElementById("newListingTitleField")
+const newListingDateField = document.getElementById("newListingDateField")
+const newListingDescriptionField = document.getElementById("newListingDescriptionField")
+const newListingTagsField = document.getElementById("itemTagsField")
+const newListingPicsArray = document.getElementById("itemPicsField")
+
+const newListingTitleFieldError = document.getElementById("newListingTitleFieldError")
+const newListingDateFieldError = document.getElementById("newListingDateFieldError")
+const otherErrorField = document.getElementById("otherErrorField");
+
+const newListingTitle = newListingTitleField.value
+const newListingDate = newListingDateField.value
+const newListingDescription = newListingDescriptionField.value
+const newListingTags= itemTagsField.value
+const newListingPics = itemPicsField.value
+
+
+newListingForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  
+  let isnewListingTitle = false;
+if (newListingTitleField.value.trim().length > 0) {
+  newListingTitleFieldError.classList.add("hidden");
+  isnewListingTitle = true;
+} else {
+  newListingTitleFieldError.classList.remove("hidden");
+}
+
+let isnewListingDate = false;
+if (newListingDateField.value.trim().length > 0) {
+  newListingDateFieldError.classList.add("hidden");
+  isnewListingDate = true;
+  const deadLineIso = new Date(newListingDateField.value).toISOString();
+  console.log('deadLineIso',deadLineIso)
+} else {
+  newListingDateFieldError.classList.remove("hidden");
+}
+
+  //console.log("newListingForm",newListingForm);
+  //title
+  console.log('newListingTitle',newListingTitle);
+  
+  //date, time, and iso-format deadline
+  console.log('newListingDate',newListingDate);
+  const deadLineIso = new Date(newListingDateField.value).toISOString();
+  
+  
+  //console.log('deadLineIso',deadLineIso);
+
+  //description
+  console.log('newListingDescription',newListingDescription);
+  //tags
+  const tagsJsonString = newListingTags;
+  const tagsParsedArray = JSON.parse(tagsJsonString);
+  console.log('tagsParsed',tagsParsedArray);
+  //pics
+  const picsJsonString = newListingPics;
+  const picsParsedArray = JSON.parse(picsJsonString);
+  console.log('picsParsedArray',picsParsedArray);
+  
+  let newListingValidated = isnewListingTitle && isnewListingDate;
+
+  if(newListingValidated) {
+    console.log("Validated newListing success");
+  const newListingData = {
+      title: newListingTitle, 
+      description: newListingDescription,
+      tags: tagsParsedArray, 
+      media: picsParsedArray, 
+      endsAt: deadLineIso 
+  };
+  //no need to further JSON stringify/parse the object before POST
+  const testBodyWithNoAlteration = newListingData;
+  //const testBody = JSON.stringify(newListingData);
+  //const testBodyWithJson = JSON.parse(newListingData)
+  console.log('testBodyWithNoAlteration', testBodyWithNoAlteration);
+  //console.log('testBody with stringify', testBody);
+  //console.log('testBodyWithJson',testBodyWithJson);
+  console.log('sheet er linket og alle er glade');
+  
+
+
+  
+  
+  /*
+  const USER_LOGIN_ENDPOINT = `${LOGIN_URL}`;
+
+async function signInUser() {
+try {
+const response = await fetch(USER_LOGIN_ENDPOINT, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(userData),
+});
+
+if (response.ok) {
+  const data = await response.json();
+  console.log("data:", data);
+  console.log("data.accessToken:", data.accessToken);
+  //location.replace("index.html")
+  // save Token
+  saveToken(data.accessToken);
+  // token saved in local storage, (const) bearerKey in local-storage-related.js
+  const signInDataToStorage = {
+    name: data.name,
+    email: data.email,
+  };
+  console.log("signInDataToStorage", signInDataToStorage);
+  storeUserSession(signInDataToStorage);
+  location.replace("index.html");
+} else {
+  otherErrorField.innerHTML = `The following error occured: ${data.message}`;
+}
+} catch (e) {
+console.log(e);
+}
+}
+signInUser();
+} else {
+otherErrorField.innerHTML = `The following error occured: ${data.message} and ${e}`;
+}*/
+  }
+})
+
+
+
+
+
+/*
+function createListingModal(){
+  const modalCreateListing = document.getElementById('modalCreateListing');
+  modalCreateListing.innerHTML = `
   <div
   class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
   id="newListingModal"
@@ -58,7 +162,7 @@
         <div
           class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md"
         >
-          <p class="text-lg text-center font-medium">Create new listing HTML ER DETTE</p>
+          <p class="text-lg text-center font-medium">Create new listing INNER HTML ER DETTE</p>
           <button
             type="button"
             class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
@@ -238,8 +342,11 @@ altFormat: 'j. F Y, H:i'});"
     </div>
   </div>
 </div>
-<script defer>
-          
+  `;
+}
+
+createListingModal();
+
 const newListingForm = document.getElementById("newListingForm")
     const newListingTitleField = document.getElementById("newListingTitleField")
     const newListingDateField = document.getElementById("newListingDateField")
@@ -294,6 +401,7 @@ const newListingForm = document.getElementById("newListingForm")
       console.log('tagsParsed',tagsParsedArray);
       //pics
       const picsJsonString = newListingPics;
+      console.log('picsJsonString',picsJsonString);
       const picsParsedArray = JSON.parse(picsJsonString);
       console.log('picsParsedArray',picsParsedArray);
       
@@ -308,15 +416,8 @@ const newListingForm = document.getElementById("newListingForm")
           media: picsParsedArray, 
           endsAt: deadLineIso 
       };
-      //no need to further JSON stringify/parse the object before POST
-      const testBodyWithNoAlteration = newListingData;
       const testBody = JSON.stringify(newListingData);
-      //const testBodyWithJson = JSON.parse(newListingData)
-      console.log('testBodyWithNoAlteration', testBodyWithNoAlteration);
-      //console.log('testBody with stringify', testBody);
-      //console.log('testBodyWithJson',testBodyWithJson);
-      
-
+      console.log('testBody', testBody);
 
       
       
@@ -358,11 +459,16 @@ async function signInUser() {
 signInUser();
 } else {
 otherErrorField.innerHTML = `The following error occured: ${data.message} and ${e}`;
-}*/
+}
       }
+
+      
+     
+
+      
+      
+    
+    
     })
   
-    
-</script>
-  </body>
-</html>
+    */

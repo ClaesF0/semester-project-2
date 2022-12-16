@@ -64,13 +64,24 @@ function createHeaderBar() {
                 >
               </li>
               <li>
-                <a
+              <a
+              class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-green-400"
+              href="createlisting.html"
+              >Create Listing</a
+            >
+                <!--
+                <button
+                  type="button"
                   class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-green-400"
-                  href="#"
-                  >Create Listing</a
+                  
+                  data-bs-toggle="modal"
+                  data-bs-target="#newListingModal"
+                  
                 >
+                  Create listing
+                </button>
+                -->
               </li>
-              
               <li>
                 <button type="button" id="logout-btn" class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent border-2 border-red-600 rounded-md text-black hover:text-white hover:bg-red-600">
                     Log Out</button>

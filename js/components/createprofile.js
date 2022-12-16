@@ -5,6 +5,7 @@ import {
 
 async function createProfile() {
     const profileContainer = document.getElementById("profilecontainer")
+    const userListingsContainer = document.getElementById("userListingsContainer")
     console.log('profcont',profileContainer);
     
     const token = getToken();
@@ -36,23 +37,101 @@ async function createProfile() {
         console.log('credits',credits);
         console.log('email',email);
         console.log('wins',wins);
-        const profilecontent = `
-        <div class="grid my-0 mx-auto w-full sm:w-4/5">
-        <div class="text-center">
-        <img
-          src="https://mdbcdn.b-cdn.net/img/new/avatars/8.webp"
-          class="rounded-full w-32 mb-4 mx-auto"
-          alt="Avatar"
-        />
-        <h5 class="text-xl font-medium leading-tight mb-2">John Doe</h5>
-        <p class="text-gray-500">Web designer</p>
+        const profilecontent = `<div class="md:hidden my-0 mx-auto w-full sm:w-4/5 grid grid-cols-2">
+        <div class="text-center md:text-left">
+          <img
+            src="${avatar}"
+            class="rounded-full w-auto h-auto mb-4 mx-auto  md:mx-0"
+            alt="Avatar"
+          />
+          <button
+            id="newPic"
+            class="text-xs text-gray-500 bg-blue-300 px-1 rounded-full"
+          >
+            New pic
+          </button>
+        </div>
+        <div class="">
+          <div>
+            <h5 class="text-xl font-medium leading-tight mb-2">${userName}</h5>
+            <p class="text-gray-500">${email}</p>
+          </div>
+          <span class="inline-flex text-center">
+            <div class="flex p-1 my-1 bg-gray-100 w-48 h-12 rounded-sm">
+              <img src="./img/wallet.svg" alt="" class="h-10" />
+              <p class="p-2" id="currentBalance">${credits}</p>
+            </div>
+          </span>
+          <span class="inline-flex text-center">
+            <button class="flex p-1 my-1 bg-orange-300 w-48 h-12 rounded-full">
+              <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
+              <p class="p-2" id="currentBalance">New Listing</p>
+            </button>
+          </span>
+        </div>
       </div>
-      
-      <div>
-            
-        
+  
+      <div class="hidden md:block w-4/5 my-0 mx-auto grid">
+        <div class="mx-auto">
+          <img
+            src="${avatar}"
+            class="rounded-full w-32"
+            alt="Avatar"
+          />
+          <button
+            id="newPic"
+            class="mx-9 p-1 text-xs text-gray-500 bg-blue-200 rounded-full"
+          >
+            New pic
+          </button>
+        </div>
+        <hr class="my-2" />
+        <span class="flex">
+          <div flex>
+            <h5 class="w-48 text-xl font-medium leading-tight mb-2">${userName}</h5>
+            <p class="text-gray-500">${email}</p>
+          </div>
+          <div class="flex p-1 mx-auto bg-gray-100 w-48 h-12 rounded-sm">
+            <img src="./img/wallet.svg" alt="" class="h-10" />
+            <p class="p-2" id="currentBalance">${credits}</p>
+          </div>
+          <button class="flex p-1 bg-orange-300 w-48 h-12 rounded-full">
+            <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
+            <p class="p-2" id="currentBalance">New Listing</p>
+          </button>
+        </span>
+        <span class="inline-flex text-center"> </span>
+      </div>
         `
         profileContainer.insertAdjacentHTML('beforeend', profilecontent);
+        const userListings = `
+        <hr class="my-2" />
+    <h3 class="text-lg text-center mx-auto">Listings</h3>
+    <div class="flex flex-grow sm:w-4/5 mx-auto">
+        <div class="inline-flex md:flex-nowrap p-2 border-t-2 border-grey-500">
+          <hr />
+          <div>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ69l12PewMsuh12EEsFLwjP8TIXTlVTJjzlA&usqp=CAU"
+              alt=""
+              style="min-width: 8rem"
+            />
+          </div>
+          <span class="p-2 mx-1">
+            <h3 class="text-lg text-center mx-auto md:text-left">Title3</h3>
+            <hr />
+            <p class="text-lg text-gray-700 px-1">Bud: 32 pris:654</p>
+            <p class="text-lg text-gray-700 px-1">Tid: 654654</p>
+            <p class="px-1">
+              Lorem descripshun blblbl blblbl kgkgk l lø kgkg oom okok o ko ko
+              kokkk kok ok k ij yuh uuh uhuhu hhh uhuh hhhuuu huhu hvordan
+              brytes teksten på denne linja egentlig
+            </p>
+          </span>
+        </div>
+    </div>
+        `
+        userListingsContainer.insertAdjacentHTML('beforeend', userListings)
 
     }
     
@@ -65,24 +144,4 @@ async function createProfile() {
 
 createProfile()
 
-       /*
-        const count = response._count
-        const avatar = response.avatar
-        const credits = response.credits
-        const email = response.email
-        const wins = response.length
-        console.log('count',count);
-        console.log('avatar',avatar);
-        console.log('credits',credits);
-        console.log('email',email);
-        console.log('wins',wins);
-        */
-        
-        /*
-                _count: Object { listings: 1 }
-​                avatar: "https://i.imgflip.com/bz9fj.jpg?a463104"
-                credits: 1000
-                email: "wobelibob@stud.noroff.no"
-                name: "wobelibob"
-                wins: Array []
-        */
+       
