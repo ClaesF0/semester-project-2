@@ -158,7 +158,7 @@ if (signInForm) {
 
 //SIGN-UP
 
-import { LOGIN_URL, SIGNUP_URL } from "./api-related";
+//import { LOGIN_URL, SIGNUP_URL } from "./api-related";
 
 //SIGNUP PAGE
 const signUpForm = document.querySelector("#signup-form");
@@ -185,36 +185,36 @@ const passwordConfirmFieldError = document.querySelector(
 //const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
 
 //cooperates with the regular expression
-function validEmail(email) {
-  return email.match(regEx) ? true : false;
-}
+//function validEmail(email) {
+//  return email.match(regEx) ? true : false;
+//}
 
-function validDomain() {
-  if (emailField.value.trim().length && validEmail(emailField.value) === true) {
-    emailInvalidError.classList.add("hidden");
-    emailField.classList.add("border-green-700");
-    validDomain = true;
-  } else if (
-    emailField.value.trim().length &&
-    validEmail(emailField.value) !== true
-  ) {
-    emailInvalidError.classList.remove("hidden");
-  }
-}
+//function validDomain() {
+//  if (emailField.value.trim().length && validEmail(emailField.value) === true) {
+//    emailInvalidError.classList.add("hidden");
+//    emailField.classList.add("border-green-700");
+//    validDomain = true;
+//  } else if (
+//    emailField.value.trim().length &&
+//    validEmail(emailField.value) !== true
+//  ) {
+//    emailInvalidError.classList.remove("hidden");
+//  }
+//}
 
-function validPassword(password, confirmPassword) {
-  if (!password) {
-    return false;
-  }
-  if (!confirmPassword) {
-    return false;
-  }
-  if (password !== confirmPassword) {
-    return false;
-  } else {
-    return true;
-  }
-}
+//function validPassword(password, confirmPassword) {
+//  if (!password) {
+//    return false;
+//  }
+//  if (!confirmPassword) {
+//    return false;
+//  }
+//  if (password !== confirmPassword) {
+//    return false;
+//  } else {
+//    return true;
+//  }
+//}
 /*
 const capsLockReminder = document.getElementById("capsLockReminder");
 signUpForm.addEventListener('keyup', function (e) {

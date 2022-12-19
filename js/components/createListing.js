@@ -2,19 +2,13 @@ import { getToken } from "../local-storage-related"
 import { CREATE_LISTING_URL } from "../api-related"
 
 
-
-const bearerKey = getToken();
-console.log('bearerKey',bearerKey);
-
-
 const newListingForm = document.getElementById("newListingForm")
 
 const newListingTitleField = document.getElementById("newListingTitleField")
 const newListingDateField = document.getElementById("newListingDateField")
 const newListingDescriptionField = document.getElementById("newListingDescriptionField")
 const newListingTagsField = document.getElementById("itemTagsField")
-const newListingPicsArray = document.getElementById("itemPicsField")
-
+const newListingPicsField = document.getElementById("itemPicsField")
 const newListingTitleFieldError = document.getElementById("newListingTitleFieldError")
 const newListingDateFieldError = document.getElementById("newListingDateFieldError")
 const otherErrorField = document.getElementById("otherErrorField");
@@ -22,8 +16,10 @@ const otherErrorField = document.getElementById("otherErrorField");
 const newListingTitle = newListingTitleField.value
 const newListingDate = newListingDateField.value
 const newListingDescription = newListingDescriptionField.value
-const newListingTags= itemTagsField.value
-const newListingPics = itemPicsField.value
+const newListingTags= newListingTagsField.value
+const newListingPics = newListingPicsField.value
+
+
 
 
 newListingForm.addEventListener("submit", function (event) {
@@ -47,51 +43,37 @@ if (newListingDateField.value.trim().length > 0) {
   newListingDateFieldError.classList.remove("hidden");
 }
 
-  //console.log("newListingForm",newListingForm);
-  //title
-  console.log('newListingTitle',newListingTitle);
+ const deadLineIso = new Date(newListingDateField.value).toISOString();
   
-  //date, time, and iso-format deadline
-  console.log('newListingDate',newListingDate);
-  const deadLineIso = new Date(newListingDateField.value).toISOString();
-  
-  
-  //console.log('deadLineIso',deadLineIso);
 
-  //description
-  console.log('newListingDescription',newListingDescription);
-  //tags
-  const tagsJsonString = newListingTags;
-  const tagsParsedArray = JSON.parse(tagsJsonString);
-  console.log('tagsParsed',tagsParsedArray);
-  //pics
-  const picsJsonString = newListingPics;
-  const picsParsedArray = JSON.parse(picsJsonString);
-  console.log('picsParsedArray',picsParsedArray);
+console.log('newListingTags',newListingTags);
+console.log('STRINGIFY newListingTags',JSON.stringify(newListingTags));
+
+//console.log('PARSE newListingTags',JSON.parse(newListingTags));
+
+//const parsedTags = JSON.parse(newListingTags);
+//const parsedPics = JSON.parse(newListingPics);
+ 
+  console.log('newListingsPics',);
   
   let newListingValidated = isnewListingTitle && isnewListingDate;
+
+  
 
   if(newListingValidated) {
     console.log("Validated newListing success");
   const newListingData = {
-      title: newListingTitle, 
-      description: newListingDescription,
-      tags: tagsParsedArray, 
-      media: picsParsedArray, 
-      endsAt: deadLineIso 
+      "title": newListingTitle, 
+      "description": newListingDescription,
+      //"tags": parsedTags, 
+      //"media": parsedPics, 
+      "endsAt": newListingDateField.value 
   };
-  //no need to further JSON stringify/parse the object before POST
-  const testBodyWithNoAlteration = newListingData;
-  //const testBody = JSON.stringify(newListingData);
-  //const testBodyWithJson = JSON.parse(newListingData)
-  console.log('testBodyWithNoAlteration', testBodyWithNoAlteration);
-  //console.log('testBody with stringify', testBody);
-  //console.log('testBodyWithJson',testBodyWithJson);
-  console.log('sheet er linket og alle er glade');
-  
+  const bearerKey = getToken();
 
 
-  
+  //console.table("newListingData is ok",newListingData);
+
   
   
   //const USER_LOGIN_ENDPOINT = `${LOGIN_URL}`;
@@ -102,17 +84,20 @@ const response = await fetch(CREATE_LISTING_URL, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "Authorization": "Bearer "+bearerKey
+    "Authorization": `Bearer ${bearerKey}`
   },
-  //body: JSON.stringify(userData),
-  body: newListingData,
+  body: JSON.stringify(newListingData),
+  //body: newListingData,
 });
 
 if (response.ok) {
   const data = await response.json();
-  console.log("data:", data);
-  console.log("data.accessToken:", data.accessToken);
-  location.replace("profile.html")
+  console.log("SUCCESS POSTING NEW LISTING data fra respons:", data);
+  console.log('response suksess',response);
+  console.log("returned ID from response", response.id)
+  
+  //console.log("data.accessToken:", data.accessToken);
+  //location.replace("profile.html")
   // save Token
   //saveToken(data.accessToken);
   // token saved in local storage, (const) bearerKey in local-storage-related.js
@@ -122,9 +107,18 @@ if (response.ok) {
   //};
   //console.log("signInDataToStorage", signInDataToStorage);
   //storeUserSession(signInDataToStorage);
-  //location.replace("index.html");
+  const detailsPageURL = `detailspage.html?item_id=${data.id}?_seller=true&_bids=true`
+  location.replace(detailsPageURL);
 } else {
-  otherErrorField.innerHTML = `The following error occured: ${data.message}`;
+  //const errorfromserver = "Error while communicating with server:" + await response.json();
+  const errorMessage = "something went wrong";
+  console.log('respons failure', response);
+  console.log('HERE IS BODY FROM UNSUCCESSFUL', response);
+  
+  
+  throw new Error(errorMessage, response.json())
+  //console.log('error from server when creating new post:', errorfromserver);
+  //otherErrorField.innerHTML = `The following error occured: ${data.message}`;
 }
 } catch (e) {
 console.log(e);

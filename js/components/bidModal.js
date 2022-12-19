@@ -1,9 +1,85 @@
+import {getToken} from "../local-storage-related"
+import {collectUserName} from "../local-storage-related"
+import {GET_PROFILEINFO_URL} from "../api-related"
 
-function createBidModal() {
+let params = (new URL(document.location)).searchParams;
+let item_id = params.get('item_id');
+
+
+
+
+
+async function createBidModal() {
+const bearerKey = getToken();
+const userKey = collectUserName();
+console.log('userKey from bidModal',userKey);
+console.log('bearerKey from bidmodal', bearerKey);
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: "Bearer "+ `${bearerKey}`
+    }
+  };
+  const profileResponse = await fetch(GET_PROFILEINFO_URL, options);
+  
+
+fetch('https://api.noroff.dev/api/v1/auction/listings/'+`${item_id}`+'&_bids=true', options)
+  .then(postResponse => postResponse.json())
+  .then(postResponse => {console.log("postResponse",postResponse)
+//console.log('bids',postResponse.bids.pop().amount);
+const currentBid = postResponse.bids.pop().amount;
+
+  
+/*
+  id: "1f157fb6-362b-489d-8c28-f6b332dab2fb", 
+  title: "zzzz", description: "", 
+  media: (1) […], tags: (1) […], 
+  created: "2022-12-16T20:35:05.858Z", 
+  updated: "2022-12-16T20:35:05.858Z", 
+  endsAt: "2022-12-16T00:38:00.000Z",
+
+  bids: [], 
+  seller: {…}, … }
+  ​
+  _count: Object { bids: 0 }
+  ​
+  bids: Array []
+  ​
+  created: "2022-12-16T20:35:05.858Z"
+  ​
+  description: ""
+  ​
+  endsAt: "2022-12-16T00:38:00.000Z"
+  ​
+  id: "1f157fb6-362b-489d-8c28-f6b332dab2fb"
+  ​
+  media: Array [ "https://placeimg.com/250/180/arch" ]
+  ​
+  seller: Object { name: "gabriel", email: "gabriel@stud.noroff.no", avatar: null, … }
+  ​
+  tags: Array [ "" ]
+  ​
+  title: "zzzz"
+  ​
+  updated: "2022-12-16T20:35:05.858Z"
+*/
+  
+  if (profileResponse.ok){
+    console.log('this is profileResponse from bidModal.js',profileResponse);
+    }
+    const profileDetails = profileResponse.json()
+    .then((profileDetails) => {
+
+      console.log('profileDetails',profileDetails);
+      
+    
+
+
     console.log("Bidmodal linked");
-    const modalBidding = document.getElementById('modalBidding');
-    const balance = "some number 123"
-    modalBidding.innerHTML = 
+    const modalBiddingContainer = document.getElementById('modalBidding');
+    const balance = profileDetails.credits
+    const bidModalRendered = 
     `
     <!-- Modal -->
 <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
@@ -27,7 +103,7 @@ function createBidModal() {
         <label for="exampleNumber0" class="form-label inline-block mb-2 text-gray-700"
           >How much do you wish to bid?</label
         >
-        <p class="text-xs text-gray-500">Available balance: ${balance}</p>
+        <p class="text-xs text-gray-500">Available balance: ${balance} credits</p>
         <input
           type="number"
           class="
@@ -48,7 +124,7 @@ function createBidModal() {
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
           "
           id="exampleNumber0"
-          placeholder="Number input"
+          placeholder="Your bid must exceed ${currentBid} credits"
         />
         <p id="noUnderbid" class="text-red-600">Bid cannot be lower than previous bid</p>
         <p id="noFunds" class="text-red-600">Bid cannot exceed your balance</p>
@@ -95,10 +171,13 @@ function createBidModal() {
   </div>
 </div>
     `;
+    modalBiddingContainer.insertAdjacentHTML('beforeend', bidModalRendered)
   }
+  
 
-  console.log("Bidmodal after");
-  
-  
+  ).catch(err => console.error("during bidding the following error occured:",err));
+})}
+
+
   createBidModal();
   
