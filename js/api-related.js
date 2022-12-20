@@ -9,6 +9,9 @@ const SIGNUP_URL = BASE_URL_FOR_API + "auth/register";
 
 //POSTS
 const CREATE_LISTING_URL = BASE_URL_FOR_API + "listings";
+
+//BID
+
 /*
 const READ_POSTS_URL = BASE_URL_FOR_API + "api/v1/social/posts"
 const RETRIEVE_POST_BY_ID = BASE_URL_FOR_API + "api/v1/social/posts"

@@ -1,19 +1,18 @@
 import {getToken} from "../local-storage-related"
 import {collectUserName} from "../local-storage-related"
 import {GET_PROFILEINFO_URL} from "../api-related"
+import {CREATE_LISTING_URL} from "../api-related"
 
 let params = (new URL(document.location)).searchParams;
 let item_id = params.get('item_id');
 
+console.log('item_id',item_id);
 
-
-
-
-async function createBidModal() {
+(async function createBidModal() {
 const bearerKey = getToken();
 const userKey = collectUserName();
-console.log('userKey from bidModal',userKey);
-console.log('bearerKey from bidmodal', bearerKey);
+//console.log('userKey from bidModal',userKey);
+//console.log('bearerKey from bidmodal', bearerKey);
 
   const options = {
     method: 'GET',
@@ -24,47 +23,13 @@ console.log('bearerKey from bidmodal', bearerKey);
   const profileResponse = await fetch(GET_PROFILEINFO_URL, options);
   
 
-fetch('https://api.noroff.dev/api/v1/auction/listings/'+`${item_id}`+'&_bids=true', options)
+fetch(CREATE_LISTING_URL+'/'+`${item_id}`+'&_bids=true', options)
   .then(postResponse => postResponse.json())
-  .then(postResponse => {console.log("postResponse",postResponse)
+  .then(postResponse => {
+    //console.log("postResponse is OK",postResponse)
 //console.log('bids',postResponse.bids.pop().amount);
 const currentBid = postResponse.bids.pop().amount;
 
-  
-/*
-  id: "1f157fb6-362b-489d-8c28-f6b332dab2fb", 
-  title: "zzzz", description: "", 
-  media: (1) […], tags: (1) […], 
-  created: "2022-12-16T20:35:05.858Z", 
-  updated: "2022-12-16T20:35:05.858Z", 
-  endsAt: "2022-12-16T00:38:00.000Z",
-
-  bids: [], 
-  seller: {…}, … }
-  ​
-  _count: Object { bids: 0 }
-  ​
-  bids: Array []
-  ​
-  created: "2022-12-16T20:35:05.858Z"
-  ​
-  description: ""
-  ​
-  endsAt: "2022-12-16T00:38:00.000Z"
-  ​
-  id: "1f157fb6-362b-489d-8c28-f6b332dab2fb"
-  ​
-  media: Array [ "https://placeimg.com/250/180/arch" ]
-  ​
-  seller: Object { name: "gabriel", email: "gabriel@stud.noroff.no", avatar: null, … }
-  ​
-  tags: Array [ "" ]
-  ​
-  title: "zzzz"
-  ​
-  updated: "2022-12-16T20:35:05.858Z"
-*/
-  
   if (profileResponse.ok){
     console.log('this is profileResponse from bidModal.js',profileResponse);
     }
@@ -82,7 +47,7 @@ const currentBid = postResponse.bids.pop().amount;
     const bidModalRendered = 
     `
     <!-- Modal -->
-<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+<form class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
   id="biddingModal" tabindex="-1" aria-labelledby="biddingModalLabel" aria-hidden="true">
   <div class="modal-dialog relative w-auto pointer-events-none">
     <div
@@ -106,6 +71,7 @@ const currentBid = postResponse.bids.pop().amount;
         <p class="text-xs text-gray-500">Available balance: ${balance} credits</p>
         <input
           type="number"
+          value="${(currentBid + 1)}"
           class="
             form-control
             block
@@ -123,11 +89,12 @@ const currentBid = postResponse.bids.pop().amount;
             m-0
             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
           "
-          id="exampleNumber0"
-          placeholder="Your bid must exceed ${currentBid} credits"
+          id="bidInputField"
+          placeholder="Current bid at ${currentBid} credits"
         />
-        <p id="noUnderbid" class="text-red-600">Bid cannot be lower than previous bid</p>
-        <p id="noFunds" class="text-red-600">Bid cannot exceed your balance</p>
+        <p id="noUnderbid" class="text-red-600 hidden">Bid cannot be lower than previous bid</p>
+        <p id="noFunds" class="text-red-600 hidden">Bid cannot exceed your balance</p>
+        <p id="bidError" class="text-red-600"></p>
       </div>
     </div>
       </div>
@@ -149,8 +116,7 @@ const currentBid = postResponse.bids.pop().amount;
           transition
           duration-150
           ease-in-out" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="px-6
-      py-2.5
+        <button type="submit" id="bidBtn" class="px-6 py-2.5
       bg-green-600
       text-white
       font-medium
@@ -169,15 +135,92 @@ const currentBid = postResponse.bids.pop().amount;
       </div>
     </div>
   </div>
-</div>
+</form>
     `;
-    modalBiddingContainer.insertAdjacentHTML('beforeend', bidModalRendered)
+    modalBiddingContainer.insertAdjacentHTML('beforeend', bidModalRendered);
+    
+    //user can bid
+    if (biddingModal) {
+      const bidBtn = document.getElementById("bidBtn");
+
+      console.log('biddingModal innerHTML rendered, ready to bid', biddingModal);
+      
+      biddingModal.addEventListener("submit", function (event) {
+        event.preventDefault();
+        
+        const noUnderbid = document.getElementById("noUnderbid");
+        const noFunds = document.getElementById("noFunds");
+        const bidError = document.getElementById("bidError");
+
+        let isNotUnderbid = false;
+        if (bidInputField.value > currentBid) 
+        {
+          noUnderbid.classList.add("hidden");
+          isNotUnderbid = true;
+        } else {
+          noUnderbid.classList.remove("hidden");
+          bidError.innerHTML =
+            "Your bid must be at least " +
+            ((currentBid - bidInputField.value)) +
+            " credits more.";
+        }
+
+        let isNotInsufficientFunds = false;
+        if (bidInputField.value < balance) 
+        {
+          noFunds.classList.add("hidden");
+          isNotUnderbid = true;
+        } else {
+          noFunds.classList.remove("hidden");
+          bidError.innerHTML =
+            "Your bid is " +
+            ((bidInputField.value - balance)) +
+            " credits more than your balance :/ ";
+        }
+    
+        let bidValidated = isNotUnderbid && isNotInsufficientFunds;
+    
+        if (bidValidated) {
+          console.log("bid validation success");
+          const newBidData = {
+            amount: bidInputField.value,
+          };
+    
+          const PLACE_BID_URL = CREATE_LISTING_URL + `/${item_id}/bids`;
+    
+          async function placeBid() {
+            try {
+              const response = await fetch(PLACE_BID_URL, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${bearerKey}`
+                },
+                body: JSON.stringify(newBidData),
+              });
+              console.log('PLACE_BID_URL',PLACE_BID_URL);
+              
+              if (response.ok) {
+                const bidFeedbac = await response.json();
+                console.log(" bid placed successfully, here is data:", data);
+                //alert("Bid placed successfully! :)")
+              } else {
+                bidError.innerHTML = `The following error occured: ${data.message}`;
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          placeBid();
+        } else {
+          bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
+        }
+      });
+    }
   }
-  
-
   ).catch(err => console.error("during bidding the following error occured:",err));
-})}
+})}())
 
 
-  createBidModal();
+  //createBidModal();
   
