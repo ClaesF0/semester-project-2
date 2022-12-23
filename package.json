@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@yaireo/tagify": "^4.17.6",
+    "moment": "^2.29.4",
     "tw-elements": "^1.0.0-alpha12"
   }
 }

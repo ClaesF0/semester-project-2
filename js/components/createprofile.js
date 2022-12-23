@@ -2,6 +2,8 @@ import {
     collectUserName, 
     getToken
 } from '../local-storage-related';
+import moment from "moment/moment";
+let now = moment(new Date()); //todays date
 
 async function createProfile() {
     const profileContainer = document.getElementById("profilecontainer")
@@ -102,36 +104,73 @@ async function createProfile() {
         </span>
         <span class="inline-flex text-center"> </span>
       </div>
+      <h3 class="text-lg text-center mx-auto">${data._count.listings} Listings</h3>
         `
         profileContainer.insertAdjacentHTML('beforeend', profilecontent);
-        const userListings = `
-        <hr class="my-2" />
-    <h3 class="text-lg text-center mx-auto">Listings</h3>
-    <div class="flex flex-grow sm:w-4/5 mx-auto">
-        <div class="inline-flex md:flex-nowrap p-2 border-t-2 border-grey-500">
-          <hr />
-          <div>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ69l12PewMsuh12EEsFLwjP8TIXTlVTJjzlA&usqp=CAU"
-              alt=""
-              style="min-width: 8rem"
-            />
-          </div>
-          <span class="p-2 mx-1">
-            <h3 class="text-lg text-center mx-auto md:text-left">Title3</h3>
-            <hr />
-            <p class="text-lg text-gray-700 px-1">Bud: 32 pris:654</p>
-            <p class="text-lg text-gray-700 px-1">Tid: 654654</p>
-            <p class="px-1">
-              Lorem descripshun blblbl blblbl kgkgk l lø kgkg oom okok o ko ko
-              kokkk kok ok k ij yuh uuh uhuhu hhh uhuh hhhuuu huhu hvordan
-              brytes teksten på denne linja egentlig
-            </p>
-          </span>
-        </div>
-    </div>
-        `
-        userListingsContainer.insertAdjacentHTML('beforeend', userListings)
+
+        (async function getAllListingsByUser() {
+          const response = await fetch(
+            "https://api.noroff.dev/api/v1/auction/profiles/"+`${userName}`+"/listings",
+            auth,
+          );
+          if (response.ok) {
+           // console.log('RESPONS OK', response);
+          }
+          const items = response.json()
+            .then((items) => {
+              const itemsMapped = items.map((item) => {
+                console.log('item',item);
+                
+                const allItemInfo = items.title;
+        
+                // console.table('item',item);
+                const bidCount = item._count.value;
+                const { created } = item;
+                const { description } = item;
+                const deadline = item.endsAt;
+                const itemID = item.id;
+                const { title } = item;
+                const { updated } = item;
+                let mainPic = item.media[0];
+                if (mainPic == undefined || null || '') {
+                  mainPic = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
+                }
+                const { tags } = item;
+
+                    const userListings = `
+                    <hr class="my-2" />
+                
+                <div class="flex flex-grow sm:w-4/5 mx-auto">
+                    <div class="inline-flex md:flex-nowrap p-2 border-t-2 border-grey-500">
+                      <hr />
+                      <div>
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ69l12PewMsuh12EEsFLwjP8TIXTlVTJjzlA&usqp=CAU"
+                          alt=""
+                          style="min-width: 8rem"
+                        />
+                      </div>
+                      <span class="p-2 mx-1">
+                        <h3 class="text-lg text-center mx-auto md:text-left">${title}</h3>
+                        <hr />
+                        <p class="text-lg text-gray-700 px-1">Bud: 32 pris:654</p>
+                        <p class="text-lg text-gray-700 px-1">Tid: 654654</p>
+                        <p class="px-1">
+                          Lorem descripshun blblbl blblbl kgkgk l lø kgkg oom okok o ko ko
+                          kokkk kok ok k ij yuh uuh uhuhu hhh uhuh hhhuuu huhu hvordan
+                          brytes teksten på denne linja egentlig
+                        </p>
+                      </span>
+                    </div>
+                </div>
+                    `
+                    userListingsContainer.insertAdjacentHTML('beforeend', userListings)
+              });
+            })
+            .catch((err) => console.error(err));
+        }());
+
+
 
     }
     

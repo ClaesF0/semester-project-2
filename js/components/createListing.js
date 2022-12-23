@@ -107,7 +107,9 @@ if (response.ok) {
   //};
   //console.log("signInDataToStorage", signInDataToStorage);
   //storeUserSession(signInDataToStorage);
-  const detailsPageURL = `detailspage.html?item_id=${data.id}?_seller=true&_bids=true`
+
+  //const detailsPageURL = `detailspage.html?item_id=${data.id}?_seller=true&_bids=true`
+  const detailsPageURL = `detailspage.html?item_id=${data.id}`
   location.replace(detailsPageURL);
 } else {
   //const errorfromserver = "Error while communicating with server:" + await response.json();

@@ -1,57 +1,72 @@
+import {collectUserName} from "../local-storage-related" 
+import moment from "moment/moment";
+let now = moment(new Date()); //todays date
+
 function createDetailsPage(){
+    const userName = collectUserName();
+    //console.log('userName',userName);
     
     const paramString = window.location.search;
     const searchParam = new URLSearchParams(paramString);
     const itemID = searchParam.get("item_id");
-
-    console.log('itemID',itemID);
-    
+  
     const options = {method: 'GET'};
 
 fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_seller=true&_bids=true", options,)
 
   .then(response => response.json())
   .then(response => { 
-    //console.table(response);
     
     const bidCount = response._count.bids;
     //console.log('bidCount',bidCount);
+    
     const bidsArray = response.bids;
-    //console.log('bidsArray.pop',bidsArray.pop().amount);
+    //console.log("response",response)
     
-    //let price = bidsArray[bidsArray.length - 1].amount;
-    
-    let price = "";
-    if (bidCount > 0 ) {
-      price = "Current bid: "+bidsArray.pop().amount;
-    } 
-   // if (bidsArray.length == 1) {
-   //   price = bidsArray[0].amount
-   // } 
-    
-    //console.log('P R I S ',price);
-    
-    const created  = response.created;
+    const highestBid = bidsArray.reduce((prev, current) => {return prev.amount > current.amount ? prev : current}, 0);
+    let price = highestBid.amount;
+    if (bidCount == 0 ) {
+      price = "No bids yet!";
+    } else {
+      price = highestBid.amount;
+    }
+
+    //console.table(response);
+
     const description = response.description;
-    const deadline = response.endsAt;
     const itemID = response.id;
     const title = response.title;
+    //time
+    const created  = response.created;
+    const deadline = response.endsAt;
     const updated = response.updated;
+    const deadLineMoment = moment(deadline).fromNow()+" from now.";
+    const updatedTimestamp = moment(updated).fromNow();
+    const createdTimestamp = moment(created).fromNow();
+    //img
+    let imgArrayLength = response.media.length;
+    let imgArray = response.media; 
+    let firstPic = response.media[0];
+    let secondPic = response.media[1];
+    let thirdPic = response.media[2];
 
-    let mainPic = response.media[0];
-    
-    if (mainPic == undefined || null || '') {
-      mainPic = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
+    if (firstPic == undefined || null || '') {
+      firstPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
     }
-    let imgArrayLength = response.media.length
-    //console.log('mainPic',mainPic);
-    //console.log('imgArray',imgArrayLength);
+    if (secondPic == undefined || null || '') {
+      secondPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
+    }
+    if (thirdPic == undefined || null || '') {
+      thirdPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
+    }
 
-    const tags = response.tags;
+    const sellerName = response.seller.name;
+    const sellerEmail = response.seller.email;
+    const sellerAvatarURL = response.seller.avatar;
 
     const detailsContainer = document.getElementById('detailsContainer');
     const newPostData = `
-    <div class="grid my-0 mx-auto w-full sm:w-4/5">
+    <div class="grid my-0 mx-auto w-full md:w-3/5 sm:w-4/5 lg:w-full ">
     <div class="overflow-hidden lg:inline-flex">
       <div
         id="carouselDarkVariant"
@@ -83,15 +98,15 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
 
         <!-- Inner -->
         <div
-          class="carousel-inner relative w-full object-scale-down overflow-hidden flex"
+          class="carousel-inner relative sm:w-4/5 flex my-0 mx-auto"
         >
           <!-- Single item -->
           <div
-            class="carousel-item overflow-hidden active relative float-left w-full inline-flex"
+            class="carousel-item object-contain active relative float-left w-full inline-flex"
           >
             <img
-              src="${mainPic}"
-              class="block w-full"
+              src="${firstPic}"
+              class="block mx-auto "
               alt=""
             />
             <!--
@@ -103,11 +118,11 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
 
           <!-- Single item -->
           <div
-            class="carousel-item overflow-hidden relative float-left w-full inline-flex"
+            class="carousel-item relative float-left w-full inline-flex"
           >
             <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(35).webp"
-              class="block w-full"
+              src="${secondPic}"
+              class="block mx-auto "
               alt=""
             />
             <!--
@@ -122,8 +137,8 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
             class="carousel-item overflow-hidden relative float-left w-full inline-flex"
           >
             <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(40).webp"
-              class="block w-full"
+              src="${thirdPic}"
+              class="block mx-auto"
               alt=""
             />
             <!--
@@ -163,13 +178,15 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
         </button>
       </div>
 
-      <div id="loginPrompt" class="relative inline-block shrink-0 lg:hidden">
+      <div id="loginPrompt" class=" relative inline-block shrink-0 lg:hidden">
+      
         <div
           class="m-1 p-1 top-0 rounded-lg shadow-lg flex hover:shadow-blue-300 bg-gray-200 max-w-sm"
         >
           <p class="text-gray-700 p-1 text-xs">Log in to bid</p>
           <button
             type="button"
+            id="loginBTN"
             class="inline-block mx-3 px-2 py-1 bg-white text-blue-600 font-medium text-xs leading-tight rounded shadow-md hover:bg-blue-700 hover:text-white hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
             data-bs-toggle="modal"
             data-bs-target="#loginModal"
@@ -179,9 +196,10 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
         </div>
       </div>
       <br />
-      <div class="relative inline-block min-w-[25%]">
+      <div class="relative inline-block min-w-[30%] md:block">
+      
         <div
-          class="m-1 p-3 rounded-lg shadow-lg hover:shadow-blue-300 bg-white max-w-sm"
+          class="m-1 p-3 rounded-lg shadow-lg hover:shadow-blue-300 bg-white "
         >
           <h4
             class="text-gray-900 text-xl leading-tight font-medium mb-2 inline-block"
@@ -189,9 +207,10 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
             ${title}
           </h4>
           <br />
+          <p  class="text-gray-400 text-xs font-small mb-1">Ends ${deadLineMoment}</p>          
           <span class="inline-flex">
             <h5 class="text-green-800 text-md leading-tight font-medium mb-2">
-              ${price}
+            Current bid: ${price}
             </h5>
             <h6
               class="text-green-800 text-md leading-tight font-medium mb-2 px-2"
@@ -199,6 +218,8 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
               Bids: ${bidCount}
             </h6>
           </span>
+          <hr>
+          <p  class="text-gray-400 text-xs font-small mb-1">Sellers description:</p>  
           <p class="text-gray-700 text-base mb-4">
             ${description} 
           </p>
@@ -220,20 +241,64 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
       ease-in-out" data-bs-toggle="modal" data-bs-target="#biddingModal">
   Bid
 </button>
+<hr>
+<button id="extraInfoTease" class=" block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="modal"
+data-bs-target="#loginModal">
+Log in for more info
+<button id="extraInfoBTN" class=" block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+Extra info
+</button>
+<script>
+      const extraInfoBTN = document.getElementById("extraInfoBTN");
+      const extraInfoTease = document.getElementById("extraInfoTease");
+
+      if (!userName) 
+      {
+        extraInfoBTN.classList.add("hidden");
+        extraInfoTease.classList.remove("hidden");
+      } else {
+        extraInfoTease.classList.add("hidden");
+        extraInfoBTN.classList.remove("hidden");
+      }
+</script>
+</p>
+    <div class="collapse" id="collapseExample">
+      <div class="block p-6 rounded-lg shadow-lg bg-white">
+        <p  class="text-gray-400 text-xs font-medium mb-1 flex">Seller:
+        <hr>
+        <span class="text-gray-500 text-xs font-medium mb-1 flex">
+        <img src="${sellerAvatarURL}" alt=" ${sellerName}'s profile pic and contact info"
+        class="rounded-full"
+          style="height: 40px; width: 40px"
+          alt=""
+          loading="lazy">
+        <a class="p-2" href="profile.html/${sellerName}">
+        ${sellerName}
+        </a> 
+        </span>
+          
+        <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">${sellerEmail}</a>
+        </p>
+        <hr>
+        <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
+        <p  class="text-gray-400 text-xs font-small mb-1">Unique id: ${itemID}</p>
+        <hr>
+        <p  class="text-gray-400 text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
+        <hr>
+        <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
+        </p>
+        <hr>
+      </div>
+    </div>
         </div>
       </div>
     </div>
   </div>       
                 `;
+                
     detailsContainer.insertAdjacentHTML('beforeend', newPostData);
 })
-   
   .catch(err => console.error(err));
 }
 
-
-
 createDetailsPage();
-
-detailsContainer
-
