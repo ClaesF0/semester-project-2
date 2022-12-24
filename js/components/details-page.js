@@ -9,10 +9,13 @@ function createDetailsPage(){
     const paramString = window.location.search;
     const searchParam = new URLSearchParams(paramString);
     const itemID = searchParam.get("item_id");
-  
-    const options = {method: 'GET'};
-
-fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_seller=true&_bids=true", options,)
+    console.log('itemID',itemID);
+    
+    const options = { method: 'GET'};
+    const sellerbidsdetailsURL = 'https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+'&_bids=true';
+    console.log('sellerbidsdetailsURL',sellerbidsdetailsURL);
+    
+fetch(sellerbidsdetailsURL, options,)
 
   .then(response => response.json())
   .then(response => { 
@@ -21,7 +24,7 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
     //console.log('bidCount',bidCount);
     
     const bidsArray = response.bids;
-    //console.log("response",response)
+    console.log("response",response)
     
     const highestBid = bidsArray.reduce((prev, current) => {return prev.amount > current.amount ? prev : current}, 0);
     let price = highestBid.amount;
@@ -59,7 +62,8 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
     if (thirdPic == undefined || null || '') {
       thirdPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
     }
-
+    
+    
     const sellerName = response.seller.name;
     const sellerEmail = response.seller.email;
     const sellerAvatarURL = response.seller.avatar;
@@ -242,54 +246,44 @@ fetch('https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+"?_sell
   Bid
 </button>
 <hr>
-<button id="extraInfoTease" class=" block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="modal"
-data-bs-target="#loginModal">
-Log in for more info
-<button id="extraInfoBTN" class=" block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+<button id="extraInfoBTN" class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
 Extra info
 </button>
-<script>
-      const extraInfoBTN = document.getElementById("extraInfoBTN");
-      const extraInfoTease = document.getElementById("extraInfoTease");
 
-      if (!userName) 
-      {
-        extraInfoBTN.classList.add("hidden");
-        extraInfoTease.classList.remove("hidden");
-      } else {
-        extraInfoTease.classList.add("hidden");
-        extraInfoBTN.classList.remove("hidden");
-      }
-</script>
+<a class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" 
+href="userprofile.html?user_name=${sellerName}" data-mdb-ripple="true" data-mdb-ripple-color="light">
+All listings by seller → 
+</a>
 </p>
-    <div class="collapse" id="collapseExample">
-      <div class="block p-6 rounded-lg shadow-lg bg-white">
-        <p  class="text-gray-400 text-xs font-medium mb-1 flex">Seller:
-        <hr>
-        <span class="text-gray-500 text-xs font-medium mb-1 flex">
-        <img src="${sellerAvatarURL}" alt=" ${sellerName}'s profile pic and contact info"
-        class="rounded-full"
-          style="height: 40px; width: 40px"
-          alt=""
-          loading="lazy">
-        <a class="p-2" href="profile.html/${sellerName}">
-        ${sellerName}
-        </a> 
-        </span>
-          
-        <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">${sellerEmail}</a>
-        </p>
-        <hr>
-        <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
-        <p  class="text-gray-400 text-xs font-small mb-1">Unique id: ${itemID}</p>
-        <hr>
-        <p  class="text-gray-400 text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
-        <hr>
-        <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
+<div class="collapse" id="collapseExample">
+<div class="block p-6 rounded-lg shadow-lg bg-white">
+  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Seller:
+  <hr>
+  <span class="text-gray-500 text-xs font-medium mb-1 flex">
+  <img src="${sellerAvatarURL}" alt=""
+  class="rounded-full"
+    style="height: 40px; width: 40px"
+    alt=""
+    loading="lazy">
+  <a class="p-2" href="profile.html/${sellerName}">
+  ${sellerName}
+  </a> 
+  </span>
+    
+  <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">${sellerEmail}</a>
+  </p>
+  <hr>
+  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
+  <p  class="text-gray-400 text-xs font-small mb-1">Unique id: ${itemID}</p>
+  <hr>
+  <p  class="text-gray-400 text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
+  <hr>
+  <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
         </p>
         <hr>
       </div>
     </div>
+    
         </div>
       </div>
     </div>

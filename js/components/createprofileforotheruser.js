@@ -5,19 +5,18 @@ import {
 import moment from "moment/moment";
 let now = moment(new Date()); //todays date
 
-async function createProfile() {
+async function createProfileForOtherUser() {
     const profileContainer = document.getElementById("profilecontainer")
     const userListingsContainer = document.getElementById("userListingsContainer")
     console.log('profcont',profileContainer);
     
     const token = getToken();
-    const userName = collectUserName();
     //console.log(userName, "her er username og en gang til", userName)
     
     const paramString = window.location.search;
     const searchParam = new URLSearchParams(paramString);
-    const user_name = searchParam.get("user_name");
-    console.log('user_name',user_name);
+    const userName = searchParam.get("user_name");
+    console.log('userName',userName);
 
     const auth = {
         method: "GET",
@@ -53,11 +52,12 @@ async function createProfile() {
           />
 
           <form id="newPicForm">
-<div class="flex justify-center">
+<div class="flex justify-center hidden">
   <div>
     <div class="dropdown relative">
       <button
         class="
+
           dropdown-toggle
           text-xs text-gray-500 bg-blue-300 px-1 rounded-full
           shadow-md
@@ -149,7 +149,7 @@ async function createProfile() {
               <p class="p-2" id="currentBalance">${credits} Credits</p>
             </div>
           </span>
-          <span class="inline-flex text-center">
+          <span class="inline-flex text-center hidden">
             <button class="flex p-1 my-1 bg-orange-300 w-48 h-12 rounded-full">
               <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
               <p class="p-2" id="currentBalance">New Listing</p>
@@ -167,7 +167,7 @@ async function createProfile() {
           />     
   <div class="pl-0">
   <form id="newPicForm">
-<div class="flex justify-center">
+<div class="flex justify-center hidden">
   <div>
     <div class="dropdown relative">
       <button
@@ -262,7 +262,7 @@ async function createProfile() {
             <img src="./img/wallet.svg" alt="" class="h-10" />
             <p class="p-2" id="currentBalance">${credits} Credits</p>
           </div>
-          <button class="flex p-1 bg-orange-300 w-48 h-12 rounded-full">
+          <button class="hidden flex p-1 bg-orange-300 w-48 h-12 rounded-full">
             <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
             <p class="p-2" id="currentBalance">New Listing</p>
           </button>
@@ -284,30 +284,7 @@ async function createProfile() {
           avatar: newPicField.value,
         };
     
-        async function newProfilePic() {
-          try {
-            const response = await fetch(USER_LOGIN_ENDPOINT, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${bearerKey}`
-              },
-              body: JSON.stringify(newPicData),
-            });
-            
-    
-            if (response.ok) {
-              const data = await response.json();
-              console.log("data after newpic:", data);
-              location.reload();
-            } else {
-              picErrorField.innerHTML = `The following error occured: ${data.message}`;            
-            }
-          } catch (e) {
-            console.log(e);
-          }
-        }
-        newProfilePic();
+
     })
 
 
@@ -392,4 +369,4 @@ async function createProfile() {
 
 }
 
-createProfile()
+createProfileForOtherUser()

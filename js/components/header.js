@@ -1,6 +1,5 @@
 import {
   collectUserName,
-// clearStorage,
   getToken,
 } from '../local-storage-related';
 
@@ -12,11 +11,9 @@ function clearStorage() {
   location.replace("index.html")
 }
 
-
 function createHeaderBar() {
   const navBar = document.getElementById('navBar');
   const userName = collectUserName();
-  console.log("USERNAME", userName)
 
   let headerLinks = 
   `
@@ -29,9 +26,6 @@ function createHeaderBar() {
   </button>
   `
   if (userName) {
-    
-
-
     headerLinks = 
     `
     <!-- Icon -->
@@ -73,10 +67,8 @@ function createHeaderBar() {
                 <button
                   type="button"
                   class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-green-400"
-                  
                   data-bs-toggle="modal"
                   data-bs-target="#newListingModal"
-                  
                 >
                   Create listing
                 </button>
@@ -86,13 +78,10 @@ function createHeaderBar() {
                 <button type="button" id="logout-btn" class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent border-2 border-red-600 rounded-md text-black hover:text-white hover:bg-red-600">
                     Log Out</button>
               </li>
-            
             </ul>
           </div>
     `
   }
-
-
   navBar.innerHTML = `
   <nav
   class="mx-auto my-0 relative w-full flex flex-wrap items-center justify-between p-2 bg-teal-700 text-gray-200 shadow-lg navbar navbar-expand-lg navbar-light"
@@ -143,7 +132,6 @@ function createHeaderBar() {
     </div>
       <!-- Right elements -->
       <!-- Button trigger login modal -->
-
   </div>
     <br>
   </div>

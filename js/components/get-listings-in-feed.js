@@ -36,16 +36,13 @@ const options = { method: 'GET' };
 */
         const cardsContainer = document.getElementById('cardsContainer');
         const newPostData = `
-            <div class="rounded-lg shadow-lg bg-white max-w-sm rounded shadow-md hover:bg-blue-100">
-            <a href="detailspage.html?item_id=${itemID}" data-mdb-ripple="true" data-mdb-ripple-color="light">
-                
-                <img class="rounded-t-lg max-w-full object-scale-down h-48 w-96 " src="${mainPic}" alt=""/>
-            
-            <div class="p-6">
-              <h5 class="text-gray-900 text-xl font-medium mb-2">${title}</h5>
-              <p class="text-gray-700 text-base mb-4">${description}</p>
-              </a>
-              <button type="button" class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Button</button>
+        <div class=" border-2 border-gray-200 w-40 max-h-70 m-1 p-1">
+        <img class="rounded-t-lg max-w-full max-h-35 object-scale-down " src="${mainPic}" alt=""/>
+            <div class="shadow-lg bg-white max-w-20 rounded  hover:bg-blue-100">
+            <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
+              <p class="text-gray-900 text-lg font-medium mb-2">${title}</p>
+              <p class="text-gray-700 text-small">${description}</p>
+            </a>
             </div>
           </div>        
                     `;

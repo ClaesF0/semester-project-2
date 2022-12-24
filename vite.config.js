@@ -8,6 +8,8 @@ export default {
         detailspage: resolve(__dirname, 'detailspage.html'),
         sandbox: resolve(__dirname, 'sandbox.html'),
         createlisting: resolve(__dirname, 'createlisting.html'),
+        userprofile: resolve(__dirname, 'userprofile.html'),
+        profile: resolve(__dirname, 'profile.html'),
       },
     },
   },
