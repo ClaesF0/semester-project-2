@@ -15,6 +15,7 @@ function createHeaderBar() {
   const navBar = document.getElementById('navBar');
   const userName = collectUserName();
 
+
   let headerLinks = 
   `
   <button
@@ -26,6 +27,9 @@ function createHeaderBar() {
   </button>
   `
   if (userName) {
+
+      
+
     headerLinks = 
     `
     <!-- Icon -->

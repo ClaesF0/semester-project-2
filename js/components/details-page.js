@@ -14,18 +14,56 @@ function createDetailsPage(){
     const options = { method: 'GET'};
     const sellerbidsdetailsURL = 'https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+'&_bids=true';
     console.log('sellerbidsdetailsURL',sellerbidsdetailsURL);
+
     
 fetch(sellerbidsdetailsURL, options,)
 
-  .then(response => response.json())
-  .then(response => { 
+  .then(response => response.json()
+  .then((response) => { 
     
     const bidCount = response._count.bids;
-    //console.log('bidCount',bidCount);
-    
+
     const bidsArray = response.bids;
-    console.log("response",response)
     
+    const bidderNames = bidsArray.map(object => object.bidderName);
+    const bidID = bidsArray.map(object => object.id);
+    const bidAmount = bidsArray.map(object => object.amount);
+    const bidCreated = bidsArray.map(object => object.created);
+    
+
+    let bidHistoryList = "";
+
+    function getOrdinal(num) {
+      if (num > 10 && num < 14) {
+        return `${num}th`;
+      }
+      switch (num % 10) {
+        case 1:
+          return `${num}st`;
+        case 2:
+          return `${num}nd`;
+        case 3:
+          return `${num}rd`;
+        default:
+          return `${num}th`;
+      }
+    }
+
+    for (let i = 0; i < bidsArray.length; i++) {
+      console.log('ordinalnumre',getOrdinal(i+1));
+      
+      bidHistoryList += `
+      <li class="text-gray-400 text-xs font-small mb-1">
+      ${getOrdinal(i+1)} 
+      bid was ${bidsArray[i].amount} credits, 
+      placed ${moment(bidsArray[i].created).format('MMM Do, k:kk:ss')} 
+      by <a class="text-blue-400" href="profile.html/${bidsArray[i].bidderName}">${bidsArray[i].bidderName} 
+      </a></li>`;
+    }
+
+ 
+    
+
     const highestBid = bidsArray.reduce((prev, current) => {return prev.amount > current.amount ? prev : current}, 0);
     let price = highestBid.amount;
     if (bidCount == 0 ) {
@@ -62,7 +100,6 @@ fetch(sellerbidsdetailsURL, options,)
     if (thirdPic == undefined || null || '') {
       thirdPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
     }
-    
     
     const sellerName = response.seller.name;
     const sellerEmail = response.seller.email;
@@ -265,12 +302,12 @@ All listings by seller →
     style="height: 40px; width: 40px"
     alt=""
     loading="lazy">
-  <a class="p-2" href="profile.html/${sellerName}">
+  <a class="p-2 text-blue-400" href="profile.html/${sellerName}">
   ${sellerName}
   </a> 
   </span>
     
-  <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">${sellerEmail}</a>
+  <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">Get in touch: ${sellerEmail}</a>
   </p>
   <hr>
   <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
@@ -281,6 +318,12 @@ All listings by seller →
   <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
         </p>
         <hr>
+        
+        <p class="text-gray-400 text-xs font-medium mb-1 flex">BIDDING HISTORY</p>
+        <ul id="bidHistory">
+         ${bidHistoryList}
+        </ul>
+        
       </div>
     </div>
     
@@ -292,7 +335,7 @@ All listings by seller →
                 
     detailsContainer.insertAdjacentHTML('beforeend', newPostData);
 })
-  .catch(err => console.error(err));
+  .catch(err => console.error(err)));
 }
 
 createDetailsPage();

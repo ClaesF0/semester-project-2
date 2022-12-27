@@ -334,7 +334,7 @@ async function createProfileForOtherUser() {
                     <hr class="my-2" />
                 
                 <div class="flex flex-grow sm:w-4/5 mx-auto">
-                <a href="detailspage.html?item_id=${itemID}" data-mdb-ripple="true" data-mdb-ripple-color="light">
+                <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
                     <div class="inline-flex md:flex-nowrap border-t-2 border-grey-500">
                       <hr />
                       <div>

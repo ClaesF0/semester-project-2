@@ -15,7 +15,7 @@ const options = { method: 'GET' };
       const itemsMapped = items.map((item) => {
         const allItemInfo = items.title;
 
-        // console.table('item',item);
+        console.table('item',item);
         const bidCount = item._count.value;
         const { created } = item;
         const { description } = item;
@@ -36,12 +36,13 @@ const options = { method: 'GET' };
 */
         const cardsContainer = document.getElementById('cardsContainer');
         const newPostData = `
-        <div class=" border-2 border-gray-200 w-40 max-h-70 m-1 p-1">
-        <img class="rounded-t-lg max-w-full max-h-35 object-scale-down " src="${mainPic}" alt=""/>
-            <div class="shadow-lg bg-white max-w-20 rounded  hover:bg-blue-100">
-            <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
-              <p class="text-gray-900 text-lg font-medium mb-2">${title}</p>
-              <p class="text-gray-700 text-small">${description}</p>
+        <div class=" border-2 border-gray-200 w-40 max-h-70 m-1 p-1 shadow-lg bg-white max-w-20 rounded  hover:bg-blue-100">
+        <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
+        <img class="rounded-lg h-35 object-contain" src="${mainPic}" alt=""/>
+            <div class="">
+            BIDCOUNT
+              <p class="text-gray-900 text-medium font-medium mb-2">${title}</p>
+              <p class="text-gray-700 text-xs">${description}</p>
             </a>
             </div>
           </div>        

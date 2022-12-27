@@ -175,57 +175,7 @@ const nameFieldError = document.querySelector("#nameFieldError");
 const passwordConfirmFieldError = document.querySelector(
   "#passwordConfirmFieldError"
 );
-//const otherErrorField = document.querySelector("#errorMessage")
 
-// checked
-
-//register user
-
-//only noroff adress
-//const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
-
-//cooperates with the regular expression
-//function validEmail(email) {
-//  return email.match(regEx) ? true : false;
-//}
-
-//function validDomain() {
-//  if (emailField.value.trim().length && validEmail(emailField.value) === true) {
-//    emailInvalidError.classList.add("hidden");
-//    emailField.classList.add("border-green-700");
-//    validDomain = true;
-//  } else if (
-//    emailField.value.trim().length &&
-//    validEmail(emailField.value) !== true
-//  ) {
-//    emailInvalidError.classList.remove("hidden");
-//  }
-//}
-
-//function validPassword(password, confirmPassword) {
-//  if (!password) {
-//    return false;
-//  }
-//  if (!confirmPassword) {
-//    return false;
-//  }
-//  if (password !== confirmPassword) {
-//    return false;
-//  } else {
-//    return true;
-//  }
-//}
-/*
-const capsLockReminder = document.getElementById("capsLockReminder");
-signUpForm.addEventListener('keyup', function (e) {
-    if (e.getModifierState('CapsLock')) {
-        capsLockReminder.classList.remove("hidden");
-    } else {
-        capsLockReminder.classList.add("hidden");
-    }
-}
-);
-*/
 //user can sign up
 signUpForm.addEventListener("submit", function (event) {
   event.preventDefault();
