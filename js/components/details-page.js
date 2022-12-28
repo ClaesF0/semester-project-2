@@ -1,112 +1,194 @@
-import {collectUserName} from "../local-storage-related" 
+import { collectUserName } from "../local-storage-related";
 import moment from "moment/moment";
 let now = moment(new Date()); //todays date
 
-function createDetailsPage(){
-    const userName = collectUserName();
-    //console.log('userName',userName);
-    
-    const paramString = window.location.search;
-    const searchParam = new URLSearchParams(paramString);
-    const itemID = searchParam.get("item_id");
-    console.log('itemID',itemID);
-    
-    const options = { method: 'GET'};
-    const sellerbidsdetailsURL = 'https://nf-api.onrender.com/api/v1/auction/listings/'+`${itemID}`+'&_bids=true';
-    console.log('sellerbidsdetailsURL',sellerbidsdetailsURL);
+function createDetailsPage() {
+  const userName = collectUserName();
+  
+  const paramString = window.location.search;
+  const searchParam = new URLSearchParams(paramString);
+  const itemID = searchParam.get("item_id");
+  console.log("itemID", itemID);
 
-    
-fetch(sellerbidsdetailsURL, options,)
+  const options = { method: "GET" };
+  const sellerbidsdetailsURL =
+    "https://nf-api.onrender.com/api/v1/auction/listings/" +
+    `${itemID}` +
+    "&_bids=true";
+  console.log("sellerbidsdetailsURL", sellerbidsdetailsURL);
 
-  .then(response => response.json()
-  .then((response) => { 
-    
-    const bidCount = response._count.bids;
+  fetch(sellerbidsdetailsURL, options).then((response) =>
+    response
+      .json()
+      .then((response) => {
+        const bidCount = response._count.bids;
 
-    const bidsArray = response.bids;
-    
-    const bidderNames = bidsArray.map(object => object.bidderName);
-    const bidID = bidsArray.map(object => object.id);
-    const bidAmount = bidsArray.map(object => object.amount);
-    const bidCreated = bidsArray.map(object => object.created);
-    
+        const bidsArray = response.bids;
 
-    let bidHistoryList = "";
+        const bidderNames = bidsArray.map((object) => object.bidderName);
+        const bidID = bidsArray.map((object) => object.id);
+        const bidAmount = bidsArray.map((object) => object.amount);
+        const bidCreated = bidsArray.map((object) => object.created);
 
-    function getOrdinal(num) {
-      if (num > 10 && num < 14) {
-        return `${num}th`;
-      }
-      switch (num % 10) {
-        case 1:
-          return `${num}st`;
-        case 2:
-          return `${num}nd`;
-        case 3:
-          return `${num}rd`;
-        default:
-          return `${num}th`;
-      }
-    }
+        let bidHistoryList = "";
 
-    for (let i = 0; i < bidsArray.length; i++) {
-      console.log('ordinalnumre',getOrdinal(i+1));
-      
-      bidHistoryList += `
+        function getOrdinal(num) {
+          if (num > 10 && num < 14) {
+            return `${num}th`;
+          }
+          switch (num % 10) {
+            case 1:
+              return `${num}st`;
+            case 2:
+              return `${num}nd`;
+            case 3:
+              return `${num}rd`;
+            default:
+              return `${num}th`;
+          }
+        }
+
+        for (let i = 0; i < bidsArray.length; i++) {
+          console.log("ordinalnumre", getOrdinal(i + 1));
+
+          bidHistoryList += `
       <li class="text-gray-400 text-xs font-small mb-1">
-      ${getOrdinal(i+1)} 
+      ${getOrdinal(i + 1)} 
       bid was ${bidsArray[i].amount} credits, 
-      placed ${moment(bidsArray[i].created).format('MMM Do, k:kk:ss')} 
-      by <a class="text-blue-400" href="profile.html/${bidsArray[i].bidderName}">${bidsArray[i].bidderName} 
+      placed ${moment(bidsArray[i].created).format("MMM Do, k:kk:ss")} 
+      by <a class="text-blue-400" href="userprofile.html?user_name=${
+        bidsArray[i].bidderName
+      }">${bidsArray[i].bidderName} 
       </a></li>`;
-    }
+        }
+        let price = "";
+        const highestBid = bidsArray.reduce((prev, current) => {
+          return prev.amount > current.amount ? prev : current;
+        }, 0);
+        price = highestBid.amount;
+        if (bidCount == 0) {
+          price = "No bids yet!";
+        } else {
+          price = highestBid.amount;
+        }
 
- 
+        //console.table(response);
+
+        const description = response.description;
+        const itemID = response.id;
+        const title = response.title;
+        //time
+        const created = response.created;
+        const deadline = response.endsAt;
+        const updated = response.updated;
+        const deadLineMoment = moment(deadline).fromNow() + " from now.";
+        const updatedTimestamp = moment(updated).fromNow();
+        const createdTimestamp = moment(created).fromNow();
+        //img
+        let imgArrayLength = response.media.length;
+        let imgArray = response.media;
+        let firstPic = response.media[0];
+        let secondPic = response.media[1];
+        let thirdPic = response.media[2];
+
+        if (firstPic == undefined || null || "") {
+          firstPic =
+            "https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg";
+        }
+        if (secondPic == undefined || null || "") {
+          secondPic =
+            "https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg";
+        }
+        if (thirdPic == undefined || null || "") {
+          thirdPic =
+            "https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg";
+        }
+
+        const sellerName = response.seller.name;
+        const sellerEmail = response.seller.email;
+        const sellerAvatarURL = response.seller.avatar;
+
+        let loggedInSection = `
+    <button
+    type="button"
+    class="nav-link px-1 py-1 my-0 mx-auto border-2 border-white bg-green-500 text-white font-medium text-xs leading-tight rounded shadow-md hover:text-black hover:bg-green-400 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+    data-bs-toggle="modal"
+    data-bs-target="#loginModal">
+    Log in or sign up to see more details :) 
+    </button>
+    `;
+        if (userName) {
+          loggedInSection = `
+    <!-- START OF SECTION FOR LOGGED IN USERS-->
+<div id="loggedInSection">
+<button type="button" class="px-6
+      py-2.5
+      bg-teal-600
+      text-white
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      rounded
+      shadow-md
+      hover:bg-teal-700 hover:shadow-lg
+      focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0
+      active:bg-teal-800 active:shadow-lg
+      transition
+      duration-150
+      ease-in-out" data-bs-toggle="modal" data-bs-target="#biddingModal">
+  Bid
+</button>
+<hr>
+<button id="extraInfoBTN" class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+Extra info
+</button>
+
+<a class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" 
+href="userprofile.html?user_name=${sellerName}" data-mdb-ripple="true" data-mdb-ripple-color="light">
+All listings by seller → 
+</a>
+</p>
+<div class="collapse" id="collapseExample">
+<div class="block p-6 rounded-lg shadow-lg bg-white">
+  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Seller:
+  <hr>
+  <span class="text-gray-500 text-xs font-medium mb-1 flex">
+  <img src="${sellerAvatarURL}" alt=""
+  class="rounded-full"
+    style="height: 40px; width: 40px"
+    alt=""
+    loading="lazy">
+  <a class="p-2 text-blue-400" href="userprofile.html?user_name=${sellerName}">
+  ${sellerName}
+  </a> 
+  </span>
     
+  <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">Get in touch: ${sellerEmail}</a>
+  </p>
+  <hr>
+  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
+  <p  class="text-gray-400 text-xs font-small mb-1">Unique id: ${itemID}</p>
+  <hr>
+  <p  class="text-gray-400 text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
+  <hr>
+  <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
+        </p>
+        <hr>
+        
+        <p class="text-gray-400 text-xs font-medium mb-1 flex">BIDDING HISTORY</p>
+        <ul id="bidHistory">
+         ${bidHistoryList}
+        </ul>
+      </div>
+    </div>
+  </div>
+    <!--END OF SECTION FOR LOGGED IN USERS-->
+    `;
+        }
 
-    const highestBid = bidsArray.reduce((prev, current) => {return prev.amount > current.amount ? prev : current}, 0);
-    let price = highestBid.amount;
-    if (bidCount == 0 ) {
-      price = "No bids yet!";
-    } else {
-      price = highestBid.amount;
-    }
-
-    //console.table(response);
-
-    const description = response.description;
-    const itemID = response.id;
-    const title = response.title;
-    //time
-    const created  = response.created;
-    const deadline = response.endsAt;
-    const updated = response.updated;
-    const deadLineMoment = moment(deadline).fromNow()+" from now.";
-    const updatedTimestamp = moment(updated).fromNow();
-    const createdTimestamp = moment(created).fromNow();
-    //img
-    let imgArrayLength = response.media.length;
-    let imgArray = response.media; 
-    let firstPic = response.media[0];
-    let secondPic = response.media[1];
-    let thirdPic = response.media[2];
-
-    if (firstPic == undefined || null || '') {
-      firstPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
-    }
-    if (secondPic == undefined || null || '') {
-      secondPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
-    }
-    if (thirdPic == undefined || null || '') {
-      thirdPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
-    }
-    
-    const sellerName = response.seller.name;
-    const sellerEmail = response.seller.email;
-    const sellerAvatarURL = response.seller.avatar;
-
-    const detailsContainer = document.getElementById('detailsContainer');
-    const newPostData = `
+        const detailsContainer = document.getElementById("detailsContainer");
+        const newPostData = `
     <div class="grid my-0 mx-auto w-full md:w-3/5 sm:w-4/5 lg:w-full ">
     <div class="overflow-hidden lg:inline-flex">
       <div
@@ -218,7 +300,7 @@ fetch(sellerbidsdetailsURL, options,)
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-
+      <!--
       <div id="loginPrompt" class=" relative inline-block shrink-0 lg:hidden">
       
         <div
@@ -234,6 +316,7 @@ fetch(sellerbidsdetailsURL, options,)
           >
             Login
           </button>
+          -->
         </div>
       </div>
       <br />
@@ -264,78 +347,19 @@ fetch(sellerbidsdetailsURL, options,)
           <p class="text-gray-700 text-base mb-4">
             ${description} 
           </p>
-          <button type="button" class="px-6
-      py-2.5
-      bg-teal-600
-      text-white
-      font-medium
-      text-xs
-      leading-tight
-      uppercase
-      rounded
-      shadow-md
-      hover:bg-teal-700 hover:shadow-lg
-      focus:bg-teal-700 focus:shadow-lg focus:outline-none focus:ring-0
-      active:bg-teal-800 active:shadow-lg
-      transition
-      duration-150
-      ease-in-out" data-bs-toggle="modal" data-bs-target="#biddingModal">
-  Bid
-</button>
-<hr>
-<button id="extraInfoBTN" class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-Extra info
-</button>
 
-<a class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" 
-href="userprofile.html?user_name=${sellerName}" data-mdb-ripple="true" data-mdb-ripple-color="light">
-All listings by seller → 
-</a>
-</p>
-<div class="collapse" id="collapseExample">
-<div class="block p-6 rounded-lg shadow-lg bg-white">
-  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Seller:
-  <hr>
-  <span class="text-gray-500 text-xs font-medium mb-1 flex">
-  <img src="${sellerAvatarURL}" alt=""
-  class="rounded-full"
-    style="height: 40px; width: 40px"
-    alt=""
-    loading="lazy">
-  <a class="p-2 text-blue-400" href="profile.html/${sellerName}">
-  ${sellerName}
-  </a> 
-  </span>
-    
-  <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">Get in touch: ${sellerEmail}</a>
-  </p>
-  <hr>
-  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
-  <p  class="text-gray-400 text-xs font-small mb-1">Unique id: ${itemID}</p>
-  <hr>
-  <p  class="text-gray-400 text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
-  <hr>
-  <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
-        </p>
-        <hr>
-        
-        <p class="text-gray-400 text-xs font-medium mb-1 flex">BIDDING HISTORY</p>
-        <ul id="bidHistory">
-         ${bidHistoryList}
-        </ul>
-        
-      </div>
-    </div>
-    
+${loggedInSection}
+
         </div>
       </div>
     </div>
   </div>       
                 `;
-                
-    detailsContainer.insertAdjacentHTML('beforeend', newPostData);
-})
-  .catch(err => console.error(err)));
+
+        detailsContainer.insertAdjacentHTML("beforeend", newPostData);
+      })
+      .catch((err) => console.error(err))
+  );
 }
 
 createDetailsPage();

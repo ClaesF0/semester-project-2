@@ -141,7 +141,8 @@ async function createProfileForOtherUser() {
         <div class="">
           <div>
             <h5 class="text-xl font-medium leading-tight mb-2">${userName}</h5>
-            <p class="text-gray-500">${email}</p>
+            <p class="text-blue-500 text-sm"><a href="mailto:${email}">${email}</a></p>
+            <p class="text-gray-500 text-sm">${wins} wins and ${data._count.listings} listings</p>
           </div>
           <span class="inline-flex text-center">
             <div class="flex p-1 my-1 bg-gray-100 w-48 h-12 rounded-sm">
@@ -256,7 +257,7 @@ async function createProfileForOtherUser() {
         <span class="flex">
           <div flex>
             <h5 class="w-48 text-xl font-medium leading-tight mb-2">${userName}</h5>
-            <p class="text-gray-500">${email}</p>
+            <p class="text-blue-500 text-sm"><a href="mailto:${email}">${email}</a></p>
           </div>
           <div class="flex p-1 mx-auto bg-gray-100 w-48 h-12 rounded-sm">
             <img src="./img/wallet.svg" alt="" class="h-10" />

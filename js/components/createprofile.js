@@ -138,26 +138,32 @@ async function createProfile() {
 </div>
 </form>
         </div>
-        <div class="">
+        <div class="p-1">
           <div>
             <h5 class="text-xl font-medium leading-tight mb-2">${userName}</h5>
-            <p class="text-gray-500">${email}</p>
+            <p class="text-gray-500 text-sm">${email}</p>
+            <p class="text-gray-500 text-sm">${wins} wins and ${data._count.listings} listings</p>
           </div>
           <span class="inline-flex text-center">
             <div class="flex p-1 my-1 bg-gray-100 w-48 h-12 rounded-sm">
               <img src="./img/wallet.svg" alt="" class="h-10" />
               <p class="p-2" id="currentBalance">${credits} Credits</p>
+              
             </div>
+            
           </span>
+          
           <span class="inline-flex text-center">
             <button class="flex p-1 my-1 bg-orange-300 w-48 h-12 rounded-full">
               <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
               <p class="p-2" id="currentBalance">New Listing</p>
             </button>
           </span>
+
         </div>
+
       </div>
-  
+
       <div class="hidden md:block w-4/5 my-0 mx-auto grid">
         <div class="mx-auto">
           <img
@@ -166,6 +172,7 @@ async function createProfile() {
             alt="Avatar"
           />     
   <div class="pl-0">
+  
   <form id="newPicForm">
 <div class="flex justify-center">
   <div>
@@ -197,6 +204,7 @@ async function createProfile() {
           ></path>
         </svg>
       </button>
+      
       <ul
         class="
           dropdown-menu
@@ -220,6 +228,7 @@ async function createProfile() {
         "
         aria-labelledby="dropdownMenuButton1"
       >
+      
       <div>
       <label for="name" class="text-sm font-medium ">URL for new profile pic</label>
       <div class="relative mt-1">
@@ -250,7 +259,9 @@ async function createProfile() {
     </div>
   </div>
 </div>
+
 </form>
+
         </div>
         <hr class="my-2" />
         <span class="flex">
@@ -269,8 +280,10 @@ async function createProfile() {
         </span>
         <span class="inline-flex text-center"> </span>
       </div>
+      
       <h3 class="text-lg text-center mx-auto">${userName} has ${wins} wins and ${data._count.listings} listings</h3>
-        `
+      
+      `
         profileContainer.insertAdjacentHTML('beforeend', profilecontent);
 
         const newPicField = document.querySelector("#newPicField");
@@ -357,7 +370,7 @@ async function createProfile() {
                     <hr class="my-2" />
                 
                 <div class="flex flex-grow sm:w-4/5 mx-auto">
-                <a href="detailspage.html?item_id=${itemID}" data-mdb-ripple="true" data-mdb-ripple-color="light">
+                <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
                     <div class="inline-flex md:flex-nowrap border-t-2 border-grey-500">
                       <hr />
                       <div>

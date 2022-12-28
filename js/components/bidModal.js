@@ -1,49 +1,70 @@
-import {getToken} from "../local-storage-related"
-import {collectUserName} from "../local-storage-related"
-import {GET_PROFILEINFO_URL} from "../api-related"
-import {CREATE_LISTING_URL} from "../api-related"
+import { getToken } from "../local-storage-related";
+import { collectUserName } from "../local-storage-related";
+import { GET_PROFILEINFO_URL } from "../api-related";
+import { CREATE_LISTING_URL } from "../api-related";
 
-let params = (new URL(window.location)).searchParams;
-let item_id = params.get('item_id');
-let seller = params.get('seller');
+let params = new URL(window.location).searchParams;
 
-const paramString = window.location.search;
-const searchParam = new URLSearchParams(paramString);
-const postId = searchParam.get("post_id");
+let item_id = params.get("item_id");
+let seller = params.get("_seller");
+console.log("params", params);
+
+const queryString = params.toString();
+//const searchParams = new URLSearchParams(queryString);
+
+console.log("queryString", queryString);
+
+//const paramString = window.location.search;
+//const searchParam = new URLSearchParams(paramString);
+//const postId = searchParam.get("post_id");
+console.log("item_id", item_id);
+//console.log('postId',postId);
 
 (async function createBidModal() {
-const bearerKey = getToken();
-const userKey = collectUserName();
+  const bearerKey = getToken();
+  const userKey = collectUserName();
 
   const options = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      Authorization: "Bearer "+ `${bearerKey}`
-    }
+      Authorization: "Bearer " + `${bearerKey}`,
+    },
   };
   const profileResponse = await fetch(GET_PROFILEINFO_URL, options);
-  
-fetch(CREATE_LISTING_URL+'/'+`${item_id}`+'?_seller=true&_bids=true', options)
-  .then(postResponse => postResponse.json())
-  .then(postResponse => {
-const bidsArray = postResponse.bids;
-const highestBid = bidsArray.reduce(
-  (prev, current) => {
-    return prev.amount > current.amount ? prev : current
-  }
-);
 
-const currentBid = highestBid.amount;
+  fetch(
+    CREATE_LISTING_URL + "/" + `${item_id}` + "?_seller=true&_bids=true",
+    options
+  )
+    .then((postResponse) => postResponse.json())
+    .then((postResponse) => {
+      console.log("postResponse", postResponse);
 
-  if (profileResponse.ok){
-    }
-    const profileDetails = profileResponse.json()
-    .then((profileDetails) => {
+      const bidsArray = postResponse.bids;
+      const highestBid = bidsArray.reduce((prev, current) => {
+        return prev.amount > current.amount ? prev : current;
+      }, 0);
 
-    const modalBiddingContainer = document.getElementById('modalBidding');
-    const balance = profileDetails.credits
-    const bidModalRendered = 
-    `
+      let currentBid = highestBid.amount;
+      console.log("this is currentBid which is highestBid.amount", currentBid);
+      console.log("this is highestBid.amount", highestBid.amount);
+      console.log("this is highestBid", highestBid);
+
+      console.log("postResponse ID", postResponse.id);
+      const itemIDWithoutFlags = postResponse.id;
+
+      if (currentBid == undefined) {
+        currentBid = 0;
+      }
+
+      if (profileResponse.ok) {
+      }
+      const profileDetails = profileResponse
+        .json()
+        .then((profileDetails) => {
+          const modalBiddingContainer = document.getElementById("modalBidding");
+          const balance = profileDetails.credits;
+          const bidModalRendered = `
     <!-- Modal -->
 <form class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
   id="biddingModal" tabindex="-1" aria-labelledby="biddingModalLabel" aria-hidden="true">
@@ -69,8 +90,8 @@ const currentBid = highestBid.amount;
         <p class="text-xs text-gray-500">Available balance: ${balance} credits</p>
         <input
           type="number"
-          value="${(currentBid + 1)} credits"
-          min="${(currentBid + 1)}"
+          value="${currentBid + 1} credits"
+          min="${currentBid + 1}"
           class="
             form-control
             block
@@ -94,12 +115,13 @@ const currentBid = highestBid.amount;
         <p id="noUnderbid" class="text-red-600 hidden">Your bid must be higher than the current bid</p>
         <p id="noFunds" class="text-red-600 hidden">Bid cannot exceed your balance</p>
         <p id="bidError" class="text-red-600"></p>
+        <p id="bidSuccessMessage" class="text-green-600"></p>
       </div>
     </div>
       </div>
       <div
         class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-evenly p-4 border-t border-gray-200 rounded-b-md">
-        <button type="button" class="px-6
+        <button type="button" id="closeBidModalButton" class="px-6
           py-2.5
           bg-red-600
           text-white
@@ -136,85 +158,117 @@ const currentBid = highestBid.amount;
   </div>
 </form>
     `;
-    modalBiddingContainer.insertAdjacentHTML('beforeend', bidModalRendered);
-    
-    //user can bid
-    if (biddingModal) {
-      const bidBtn = document.getElementById("bidBtn");
+          modalBiddingContainer.insertAdjacentHTML(
+            "beforeend",
+            bidModalRendered
+          );
 
-      biddingModal.addEventListener("submit", function (event) {
-        event.preventDefault();
-        
-        const noUnderbid = document.getElementById("noUnderbid");
-        const noFunds = document.getElementById("noFunds");
-        const bidError = document.getElementById("bidError");
+          //user can bid
+          if (biddingModal) {
+            //const bidBtn = document.getElementById("bidBtn");
 
-        let isNotUnderbid = false;
-        if (bidInputField.value > highestBid) 
-        {
-          noUnderbid.classList.add("hidden");
-          isNotUnderbid = true;
-        } else {
-          noUnderbid.classList.remove("hidden");
-          bidError.innerHTML =
-            "Your bid must be at least " +
-            ((highestBid +1 - bidInputField.value)) +
-            " credits more.";
-        }
+            biddingModal.addEventListener("submit", function (event) {
+              event.preventDefault();
 
-        let isNotInsufficientFunds = false;
-        if (bidInputField.value < balance) 
-        {
-          noFunds.classList.add("hidden");
-          isNotInsufficientFunds = true;
-        } else {
-          noFunds.classList.remove("hidden");
-          bidError.innerHTML =
-            "Your bid is " +
-            ((bidInputField.value - balance)) +
-            " credits more than your balance :/ ";
-        }
-    
-        let bidValidated = isNotUnderbid && isNotInsufficientFunds;
-        
-        const bid = parseInt(bidInputField.value)
-        if (bidValidated) {
-          console.log("bid validation success");
-          const newBidData = {
-            "amount": bid,
-          };
-          
-          const PLACE_BID_URL = CREATE_LISTING_URL + `/${item_id}/bids`;
-    
-          async function placeBid() {
-            try {
-              const response = await fetch(PLACE_BID_URL, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "Authorization": `Bearer ${bearerKey}`
-                },
-                body: JSON.stringify(newBidData),
-              });
-              
-              if (response.ok) {
-                const data = await response.json();
-                console.log('response.json()',response.json());
-                console.log(" bid placed successfully, here is data:", data);
-                alert("Bid placed successfully! :)")
+              const noUnderbid = document.getElementById("noUnderbid");
+              const noFunds = document.getElementById("noFunds");
+              const bidError = document.getElementById("bidError");
+
+              let isNotUnderbid = false;
+              if (bidInputField.value > currentBid) {
+                noUnderbid.classList.add("hidden");
+                isNotUnderbid = true;
               } else {
-                bidError.innerHTML = `The following error occured: ${data.message}`;
+                noUnderbid.classList.remove("hidden");
+                bidError.innerHTML =
+                  "Your bid must be at least " +
+                  (currentBid + 1 - bidInputField.value) +
+                  " credits more than what you tried now.";
               }
-            } catch (e) {
-              console.log(e);
-            }
+
+              let isNotInsufficientFunds = false;
+              if (bidInputField.value < balance) {
+                noFunds.classList.add("hidden");
+                isNotInsufficientFunds = true;
+              } else {
+                noFunds.classList.remove("hidden");
+                bidError.innerHTML =
+                  "Your bid is " +
+                  (bidInputField.value - balance) +
+                  " credits more than your balance :/ ";
+              }
+
+              let bidValidated = isNotUnderbid && isNotInsufficientFunds;
+
+              const bid = parseInt(bidInputField.value);
+              if (bidValidated) {
+                console.log("bid validation success");
+                const newBidData = {
+                  amount: bid,
+                };
+
+                const PLACE_BID_URL =
+                  CREATE_LISTING_URL + `/${itemIDWithoutFlags}/bids`;
+
+                console.log("this is PLACE_BID_URL", PLACE_BID_URL);
+
+                async function placeBid() {
+                  try {
+                    const response = await fetch(PLACE_BID_URL, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${bearerKey}`,
+                      },
+                      body: JSON.stringify(newBidData),
+                    });
+
+                    if (response.ok) {
+                      const JSONresponse = await response.json();
+                      //console.log("response.json()", response.json());
+                      console.log(
+                        "bid placed successfully, here is data:",
+                        JSONresponse
+                      );
+
+                      const bidSuccessMessage =
+                        document.getElementById("bidSuccessMessage");
+                      {
+                        bidSuccessMessage.innerHTML = `Your bidding for ${JSONresponse.title} was successful! :))
+                          This message will close in 5 seconds`;
+                      }
+
+                      const closeBidModalButton = document.getElementById(
+                        "closeBidModalButton"
+                      );
+                      setTimeout(function clickcloseBidModalButton() {
+                        closeBidModalButton.click();
+                        console.log(
+                          "clickcloseBidModalButton() skal være gjort nå"
+                        );
+                      }, 5000);
+                      location.reload();
+                      clickcloseBidModalButton();
+                      
+                    } else {
+                      const JSONresponse = await response.json();
+                      const errorMessage = JSONresponse.errors[length].message;
+
+                      bidError.innerHTML = `Sorry. ${errorMessage} :(`;
+                    }
+                  } catch (e) {
+                    console.log("error caught: ", e);
+                  }
+                }
+                placeBid();
+              } else {
+                //bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
+              }
+            });
           }
-          placeBid();
-        } else {
-          bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
-        }
-      });
-    }
-  }
-  ).catch(err => console.error("during bidding the following error occured:",err));
-})}())
+        })
+        .catch((err) =>
+          console.error("during bidding the following error occured:", err)
+        );
+    });
+})();
