@@ -88,9 +88,9 @@ function createHeaderBar() {
   }
   navBar.innerHTML = `
   <nav
-  class="mx-auto my-0 relative w-full flex flex-wrap items-center justify-between p-2 bg-teal-700 text-gray-200 shadow-lg navbar navbar-expand-lg navbar-light"
+  class="mx-auto my-0 relative w-full flex items-center justify-between p-2 bg-teal-700 text-gray-200 shadow-lg navbar navbar-expand-lg navbar-light"
 >    
-  <div class="mx-auto my-0 container-fluid w-full flex flex-wrap justify-evenly sm:w-4/5">
+  <div class="mx-auto my-0 container-fluid w-full flex justify-evenly sm:w-4/5">
     <a class="text-xl text-white font-semibold p-2" href="index.html">
         <img src="./img/homeicon.svg" alt=""
         class="rounded-full"
@@ -111,8 +111,8 @@ function createHeaderBar() {
         <div class="flex justify-center">
           <div class="xl:w-96">
             <div class="input-group relative flex flex-wrap items-stretch ">
-              <input type="search" class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
-              <button class="btn inline-block px-6 bg-teal-500 border-emerald-50 border-2 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center" type="button" id="button-addon2">
+              <input id="search-input" type="search" class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+              <button id="search-button" class="btn inline-block px-6 bg-teal-500 border-emerald-50 border-2 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center" type="button" >
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="w-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                   <path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path>
                 </svg>
@@ -120,7 +120,9 @@ function createHeaderBar() {
             </div>
           </div>
         </div>
+        
       </div>
+      
     <!--
     <a class="text-xl text-white font-semibold p-2" href="index.html">
         <img src="./img/homeicon.svg" alt=""
@@ -139,7 +141,22 @@ function createHeaderBar() {
   </div>
     <br>
   </div>
+  <br>
+    
 </nav>
+
+  <div class="list-none flex p-1 justify-center mx-auto text-sm font-normal bg-teal-600 text-white">
+  <br>
+  <li id="list"> <br> </li><li id="listTwo"></li>
+  <br>
+  </div>
+  <!--
+  <div class="list-none flex flex-nowrap p-1 justify-center mx-auto border-2 border-red-600">
+      <br>
+    
+      
+  </div>
+  -->
   `
   const logoutbtn = document.getElementById('logout-btn');
 
@@ -152,8 +169,24 @@ if (logoutbtn) {
 }
 
 
-// Search for usernames starts here
+const searchButton = document.getElementById('search-button');
+const searchInput = document.getElementById('search-input');
 /*
+const items = ['apple', 'banana', 'orange', 'mango'];
+
+searchButton.addEventListener('click', function() {
+  const searchQuery = searchInput.value;
+  const index = items.indexOf(searchQuery);
+  if (index !== -1) {
+    console.log(`Item found: ${items[index]}`);
+  } else {
+    console.log('Item not found');
+  }
+});
+*/
+
+// Search for usernames starts here
+
 const searchApiForProfiles = {
   method: 'GET',
   headers: {
@@ -161,13 +194,13 @@ const searchApiForProfiles = {
   }
 };
 
-fetch('https://nf-api.onrender.com/api/v1/social/profiles', searchApiForProfiles)
+fetch('https://nf-api.onrender.com/api/v1/auction/profiles', searchApiForProfiles)
   .then(response => response.json())
   .then((data) => {
     const people = data;
-    //console.log('HERE IS THE RAW DATA RECEIVED',data);
+    console.log('HERE IS THE RAW DATA RECEIVED',data);
 
-    const searchInput = document.getElementById("searchInput");
+    const searchInput = document.getElementById("search-input");
     const list = document.getElementById("list");
 
 function setList(group){
@@ -176,8 +209,20 @@ function setList(group){
     const item=document.createElement('li')
     //console.dir("ITEM",item)
     item.classList.add('list-group-item')
-    const text = document.createTextNode("username: "+person.name);
-    item.appendChild(text);
+
+    const a = document.createElement('a');
+    //a.href = `userprofile.html?user_name=`+person.name;
+    //a.href = `userprofile.html?user_name=`+person.name;
+    
+    //const linktest = `<a href="userprofile.html?user_name=${person.name}">${person.name}</a>`;
+    const linkUserProfileFromSearch = `userprofile.html?user_name=${person.name}`;
+    a.href = linkUserProfileFromSearch
+    console.log('a',a);
+    
+    const text = document.createTextNode("user: "+ person.name ) ;
+    a.appendChild(text);
+    list.appendChild(a)
+    item.appendChild(a);
     list.appendChild(item);
   }
     if (group.length === 0){
@@ -237,11 +282,11 @@ const searchApiForPosts = {
   }
 };
 
-fetch('https://nf-api.onrender.com/api/v1/social/posts', searchApiForPosts)
+fetch('https://nf-api.onrender.com/api/v1/auction/listings', searchApiForPosts)
   .then(response => response.json())
   .then((allPostData) => {
     const people = allPostData;
-    const searchInput = document.getElementById("searchInput");
+    const searchInput = document.getElementById("search-input");
     const list = document.getElementById("listTwo");
 
 function setList(group){
@@ -252,9 +297,28 @@ function setList(group){
     const item=document.createElement('li')
     item.classList.add('list-group-item')
     //const linkToProfile = `<a href="/profile.html/${person.name}">Profile:${person.name}</a>`;
-    const title = document.createTextNode("Post with title: "+'"'+post.title+'"');
-    item.appendChild(title);
-    list.appendChild(item);
+    const title = document.createTextNode("Listing: "+post.title +" ");//("user: "+ person.name )
+    //hei
+    const a = document.createElement('a');
+    //a.href = `userprofile.html?user_name=`+person.name;
+    //a.href = `userprofile.html?user_name=`+person.name;
+    
+    //const linktest = `<a href="userprofile.html?user_name=${person.name}">${person.name}</a>`;
+    const linkListingFromSearch = `detailspage.html?item_id=${post.id}?_seller=true&_bids=true`;
+    a.href = linkListingFromSearch
+    console.log('a listing',a);
+    
+    //const text = document.createTextNode("Listing: "+ post.title ) ;
+    //a.appendChild(text);
+    //list.appendChild(a)
+    //item.appendChild(a);
+    //list.appendChild(item);
+    //heisann
+    a.appendChild(title)
+    item.appendChild(a)
+    list.appendChild(a)
+    //item.appendChild(title);
+    //list.appendChild(item);
   }
     if (group.length === 0){
       setNoResults();
@@ -306,5 +370,5 @@ searchInput.addEventListener('input', (event) => {
   )
   .catch(err => console.error(err));
 /////////END OF CALL 2/////////
-*/
+
 createHeaderBar();
