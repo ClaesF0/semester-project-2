@@ -9,14 +9,7 @@
     <script type="module" src="./js/components/header.js" defer></script>
     <!--<script type="module" src="./js/log-in-sign-up.js" defer></script>-->
     <script type="module" src="./js/components/modal.js" defer></script>
-    
-
-
-    <script
-      type="module"
-      src="./js/components/get-listings-in-feed.js"
-      defer
-    ></script>
+    <script type="module" src="./js/components/get-listings-in-feed.js" defer></script>
     <title>Vite App</title>
   </head>
   <body class="">
@@ -25,6 +18,15 @@
       <div id="top-bar-allocated-space" class="h-3"></div>
     </header>
     <div id="modalAccount"></div>
+
+    <select id="selectElement" selected="all">
+      <option selected value="all">All</option>
+      <option value="active">Active only</option>
+      <option value="ascending">Ascending (oldest first)</option>
+      <option value="descending">Descending (newest first)</option>
+    </select> disregard filter function, not successful in making work
+  
+
     
 
     <!--CARD START-->

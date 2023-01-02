@@ -1,23 +1,17 @@
-import {
-  collectUserName,
-  getToken,
-} from '../local-storage-related';
-
+import { collectUserName, getToken } from "../local-storage-related";
 
 const bearerKey = getToken();
 
 function clearStorage() {
   localStorage.clear();
-  location.replace("index.html")
+  location.replace("index.html");
 }
 
 function createHeaderBar() {
-  const navBar = document.getElementById('navBar');
+  const navBar = document.getElementById("navBar");
   const userName = collectUserName();
 
-
-  let headerLinks = 
-  `
+  let headerLinks = `
   <button
   type="button"
   class="nav-link px-1 py-1 my-0 mx-auto border-2 border-white bg-green-500 text-white font-medium text-xs leading-tight rounded shadow-md hover:text-black hover:bg-green-400 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
@@ -25,13 +19,9 @@ function createHeaderBar() {
   data-bs-target="#loginModal">
   Log in / Sign up
   </button>
-  `
+  `;
   if (userName) {
-
-      
-
-    headerLinks = 
-    `
+    headerLinks = `
     <!-- Icon -->
           <div class="dropdown relative">
             <a
@@ -84,7 +74,7 @@ function createHeaderBar() {
               </li>
             </ul>
           </div>
-    `
+    `;
   }
   navBar.innerHTML = `
   <nav
@@ -147,7 +137,10 @@ function createHeaderBar() {
 
   <div class="list-none flex p-1 justify-center mx-auto text-sm font-normal bg-teal-600 text-white">
   <br>
-  <li id="list"> <br> </li><li id="listTwo"></li>
+  <ul>
+  <li id="list"></li>
+  <li id="listTwo"></li>
+  </ul>
   <br>
   </div>
   <!--
@@ -157,20 +150,19 @@ function createHeaderBar() {
       
   </div>
   -->
-  `
-  const logoutbtn = document.getElementById('logout-btn');
+  `;
+  const logoutbtn = document.getElementById("logout-btn");
 
-if (logoutbtn) {
-  logoutbtn.addEventListener('click', () => {
-    clearStorage();
-    window.location.replace('index.html');
-  });
+  if (logoutbtn) {
+    logoutbtn.addEventListener("click", () => {
+      clearStorage();
+      window.location.replace("index.html");
+    });
+  }
 }
-}
 
-
-const searchButton = document.getElementById('search-button');
-const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById("search-button");
+const searchInput = document.getElementById("search-input");
 /*
 const items = ['apple', 'banana', 'orange', 'mango'];
 
@@ -188,187 +180,195 @@ searchButton.addEventListener('click', function() {
 // Search for usernames starts here
 
 const searchApiForProfiles = {
-  method: 'GET',
+  method: "GET",
   headers: {
-    Authorization: `Bearer ${bearerKey}`
-  }
+    Authorization: `Bearer ${bearerKey}`,
+  },
 };
 
-fetch('https://nf-api.onrender.com/api/v1/auction/profiles', searchApiForProfiles)
-  .then(response => response.json())
+fetch(
+  "https://nf-api.onrender.com/api/v1/auction/profiles",
+  searchApiForProfiles
+)
+  .then((response) => response.json())
   .then((data) => {
     const people = data;
-    console.log('HERE IS THE RAW DATA RECEIVED',data);
+    console.log("HERE IS THE RAW DATA RECEIVED", data);
 
     const searchInput = document.getElementById("search-input");
     const list = document.getElementById("list");
 
-function setList(group){
-  clearList();
-  for(const person of group){
-    const item=document.createElement('li')
-    //console.dir("ITEM",item)
-    item.classList.add('list-group-item')
+    function setList(group) {
+      clearList();
+      for (const person of group) {
+        const item = document.createElement("li");
 
-    const a = document.createElement('a');
-    //a.href = `userprofile.html?user_name=`+person.name;
-    //a.href = `userprofile.html?user_name=`+person.name;
-    
-    //const linktest = `<a href="userprofile.html?user_name=${person.name}">${person.name}</a>`;
-    const linkUserProfileFromSearch = `userprofile.html?user_name=${person.name}`;
-    a.href = linkUserProfileFromSearch
-    console.log('a',a);
-    
-    const text = document.createTextNode("user: "+ person.name ) ;
-    a.appendChild(text);
-    list.appendChild(a)
-    item.appendChild(a);
-    list.appendChild(item);
-  }
-    if (group.length === 0){
-      setNoResults();
-  }
-}
+        item.classList.add("list-group-item");
 
-function clearList(){
-    while (list.firstChild){
-      list.removeChild(list.firstChild);
+        const a = document.createElement("a");
+
+        const linkUserProfileFromSearch = `userprofile.html?user_name=${person.name}`;
+        a.href = linkUserProfileFromSearch;
+        console.log("a", a);
+
+        const text = document.createTextNode("user: " + person.name);
+        a.appendChild(text);
+        list.appendChild(a);
+        item.appendChild(a);
+        list.appendChild(item);
+      }
+      if (group.length === 0) {
+        setNoResults();
+      }
     }
-}
 
-function setNoResults () {
+    function clearList() {
+      while (list.firstChild) {
+        list.removeChild(list.firstChild);
+      }
+    }
 
-    const item=document.createElement('li')
-    item.classList.add('list-group-item')
-    const text = document.createTextNode("No matching user found");
-    item.appendChild(text);
-    list.appendChild(item);
-}
+    function setNoResults() {
+      const item = document.createElement("li");
+      item.classList.add("list-group-item");
+      const text = document.createTextNode("No matching user found");
+      item.appendChild(text);
+      list.appendChild(item);
+    }
 
-function getRelevancy(value, searchTerm){ //maximizing relevancy with origin of amount of search/result match
-  if (value === searchTerm) {
-    return 2;
-  } else if (value.startsWith(searchTerm)) {
-    return 1;
-  } else if(value.includes(searchTerm)) {
-    return 0;
-  }
-}
+    function getRelevancy(value, searchTerm) {
+      //maximizing relevancy with origin of amount of search/result match
+      if (value === searchTerm) {
+        return 2;
+      } else if (value.startsWith(searchTerm)) {
+        return 1;
+      } else if (value.includes(searchTerm)) {
+        return 0;
+      }
+    }
 
-searchInput.addEventListener('input', (event) => {
-  //console.log(event.target.value)
-  let value = event.target.value;
-  if (value && value.trim().length > 0) {
-      value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
-      setList(people.filter(person=>{
-        return person.name.includes(value);
-      }).sort((personA, personB)=>{
-        return getRelevancy(personB.name, value) -getRelevancy(personA.name, value);
-      })); //her er array som søkes i
-  } else {
-    clearList();
-  }
-});
-//Search 1 ends here
-  }
-  )
-  .catch(err => console.error(err));
+    searchInput.addEventListener("input", (event) => {
+      //console.log(event.target.value)
+      let value = event.target.value;
+      if (value && value.trim().length > 0) {
+        value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
+        setList(
+          people
+            .filter((person) => {
+              return person.name.includes(value);
+            })
+            .sort((personA, personB) => {
+              return (
+                getRelevancy(personB.name, value) -
+                getRelevancy(personA.name, value)
+              );
+            })
+        ); //her er array som søkes i
+      } else {
+        clearList();
+      }
+    });
+    //Search 1 ends here
+  })
+  .catch((err) => console.error(err));
 
-////////Call for post data begins/////////
+////////Call for listing data begins/////////
 const searchApiForPosts = {
-  method: 'GET',
+  method: "GET",
   headers: {
-    Authorization: `Bearer ${bearerKey}`
-  }
+    Authorization: `Bearer ${bearerKey}`,
+  },
 };
 
-fetch('https://nf-api.onrender.com/api/v1/auction/listings', searchApiForPosts)
-  .then(response => response.json())
+fetch("https://nf-api.onrender.com/api/v1/auction/listings", searchApiForPosts)
+  .then((response) => response.json())
   .then((allPostData) => {
     const people = allPostData;
     const searchInput = document.getElementById("search-input");
     const list = document.getElementById("listTwo");
 
-function setList(group){
-  clearList();
-  for(const post of group){
-    console.log('GROUP',group);
+    function setList(group) {
+      clearList();
+      for (const post of group) {
+        console.log("GROUP", group);
 
-    const item=document.createElement('li')
-    item.classList.add('list-group-item')
-    //const linkToProfile = `<a href="/profile.html/${person.name}">Profile:${person.name}</a>`;
-    const title = document.createTextNode("Listing: "+post.title +" ");//("user: "+ person.name )
-    //hei
-    const a = document.createElement('a');
-    //a.href = `userprofile.html?user_name=`+person.name;
-    //a.href = `userprofile.html?user_name=`+person.name;
-    
-    //const linktest = `<a href="userprofile.html?user_name=${person.name}">${person.name}</a>`;
-    const linkListingFromSearch = `detailspage.html?item_id=${post.id}?_seller=true&_bids=true`;
-    a.href = linkListingFromSearch
-    console.log('a listing',a);
-    
-    //const text = document.createTextNode("Listing: "+ post.title ) ;
-    //a.appendChild(text);
-    //list.appendChild(a)
-    //item.appendChild(a);
-    //list.appendChild(item);
-    //heisann
-    a.appendChild(title)
-    item.appendChild(a)
-    list.appendChild(a)
-    //item.appendChild(title);
-    //list.appendChild(item);
-  }
-    if (group.length === 0){
-      setNoResults();
+        const item = document.createElement("li");
+        item.classList.add("list-group-item");
+        const title = document.createTextNode("Listing: " + post.title);
+        const a = document.createElement("a");
 
-  }
-}
+        const linkListingFromSearch = `detailspage.html?item_id=${post.id}?_seller=true&_bids=true`;
+        a.href = linkListingFromSearch;
+        console.log("a listing", a);
 
-function clearList(){
-    while (list.firstChild){
-      list.removeChild(list.firstChild);
+        a.appendChild(title);
+        list.appendChild(a);
+        item.appendChild(a);
+        list.appendChild(item)
+        
+
+        /* 
+         const text = document.createTextNode("user: " + person.name);
+        //a.appendChild(text);
+        list.appendChild(a);
+        item.appendChild(a);
+        list.appendChild(item);
+        */
+      }
+      if (group.length === 0) {
+        setNoResults();
+      }
     }
-}
 
-function setNoResults () {
-    const item=document.createElement('li')
-    item.classList.add('list-group-item')
-    const text = document.createTextNode("No results found");
-    item.appendChild(text);
-    list.appendChild(item);
-}
+    function clearList() {
+      while (list.firstChild) {
+        list.removeChild(list.firstChild);
+      }
+    }
 
-function getRelevancy(value, searchTerm){ //maximizing relevancy with origin of amount of search/result match
-  if (value === searchTerm) {
-    return 2;
-  } else if (value.startsWith(searchTerm)) {
-    return 1;
-  } else if(value.includes(searchTerm)) {
-    return 0;
-  }
-}
+    function setNoResults() {
+      const item = document.createElement("li");
+      item.classList.add("list-group-item");
+      const text = document.createTextNode("No listing results found");
+      item.appendChild(text);
+      list.appendChild(item);
+    }
 
-searchInput.addEventListener('input', (event) => {
-  //console.log(event.target.value)
-  let value = event.target.value;
-  if (value && value.trim().length > 0) {
-      value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
-      setList(people.filter(post=>{
-        return post.title.includes(value);
-      }).sort((postA, postB)=>{
-        return getRelevancy(postB.title, value) -getRelevancy(postA.title, value);
-      })); //her er array som søkes i
-  } else {
-    clearList();
-  }
-});
-//Search ends here
+    function getRelevancy(value, searchTerm) {
+      //maximizing relevancy with origin of amount of search/result match
+      if (value === searchTerm) {
+        return 2;
+      } else if (value.startsWith(searchTerm)) {
+        return 1;
+      } else if (value.includes(searchTerm)) {
+        return 0;
+      }
+    }
 
-  }
-  )
-  .catch(err => console.error(err));
+    searchInput.addEventListener("input", (event) => {
+      //console.log(event.target.value)
+      let value = event.target.value;
+      if (value && value.trim().length > 0) {
+        value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
+        setList(
+          people
+            .filter((post) => {
+              return post.title.includes(value);
+            })
+            .sort((postA, postB) => {
+              return (
+                getRelevancy(postB.title, value) -
+                getRelevancy(postA.title, value)
+              );
+            })
+        ); //her er array som søkes i
+      } else {
+        clearList();
+      }
+    });
+    //Search ends here
+  })
+  .catch((err) => console.error(err));
 /////////END OF CALL 2/////////
 
 createHeaderBar();
