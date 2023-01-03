@@ -199,6 +199,8 @@ fetch(
     const list = document.getElementById("list");
 
     function setList(group) {
+      console.log("group usernames", group);
+
       clearList();
       for (const person of group) {
         const item = document.createElement("li");
@@ -250,13 +252,21 @@ fetch(
     searchInput.addEventListener("input", (event) => {
       //console.log(event.target.value)
       let value = event.target.value;
+      console.log("value from searchevent", value);
+      console.log("value.trim().length", value.trim().length);
+
       if (value && value.trim().length > 0) {
         value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
+        //console.log('people',people);//GIVES THE WHOLE ARRAY
+
         setList(
           people
             .filter((person) => {
+              //console.log('person',person);//GIVES EVERY SINGLE PERSON
+
               return person.name.includes(value);
             })
+
             .sort((personA, personB) => {
               return (
                 getRelevancy(personB.name, value) -
@@ -283,37 +293,30 @@ const searchApiForPosts = {
 fetch("https://nf-api.onrender.com/api/v1/auction/listings", searchApiForPosts)
   .then((response) => response.json())
   .then((allPostData) => {
-    const people = allPostData;
+    const listings = allPostData;
     const searchInput = document.getElementById("search-input");
     const list = document.getElementById("listTwo");
 
     function setList(group) {
+      console.log("GROUP of listings", group);
+
       clearList();
       for (const post of group) {
-        console.log("GROUP", group);
-
         const item = document.createElement("li");
+
         item.classList.add("list-group-item");
-        const title = document.createTextNode("Listing: " + post.title);
+
         const a = document.createElement("a");
 
         const linkListingFromSearch = `detailspage.html?item_id=${post.id}?_seller=true&_bids=true`;
         a.href = linkListingFromSearch;
         console.log("a listing", a);
 
+        const title = document.createTextNode("Listing: " + post.title);
         a.appendChild(title);
         list.appendChild(a);
         item.appendChild(a);
-        list.appendChild(item)
-        
-
-        /* 
-         const text = document.createTextNode("user: " + person.name);
-        //a.appendChild(text);
-        list.appendChild(a);
-        item.appendChild(a);
         list.appendChild(item);
-        */
       }
       if (group.length === 0) {
         setNoResults();
@@ -348,17 +351,22 @@ fetch("https://nf-api.onrender.com/api/v1/auction/listings", searchApiForPosts)
     searchInput.addEventListener("input", (event) => {
       //console.log(event.target.value)
       let value = event.target.value;
+      console.log("value from searchevent LISTINGS", value);
+      console.log("value.trim().length LISTINGS", value.trim().length);
+
       if (value && value.trim().length > 0) {
         value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
+
         setList(
-          people
+          listings
             .filter((post) => {
-              return post.title.includes(value);
+              return post.title.toLowerCase().includes(value);
             })
+
             .sort((postA, postB) => {
               return (
-                getRelevancy(postB.title, value) -
-                getRelevancy(postA.title, value)
+                getRelevancy(postB.title.toLowerCase(), value) -
+                getRelevancy(postA.title.toLowerCase(), value)
               );
             })
         ); //her er array som søkes i
