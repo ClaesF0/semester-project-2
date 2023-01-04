@@ -10,7 +10,7 @@
     <!--<script type="module" src="./js/log-in-sign-up.js" defer></script>-->
     <script type="module" src="./js/components/modal.js" defer></script>
     <script type="module" src="./js/components/get-listings-in-feed.js" defer></script>
-    <title>Vite App</title>
+    <title>Front page</title>
   </head>
   <body class="">
     <header>
@@ -19,13 +19,13 @@
     </header>
     <div id="modalAccount"></div>
 
-    <select id="selectElement" selected="all">
-      <option selected value="all">All</option>
+    <select onchange="getAllListings()" id="selectElement" selected="all" class="ml-2">
+      <option value="all">All</option>
       <option value="active">Active only</option>
-      <option value="ascendingTitle">Ascending (A → Z)</option>
-      <option value="descendingTitle">Descending (Z → A)</option>
-      <option value="ascendingCreated">Ascending (oldest first)</option>
-      <option value="descendingCreated">Descending (newest first)</option>
+      <option value="ascendingTitle">(A → Z)</option>
+      <option value="descendingTitle">(Z → A)</option>
+      <option value="ascendingCreated">Oldest first</option>
+      <option value="descendingCreated">Newest first</option>
     </select> disregard filter function, not successful in making work
   
 

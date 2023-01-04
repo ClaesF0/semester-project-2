@@ -6,34 +6,9 @@ import moment from "moment/moment";
 //let now = moment(new Date()); //todays date
 
 (async function getAllListings() {
-
-  
-  /*
-  const filters = document.getElementById('filters');
-  console.log('filters select elemenet is here',filters);
-  let filter = ''
-
-  filters.addEventListener('change', function() {
-    console.log('filter button pressed',);
-    
-    const selectedValue = this.value;
-    if (selectedValue === 'all') {
-      (filter = '')
-    } else if (selectedValue === 'active') {
-      (filter = '?_active=true')
-    } else if (selectedValue === 'ascending') {
-      (filter = '?sort=title&sortOrder=asc')
-    } else if (selectedValue === 'descending') {
-      (filter = '?sort=created&sortOrder=desc')
-    } 
-  });
-*/
-
-
   
   const response = await fetch('https://nf-api.onrender.com/api/v1/auction/listings',options,);
   if (response.ok) {
-    //console.log('RESPONS OK', response);
     const selectElement = document.getElementById('selectElement');
 
 selectElement.addEventListener('change', function() {
@@ -42,12 +17,22 @@ selectElement.addEventListener('change', function() {
 
   if (selectedValue === 'all') {
     apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings';
+    console.log('apiUrl',apiUrl);
   } else if (selectedValue === 'active') {
     apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?_active=true';
-  } else if (selectedValue === 'ascending') {
+    console.log('apiUrl',apiUrl);
+  } else if (selectedValue === 'ascendingTitle') {
     apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?sort=title&sortOrder=asc';
-  } else if (selectedValue === 'descending') {
+    console.log('apiUrl',apiUrl);
+  } else if (selectedValue === 'descendingTitle') {
     apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?sort=title&sortOrder=desc';
+    console.log('apiUrl',apiUrl);
+  } else if (selectedValue === 'ascendingCreated') {
+    apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?sort=created&sortOrder=asc';
+    console.log('apiUrl',apiUrl);
+  } else if (selectedValue === 'descendingCreated') {
+    apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?sort=created&sortOrder=desc';
+    console.log('apiUrl',apiUrl);
   }
 
   const options = { method: 'GET' };
@@ -91,10 +76,10 @@ console.log('response',response);
 
         const cardsContainer = document.getElementById('cardsContainer');
         const newPostData = `
-        <div class=" border-2 border-gray-200 w-40 h-80 m-1 p-1 shadow-lg bg-white max-w-20 rounded  hover:bg-blue-100 sm:w-60">
+        <div class=" border-2 border-gray-200 w-40 h-70 m-1 p-1 shadow-lg bg-white max-w-20 rounded  hover:bg-blue-100 sm:w-60">
         <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
-        <div class="border-2 border-green-600 ">
-        <img class="mx-auto border-2 border-red-600 rounded-lg h-40 w-auto object-contain" src="${mainPic}" alt=""/>
+        <div class="">
+        <img class="mx-auto rounded-sm h-40 w-auto object-cover" src="${mainPic}" alt=""/>
         </div>
             <div class="">
             <p class="text-gray-700 text-xs pt-1">Bids: ${bidCount}</p>
@@ -105,6 +90,7 @@ console.log('response',response);
             </div>
           </div>        
                     `;
+                    
         cardsContainer.insertAdjacentHTML('beforeend', newPostData);
       });
     })

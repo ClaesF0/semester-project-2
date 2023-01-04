@@ -29,7 +29,7 @@ function createDetailsPage() {
         const bidID = bidsArray.map((object) => object.id);
         const bidAmount = bidsArray.map((object) => object.amount);
         const bidCreated = bidsArray.map((object) => object.created);
-
+        document.title = "Auction details for "+response.title;
         let bidHistoryList = "";
 
         function getOrdinal(num) {
