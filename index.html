@@ -19,7 +19,7 @@
     </header>
     <div id="modalAccount"></div>
 
-    <select onchange="getAllListings()" id="selectElement" selected="all" class="ml-2">
+    <select id="selectElement" class="ml-2">
       <option value="all">All</option>
       <option value="active">Active only</option>
       <option value="ascendingTitle">(A → Z)</option>
@@ -32,10 +32,12 @@
     
 
     <!--CARD START-->
+    <div id="cardsParent">
     <div
       id="cardsContainer"
       class="inline-flex flex-wrap justify-evenly"
     ></div>
+  </div>
     <!--CARD END-->
 
 
