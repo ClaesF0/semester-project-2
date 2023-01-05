@@ -163,19 +163,6 @@ function createHeaderBar() {
 
 const searchButton = document.getElementById("search-button");
 const searchInput = document.getElementById("search-input");
-/*
-const items = ['apple', 'banana', 'orange', 'mango'];
-
-searchButton.addEventListener('click', function() {
-  const searchQuery = searchInput.value;
-  const index = items.indexOf(searchQuery);
-  if (index !== -1) {
-    console.log(`Item found: ${items[index]}`);
-  } else {
-    console.log('Item not found');
-  }
-});
-*/
 
 // Search for usernames starts here
 
@@ -193,7 +180,6 @@ fetch(
   .then((response) => response.json())
   .then((data) => {
     const people = data;
-    console.log("HERE IS THE RAW DATA RECEIVED", data);
 
     const searchInput = document.getElementById("search-input");
     const list = document.getElementById("list");
@@ -250,20 +236,16 @@ fetch(
     }
 
     searchInput.addEventListener("input", (event) => {
-      //console.log(event.target.value)
       let value = event.target.value;
       console.log("value from searchevent", value);
       console.log("value.trim().length", value.trim().length);
 
       if (value && value.trim().length > 0) {
         value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
-        //console.log('people',people);//GIVES THE WHOLE ARRAY
 
         setList(
           people
             .filter((person) => {
-              //console.log('person',person);//GIVES EVERY SINGLE PERSON
-
               return person.name.includes(value);
             })
 
