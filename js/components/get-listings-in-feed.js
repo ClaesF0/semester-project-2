@@ -112,20 +112,6 @@ selectElement.addEventListener('change', async function() {
     console.log('apiUrl',apiUrl);
   }
 
-    const checkbox = document.querySelector('#activeOnly');
-    function updateURL() {
-      if (checkbox.checked) {
-        apiUrl += '?_active=true';
-        
-      } else {
-        apiUrl += '';
-      }
-
-      // Use the updated URL to perform some action, such as making an AJAX request
-      // or updating the current page's URL.
-      console.log("apiUrl CHECKBOX",apiUrl);
-    }
-    checkbox.addEventListener('change', updateURL);
 
 
   const options = { method: 'GET' };
@@ -133,6 +119,21 @@ selectElement.addEventListener('change', async function() {
   console.log('apiUrl ETTER FETCH 2',apiUrl);
   console.log('dette er responseTWO RETT ETTER FETCH',responseTWO);
   
+  const checkbox = document.getElementById('activeOnly');
+  function updateURL() {
+    if (checkbox.checked) {
+      apiUrl += '?_active=true';
+      location.reload();
+    } else {
+      apiUrl = apiUrl.replace("?_active=true", "");
+      location.reload();
+    }
+    console.log("apiUrl CHECKBOX",apiUrl);
+  }
+  checkbox.addEventListener('change', updateURL);
+
+  console.log('apiUrl ETTER FETCH 2 ETTER CHECKBOX',apiUrl);
+  console.log('dette er responseTWO RETT ETTER FETCH ETTER CHECKBOX',responseTWO);
   
   
 console.log('console log etter second call');
