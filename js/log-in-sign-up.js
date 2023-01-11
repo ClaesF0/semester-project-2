@@ -141,7 +141,8 @@ if (signInForm) {
             };
             console.log("signInDataToStorage", signInDataToStorage);
             storeUserSession(signInDataToStorage);
-            location.replace("index.html");
+            //location.replace("index.html");
+            location.reload();
           } else {
             otherErrorField.innerHTML = `The following error occured: ${data.message}`;
           }

@@ -4,18 +4,16 @@ let now = moment(new Date()); //todays date
 
 function createDetailsPage() {
   const userName = collectUserName();
-  
+
   const paramString = window.location.search;
   const searchParam = new URLSearchParams(paramString);
   const itemID = searchParam.get("item_id");
-  console.log("itemID", itemID);
 
   const options = { method: "GET" };
   const sellerbidsdetailsURL =
     "https://nf-api.onrender.com/api/v1/auction/listings/" +
     `${itemID}` +
     "&_bids=true";
-  console.log("sellerbidsdetailsURL", sellerbidsdetailsURL);
 
   fetch(sellerbidsdetailsURL, options).then((response) =>
     response
@@ -29,7 +27,7 @@ function createDetailsPage() {
         const bidID = bidsArray.map((object) => object.id);
         const bidAmount = bidsArray.map((object) => object.amount);
         const bidCreated = bidsArray.map((object) => object.created);
-        document.title = "Auction details for "+response.title;
+        document.title = "Auction details for " + response.title;
         let bidHistoryList = "";
 
         function getOrdinal(num) {
@@ -49,8 +47,6 @@ function createDetailsPage() {
         }
 
         for (let i = 0; i < bidsArray.length; i++) {
-          console.log("ordinalnumre", getOrdinal(i + 1));
-
           bidHistoryList += `
       <li class="text-gray-400 text-xs font-small mb-1">
       ${getOrdinal(i + 1)} 
@@ -71,8 +67,6 @@ function createDetailsPage() {
         } else {
           price = highestBid.amount;
         }
-
-        //console.table(response);
 
         const description = response.description;
         const itemID = response.id;

@@ -1,8 +1,5 @@
-
-
-
 function createModal() {
-  const modalAccount = document.getElementById('modalAccount');
+  const modalAccount = document.getElementById("modalAccount");
   modalAccount.innerHTML = `
       <!-- log in Modal -->
 <div
@@ -456,7 +453,6 @@ if (signInForm) {
     let formValidated = isEmailField && validDomain && correctPassword;
 
     if (formValidated) {
-      console.log("Validation success");
       const userData = {
         email: emailField.value,
         password: passwordField.value,
@@ -476,9 +472,7 @@ if (signInForm) {
 
           if (response.ok) {
             const data = await response.json();
-            console.log("data:", data);
-            console.log("data.accessToken:", data.accessToken);
-            location.reload()
+            location.reload();
             // save Token
             saveToken(data.accessToken);
             // token saved in local storage, (const) bearerKey in local-storage-related.js
@@ -486,12 +480,10 @@ if (signInForm) {
               name: data.name,
               email: data.email,
             };
-            console.log("signInDataToStorage", signInDataToStorage);
             storeUserSession(signInDataToStorage);
             location.reload();
           } else {
-            
-            otherErrorField.innerHTML = `The following error occured: ${data.message}`;            
+            otherErrorField.innerHTML = `The following error occured: ${data.message}`;
           }
         } catch (e) {
           console.log(e);
@@ -506,22 +498,30 @@ if (signInForm) {
 
 //SIGN-UP
 
-    //import { LOGIN_URL, SIGNUP_URL } from "../api-related";
+//import { LOGIN_URL, SIGNUP_URL } from "../api-related";
 
 //SIGNUP PAGE
 const signUpForm = document.querySelector("#signup-form");
 const signUpnameField = document.querySelector("#signUpnameField");
-const signUpemailField = document.querySelector("#signUpemailField")
-const signUppasswordField = document.querySelector("#signUppasswordField")
-const signUppasswordConfirmField = document.querySelector("#signUppasswordConfirmField");
+const signUpemailField = document.querySelector("#signUpemailField");
+const signUppasswordField = document.querySelector("#signUppasswordField");
+const signUppasswordConfirmField = document.querySelector(
+  "#signUppasswordConfirmField"
+);
 
 const signUpFormError = document.querySelector("#signup-formError");
 const signUpnameFieldError = document.querySelector("#signUpnameFieldError");
-const signUpemailFieldError = document.querySelector("#signUpemailFieldError")
-const signUpemailInvalidError = document.querySelector("#signUpemailInvalidError")
-const signUppasswordFieldError = document.querySelector("#signUppasswordFieldError")
-const signUppasswordConfirmFieldError = document.querySelector("#signUppasswordConfirmFieldError");
-const signUperrorMessage = document.querySelector("#signUperrorMessage")
+const signUpemailFieldError = document.querySelector("#signUpemailFieldError");
+const signUpemailInvalidError = document.querySelector(
+  "#signUpemailInvalidError"
+);
+const signUppasswordFieldError = document.querySelector(
+  "#signUppasswordFieldError"
+);
+const signUppasswordConfirmFieldError = document.querySelector(
+  "#signUppasswordConfirmFieldError"
+);
+const signUperrorMessage = document.querySelector("#signUperrorMessage");
 
 // checked
 
@@ -531,12 +531,15 @@ const signUperrorMessage = document.querySelector("#signUperrorMessage")
 //const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
 
 //cooperates with the regular expression
-    function signUpvalidEmail(email) {
-      return email.match(regEx) ? true : false;
-    }
+function signUpvalidEmail(email) {
+  return email.match(regEx) ? true : false;
+}
 
-    function signUpvalidDomain() {
-  if (signUpemailField.value.trim().length && signUpvalidEmail(signUpemailField.value) === true) {
+function signUpvalidDomain() {
+  if (
+    signUpemailField.value.trim().length &&
+    signUpvalidEmail(signUpemailField.value) === true
+  ) {
     signUpemailInvalidError.classList.add("hidden");
     signUpemailField.classList.add("border-green-700");
     signUpvalidDomain = true;
@@ -546,31 +549,32 @@ const signUperrorMessage = document.querySelector("#signUperrorMessage")
   ) {
     signUpemailInvalidError.classList.remove("hidden");
   }
-    }
-
-    function signUpvalidPassword(password, confirmPassword) {
-      if (!password) {
-        return false;
-      }
-      if (!confirmPassword) {
-        return false;
-      }
-      if (password !== confirmPassword) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-
-const signUpcapsLockReminder = document.getElementById("signUpcapsLockReminder");
-signUpForm.addEventListener('keyup', function (e) {
-    if (e.getModifierState('CapsLock')) {
-      signUpcapsLockReminder.classList.remove("hidden");
-    } else {
-      signUpcapsLockReminder.classList.add("hidden");
-    }
 }
+
+function signUpvalidPassword(password, confirmPassword) {
+  if (!password) {
+    return false;
+  }
+  if (!confirmPassword) {
+    return false;
+  }
+  if (password !== confirmPassword) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+const signUpcapsLockReminder = document.getElementById(
+  "signUpcapsLockReminder"
 );
+signUpForm.addEventListener("keyup", function (e) {
+  if (e.getModifierState("CapsLock")) {
+    signUpcapsLockReminder.classList.remove("hidden");
+  } else {
+    signUpcapsLockReminder.classList.add("hidden");
+  }
+});
 
 //user can sign up
 signUpForm.addEventListener("submit", function (event) {
@@ -597,7 +601,10 @@ signUpForm.addEventListener("submit", function (event) {
   }
 
   let signUpvalidDomain = false;
-  if (signUpemailField.value.trim().length && signUpvalidEmail(signUpemailField.value) === true) {
+  if (
+    signUpemailField.value.trim().length &&
+    signUpvalidEmail(signUpemailField.value) === true
+  ) {
     signUpemailInvalidError.classList.add("hidden");
     signUpvalidDomain = true;
     signUpemailField.classList.remove("border-red-700");
@@ -647,12 +654,12 @@ signUpForm.addEventListener("submit", function (event) {
   }
 
   let signUpformValidated =
-  signUpisNameField &&
-  signUpisEmailField &&
-  signUpvalidDomain &&
-  signUpcorrectPassword &&
-  signUpisPasswordRepeated &&
-  signUpisPasswordMatching;
+    signUpisNameField &&
+    signUpisEmailField &&
+    signUpvalidDomain &&
+    signUpcorrectPassword &&
+    signUpisPasswordRepeated &&
+    signUpisPasswordMatching;
 
   if (signUpformValidated) {
     const userData = {
@@ -676,7 +683,6 @@ signUpForm.addEventListener("submit", function (event) {
         const data = await response.json();
 
         if (response.ok) {
-          console.log("New user sucessfully registered");
           location.reload();
         } else {
           signUperrorMessage.innerHTML = `The following error occured: ${data.message}`;

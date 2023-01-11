@@ -31,6 +31,160 @@
 
 <!--format start-->
                   
+
+<div class="md:hidden my-0 mx-auto w-full sm:w-4/5 grid grid-cols-2">
+  <div class="text-center md:text-left">
+    <img
+      src="${avatar}"
+      class="rounded-full w-auto h-auto mb-4 mx-auto  md:mx-0"
+      alt="Avatar"
+    />
+
+    <form id="newPicForm">
+<div class="flex justify-center hidden">
+<div>
+<div class="dropdown relative">
+<button
+  class="
+
+    dropdown-toggle
+    text-xs text-gray-500 bg-blue-300 px-1 rounded-full
+    shadow-md
+    hover:bg-blue-700 hover:shadow-lg
+    focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+    active:bg-blue-800 active:shadow-lg active:text-white
+    transition
+    duration-150
+    ease-in-out
+    flex
+    items-center
+    whitespace-nowrap
+  "
+  type="button"
+  id="dropdownMenuButton1"
+  data-bs-toggle="dropdown"
+  aria-expanded="false"
+>
+  New pic
+    <path
+      fill="currentColor"
+      d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+    ></path>
+  </svg>
+</button>
+<ul
+  class="
+    dropdown-menu
+    min-w-max
+    absolute
+    hidden
+    bg-white
+    text-base
+    z-50
+    float-left
+    py-2
+    list-none
+    text-left
+    rounded-lg
+    shadow-lg
+    mt-1
+    hidden
+    m-0
+    bg-clip-padding
+    border-none
+  "
+  aria-labelledby="dropdownMenuButton1"
+>
+<div>
+<label for="name" class="text-sm font-medium ">URL for new profile pic</label>
+<div class="relative mt-1">
+
+  <input
+    type=""
+    id="newPicField"
+    class="w-full p-4 pr-12 text-sm border-2 border-gray-400 rounded-lg shadow-sm"
+    placeholder="Publicly accessible URL for profile pic (optional)"
+  />
+  <span class="absolute inset-y-0 inline-flex items-center right-4">
+  </span>
+  
+</div>
+</div>
+<span
+        id="picErrorField"
+        class="hidden text-sm ml-4 text-red-600"
+>
+    CAPS LOCK IS ON </span>
+<button
+  type="submit"
+  class="block w-full px-5 py-3 text-sm font-medium text-black bg-teal-500 rounded-full"
+>
+  Set as new pic
+</button>
+</ul>
+</div>
+</div>
+</div>
+</form>
+  </div>
+  <div class="">
+    <div>
+      <h5 class="text-xl font-medium leading-tight mb-2">${userName}</h5>
+      <p class="text-blue-500 text-sm"><a href="mailto:${email}">${email}</a></p>
+      <p class="text-gray-500 text-sm">${wins} wins and ${data._count.listings} listings</p>
+    </div>
+    <span class="inline-flex text-center">
+      <div class="flex p-1 my-1 bg-gray-100 w-48 h-12 rounded-sm">
+        <img src="./img/wallet.svg" alt="" class="h-10" />
+        <p class="p-2" id="currentBalance">${credits} Credits</p>
+      </div>
+    </span>
+    <span class="inline-flex text-center hidden">
+      <button class="flex p-1 my-1 bg-orange-300 w-48 h-12 rounded-full">
+        <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
+        <p class="p-2" id="currentBalance">New Listing</p>
+      </button>
+    </span>
+  </div>
+</div>
+
+<div class="hidden md:block w-4/5 my-0 mx-auto grid">
+  <div class="mx-auto">
+    <img
+      src="${avatar}"
+      class="rounded-full w-32"
+      alt="Avatar"
+    />     
+<div class="pl-0">
+
+  </div>
+  <hr class="my-2" />
+  <span class="flex">
+    <div flex>
+      <h5 class="w-48 text-xl font-medium leading-tight mb-2">${userName}</h5>
+      <p class="text-blue-500 text-sm"><a href="mailto:${email}">${email}</a></p>
+    </div>
+    <div class="flex p-1 mx-auto bg-gray-100 w-48 h-12 rounded-sm">
+      <img src="./img/wallet.svg" alt="" class="h-10" />
+      <p class="p-2" id="currentBalance">${credits} Credits</p>
+    </div>
+    <button class="hidden flex p-1 bg-orange-300 w-48 h-12 rounded-full">
+      <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
+      <p class="p-2" id="currentBalance">New Listing</p>
+    </button>
+  </span>
+  <span class="inline-flex text-center"> </span>
+</div>
+<h3 class="text-lg text-center mx-auto">${userName} has ${wins} wins and ${data._count.listings} listings</h3>
+
+
+
+
+
+
+
+
+
 <!--format end-->
 
 
