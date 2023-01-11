@@ -18,32 +18,53 @@
       <div id="top-bar-allocated-space" class="h-3"></div>
     </header>
     <div id="modalAccount"></div>
-  
-  <div>  
-    <select id="selectElement" class="ml-2">
-      <option value="all">All</option>
-      <option value="active">Active only</option>
-      <option value="ascendingTitle">(A → Z)</option>
-      <option value="descendingTitle">(Z → A)</option>
-      <option value="ascendingCreated">Oldest first</option>
-      <option value="descendingCreated">Newest first</option>
-    </select> 
-    
+
+  <div>
+    <select id="selectFilterElement" class="ml-2">
+      <option value="all" selected="selected">All</option>
+      <!--<option value="?_active=true">Active only</option>-->
+      <option value="sort=title&sortOrder=asc">(A → Z)</option>
+      <option value="sort=title&sortOrder=desc">(Z → A)</option>
+      <option value="sort=created&sortOrder=asc">Oldest first</option>
+      <option value="sort=created&sortOrder=desc">Newest first</option>
+    </select>
+
+<form id="results-per-page-form">
+  <label for="results-per-page">Results per page:</label>
+  <select id="results-per-page" name="results-per-page">
+    <option value="25" selected="selected">25</option>
+    <option value="50">50</option>
+    <option value="75">75</option>
+    <option value="100">100</option>
+  </select>
+</form>
+
+
     <label for="activeOnly">Show only active listings?</label>
     <input type="checkbox" id="activeOnly" name="activeOnly" checked>
-    <p class="text-xs">Hesham: this checkbox works if you check it and then refresh, working on a solution.</p> 
+    <p class="text-xs">↑ hesh this is work in progress</p>
   </div>
 
-    
+
+
 
     <!--CARD START-->
-    <div id="cardsParent">
+
     <div
       id="cardsContainer"
       class="inline-flex flex-wrap justify-evenly"
     ></div>
-  </div>
+
     <!--CARD END-->
+
+    <div id="pagination">
+      <a href="#" class="previous">Previous</a>
+      <a href="#" class="page active">1</a>
+      <a href="#" class="page">2</a>
+      <a href="#" class="page">3</a>
+      <a href="#" class="page">4</a>
+      <a href="#" class="next">Next</a>
+    </div>
 
 
   </body>
