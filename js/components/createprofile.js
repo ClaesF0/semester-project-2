@@ -34,7 +34,8 @@ async function createProfile() {
       const credits = data.credits;
       const email = data.email;
       const wins = data.wins.length;
-      const profilecontent = `<div class="grid my-0 mx-auto w-full sm:w-4/5 grid-cols-2 ">
+      const profilecontent = `
+      <div class="grid my-0 mx-auto w-full sm:w-4/5 grid-cols-2 ">
         <div class="text-center md:text-left">
           <img
             src="${avatar}"

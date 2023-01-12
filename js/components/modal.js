@@ -473,7 +473,6 @@ if (signInForm) {
           if (response.ok) {
             const data = await response.json();
             location.reload();
-            // save Token
             saveToken(data.accessToken);
             // token saved in local storage, (const) bearerKey in local-storage-related.js
             const signInDataToStorage = {
@@ -496,9 +495,8 @@ if (signInForm) {
   });
 }
 
-//SIGN-UP
+//SIGN-UP RELATED SECTION OF CODE
 
-//import { LOGIN_URL, SIGNUP_URL } from "../api-related";
 
 //SIGNUP PAGE
 const signUpForm = document.querySelector("#signup-form");
@@ -523,14 +521,11 @@ const signUppasswordConfirmFieldError = document.querySelector(
 );
 const signUperrorMessage = document.querySelector("#signUperrorMessage");
 
-// checked
-
 //register user
 
-//only noroff adress
+//only noroff adress cooperates with following regex:
 //const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
 
-//cooperates with the regular expression
 function signUpvalidEmail(email) {
   return email.match(regEx) ? true : false;
 }
@@ -616,7 +611,6 @@ signUpForm.addEventListener("submit", function (event) {
     signUpemailField.classList.add("border-red-700");
   }
 
-  //const passwordFieldError = document.querySelector("#passwordFieldError")
   let signUpcorrectPassword = false;
   if (signUppasswordField.value.trim().length >= 8) {
     signUppasswordFieldError.classList.add("hidden");
@@ -667,8 +661,6 @@ signUpForm.addEventListener("submit", function (event) {
       email: signUpemailField.value,
       password: signUppasswordField.value,
     };
-
-    // const REGISTER_USER_URL_ENDPOINT = USER_SIGNUP_URL;
 
     async function registerNewUser() {
       try {

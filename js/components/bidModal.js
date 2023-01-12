@@ -7,18 +7,8 @@ let params = new URL(window.location).searchParams;
 
 let item_id = params.get("item_id");
 let seller = params.get("_seller");
-console.log("params", params);
 
 const queryString = params.toString();
-//const searchParams = new URLSearchParams(queryString);
-
-console.log("queryString", queryString);
-
-//const paramString = window.location.search;
-//const searchParam = new URLSearchParams(paramString);
-//const postId = searchParam.get("post_id");
-console.log("item_id", item_id);
-//console.log('postId',postId);
 
 (async function createBidModal() {
   const bearerKey = getToken();
@@ -38,7 +28,6 @@ console.log("item_id", item_id);
   )
     .then((postResponse) => postResponse.json())
     .then((postResponse) => {
-      console.log("postResponse", postResponse);
 
       const bidsArray = postResponse.bids;
       const highestBid = bidsArray.reduce((prev, current) => {
@@ -46,11 +35,6 @@ console.log("item_id", item_id);
       }, 0);
 
       let currentBid = highestBid.amount;
-      console.log("this is currentBid which is highestBid.amount", currentBid);
-      console.log("this is highestBid.amount", highestBid.amount);
-      console.log("this is highestBid", highestBid);
-
-      console.log("postResponse ID", postResponse.id);
       const itemIDWithoutFlags = postResponse.id;
 
       if (currentBid == undefined) {
@@ -202,15 +186,12 @@ console.log("item_id", item_id);
 
               const bid = parseInt(bidInputField.value);
               if (bidValidated) {
-                console.log("bid validation success");
                 const newBidData = {
                   amount: bid,
                 };
 
                 const PLACE_BID_URL =
                   CREATE_LISTING_URL + `/${itemIDWithoutFlags}/bids`;
-
-                console.log("this is PLACE_BID_URL", PLACE_BID_URL);
 
                 async function placeBid() {
                   try {
@@ -225,11 +206,7 @@ console.log("item_id", item_id);
 
                     if (response.ok) {
                       const JSONresponse = await response.json();
-                      //console.log("response.json()", response.json());
-                      console.log(
-                        "bid placed successfully, here is data:",
-                        JSONresponse
-                      );
+                      
 
                       const bidSuccessMessage =
                         document.getElementById("bidSuccessMessage");
@@ -243,13 +220,7 @@ console.log("item_id", item_id);
                       );
                       setTimeout(function clickcloseBidModalButton() {
                         closeBidModalButton.click();
-                        console.log(
-                          "clickcloseBidModalButton() skal være gjort nå"
-                        );
                       }, 5000);
-                      location.reload();
-                      clickcloseBidModalButton();
-                      
                     } else {
                       const JSONresponse = await response.json();
                       const errorMessage = JSONresponse.errors[length].message;
@@ -262,13 +233,13 @@ console.log("item_id", item_id);
                 }
                 placeBid();
               } else {
-                //bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
+                bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
               }
             });
           }
         })
         .catch((err) =>
-          console.error("during bidding the following error occured:", err)
+        bidError.innerHTML = `during bidding the following error occured:`, err
         );
     });
 })();

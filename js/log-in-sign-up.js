@@ -109,7 +109,6 @@ if (signInForm) {
     let formValidated = isEmailField && validDomain && correctPassword;
 
     if (formValidated) {
-      console.log("Validation success");
       const userData = {
         email: emailField.value,
         password: passwordField.value,
@@ -129,9 +128,6 @@ if (signInForm) {
 
           if (response.ok) {
             const data = await response.json();
-            console.log("data:", data);
-            console.log("data.accessToken:", data.accessToken);
-            //location.replace("index.html")
             // save Token
             saveToken(data.accessToken);
             // token saved in local storage, (const) bearerKey in local-storage-related.js
@@ -139,9 +135,7 @@ if (signInForm) {
               name: data.name,
               email: data.email,
             };
-            console.log("signInDataToStorage", signInDataToStorage);
             storeUserSession(signInDataToStorage);
-            //location.replace("index.html");
             location.reload();
           } else {
             otherErrorField.innerHTML = `The following error occured: ${data.message}`;
@@ -159,20 +153,15 @@ if (signInForm) {
 
 //SIGN-UP
 
-//import { LOGIN_URL, SIGNUP_URL } from "./api-related";
-
 //SIGNUP PAGE
 const signUpForm = document.querySelector("#signup-form");
 const nameField = document.querySelector("#nameField");
-//const emailField = document.querySelector("#emailField")
-//const passwordField = document.querySelector("#passwordField")
+
 const passwordConfirmField = document.querySelector("#passwordConfirmField");
 
 const signUpFormError = document.querySelector("#signup-formError");
 const nameFieldError = document.querySelector("#nameFieldError");
-//const emailFieldError = document.querySelector("#emailFieldError")
-//const emailInvalidError = document.querySelector("#emailInvalidError")
-//const passwordFieldError = document.querySelector("#passwordFieldError")
+
 const passwordConfirmFieldError = document.querySelector(
   "#passwordConfirmFieldError"
 );
@@ -243,7 +232,7 @@ signUpForm.addEventListener("submit", function (event) {
   isPasswordMatching = validPassword(
     passwordField.value,
     passwordConfirmField.value
-  ); // true // false
+  ); 
   if (isPasswordMatching) {
     passwordConfirmFieldError.classList.add("hidden");
     isPasswordMatching = true;
@@ -266,8 +255,6 @@ signUpForm.addEventListener("submit", function (event) {
       password: passwordField.value,
     };
 
-    // const REGISTER_USER_URL_ENDPOINT = USER_SIGNUP_URL;
-
     async function registerNewUser() {
       try {
         const response = await fetch(SIGNUP_URL, {
@@ -281,7 +268,6 @@ signUpForm.addEventListener("submit", function (event) {
         const data = await response.json();
 
         if (response.ok) {
-          console.log("New user sucessfully registered");
           location.replace("signin.html");
         } else {
           errorMessage.innerHTML = `The following error occured: ${data.message}`;
