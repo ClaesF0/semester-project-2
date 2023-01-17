@@ -1,5 +1,14 @@
+import { LOGIN_URL, SIGNUP_URL } from '../api-related';
+import {
+  getToken,
+  saveToken,
+  storeUserSession,
+  collectUserName,
+  clearStorage,
+} from '../local-storage-related';
+
 function createModal() {
-  const modalAccount = document.getElementById("modalAccount");
+  const modalAccount = document.getElementById('modalAccount');
   modalAccount.innerHTML = `
       <!-- log in Modal -->
 <div
@@ -342,43 +351,34 @@ function createModal() {
 
 createModal();
 
-import { LOGIN_URL, SIGNUP_URL } from "../api-related";
-import {
-  getToken,
-  saveToken,
-  storeUserSession,
-  collectUserName,
-  clearStorage,
-} from "../local-storage-related";
+// LOG-IN PAGE
+const signInForm = document.querySelector('#signin-form');
+const emailField = document.querySelector('#emailField');
+const passwordField = document.querySelector('#passwordField');
 
-//LOG-IN PAGE
-const signInForm = document.querySelector("#signin-form");
-const emailField = document.querySelector("#emailField");
-const passwordField = document.querySelector("#passwordField");
+const emailFieldError = document.querySelector('#emailFieldError');
+const emailInvalidError = document.querySelector('#emailInvalidError');
+const passwordFieldError = document.querySelector('#passwordFieldError');
+const otherErrorField = document.querySelector('#errorMessage');
 
-const emailFieldError = document.querySelector("#emailFieldError");
-const emailInvalidError = document.querySelector("#emailInvalidError");
-const passwordFieldError = document.querySelector("#passwordFieldError");
-const otherErrorField = document.querySelector("#errorMessage");
-
-//only noroff adress
+// only noroff adress
 const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
 
-//cooperates with the regular expression
+// cooperates with the regular expression
 function validEmail(email) {
-  return email.match(regEx) ? true : false;
+  return !!email.match(regEx);
 }
 
 function validDomain() {
   if (emailField.value.trim().length && validEmail(emailField.value) === true) {
-    emailInvalidError.classList.add("hidden");
-    emailField.classList.add("border-green-700");
+    emailInvalidError.classList.add('hidden');
+    emailField.classList.add('border-green-700');
     validDomain = true;
   } else if (
-    emailField.value.trim().length &&
-    validEmail(emailField.value) !== true
+    emailField.value.trim().length
+    && validEmail(emailField.value) !== true
   ) {
-    emailInvalidError.classList.remove("hidden");
+    emailInvalidError.classList.remove('hidden');
   }
 }
 
@@ -391,66 +391,64 @@ function validPassword(password, confirmPassword) {
   }
   if (password !== confirmPassword) {
     return false;
-  } else {
-    return true;
   }
+  return true;
 }
 
-const capsLockReminder = document.getElementById("capsLockReminder");
-signInForm.addEventListener("keyup", function (e) {
-  if (e.getModifierState("CapsLock")) {
-    capsLockReminder.classList.remove("hidden");
+const capsLockReminder = document.getElementById('capsLockReminder');
+signInForm.addEventListener('keyup', (e) => {
+  if (e.getModifierState('CapsLock')) {
+    capsLockReminder.classList.remove('hidden');
   } else {
-    capsLockReminder.classList.add("hidden");
+    capsLockReminder.classList.add('hidden');
   }
 });
 
-//user can sign in
+// user can sign in
 if (signInForm) {
-  signInForm.addEventListener("submit", function (event) {
+  signInForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     let isEmailField = false;
     if (emailField.value.trim().length > 0) {
-      emailFieldError.classList.add("hidden");
+      emailFieldError.classList.add('hidden');
       isEmailField = true;
-      emailField.classList.remove("border-red-700");
+      emailField.classList.remove('border-red-700');
     } else {
-      emailFieldError.classList.remove("hidden");
-      emailField.classList.add("border-red-700");
+      emailFieldError.classList.remove('hidden');
+      emailField.classList.add('border-red-700');
     }
 
     let validDomain = false;
     if (
-      emailField.value.trim().length &&
-      validEmail(emailField.value) === true
+      emailField.value.trim().length
+      && validEmail(emailField.value) === true
     ) {
-      emailInvalidError.classList.add("hidden");
+      emailInvalidError.classList.add('hidden');
       validDomain = true;
-      emailField.classList.remove("border-red-700");
+      emailField.classList.remove('border-red-700');
     } else if (
-      emailField.value.trim().length &&
-      validEmail(emailField.value) !== true
+      emailField.value.trim().length
+      && validEmail(emailField.value) !== true
     ) {
-      emailInvalidError.classList.remove("hidden");
-      emailField.classList.add("border-red-700");
+      emailInvalidError.classList.remove('hidden');
+      emailField.classList.add('border-red-700');
     }
 
     let correctPassword = false;
     if (passwordField.value.trim().length >= 8) {
-      passwordFieldError.classList.add("hidden");
+      passwordFieldError.classList.add('hidden');
       correctPassword = true;
-      passwordField.classList.remove("border-red-700");
+      passwordField.classList.remove('border-red-700');
     } else {
-      passwordFieldError.classList.remove("hidden");
-      passwordField.classList.add("border-red-700");
-      passwordFieldError.innerHTML =
-        "Password of at least 8 letters is required. Please add " +
-        (8 - passwordField.value.length) +
-        " characters.";
+      passwordFieldError.classList.remove('hidden');
+      passwordField.classList.add('border-red-700');
+      passwordFieldError.innerHTML = `Password of at least 8 letters is required. Please add ${
+        8 - passwordField.value.length
+      } characters.`;
     }
 
-    let formValidated = isEmailField && validDomain && correctPassword;
+    const formValidated = isEmailField && validDomain && correctPassword;
 
     if (formValidated) {
       const userData = {
@@ -463,9 +461,9 @@ if (signInForm) {
       async function signInUser() {
         try {
           const response = await fetch(USER_LOGIN_ENDPOINT, {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(userData),
           });
@@ -495,54 +493,53 @@ if (signInForm) {
   });
 }
 
-//SIGN-UP RELATED SECTION OF CODE
+// SIGN-UP RELATED SECTION OF CODE
 
-
-//SIGNUP PAGE
-const signUpForm = document.querySelector("#signup-form");
-const signUpnameField = document.querySelector("#signUpnameField");
-const signUpemailField = document.querySelector("#signUpemailField");
-const signUppasswordField = document.querySelector("#signUppasswordField");
+// SIGNUP PAGE
+const signUpForm = document.querySelector('#signup-form');
+const signUpnameField = document.querySelector('#signUpnameField');
+const signUpemailField = document.querySelector('#signUpemailField');
+const signUppasswordField = document.querySelector('#signUppasswordField');
 const signUppasswordConfirmField = document.querySelector(
-  "#signUppasswordConfirmField"
+  '#signUppasswordConfirmField',
 );
 
-const signUpFormError = document.querySelector("#signup-formError");
-const signUpnameFieldError = document.querySelector("#signUpnameFieldError");
-const signUpemailFieldError = document.querySelector("#signUpemailFieldError");
+const signUpFormError = document.querySelector('#signup-formError');
+const signUpnameFieldError = document.querySelector('#signUpnameFieldError');
+const signUpemailFieldError = document.querySelector('#signUpemailFieldError');
 const signUpemailInvalidError = document.querySelector(
-  "#signUpemailInvalidError"
+  '#signUpemailInvalidError',
 );
 const signUppasswordFieldError = document.querySelector(
-  "#signUppasswordFieldError"
+  '#signUppasswordFieldError',
 );
 const signUppasswordConfirmFieldError = document.querySelector(
-  "#signUppasswordConfirmFieldError"
+  '#signUppasswordConfirmFieldError',
 );
-const signUperrorMessage = document.querySelector("#signUperrorMessage");
+const signUperrorMessage = document.querySelector('#signUperrorMessage');
 
-//register user
+// register user
 
-//only noroff adress cooperates with following regex:
-//const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
+// only noroff adress cooperates with following regex:
+// const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
 
 function signUpvalidEmail(email) {
-  return email.match(regEx) ? true : false;
+  return !!email.match(regEx);
 }
 
 function signUpvalidDomain() {
   if (
-    signUpemailField.value.trim().length &&
-    signUpvalidEmail(signUpemailField.value) === true
+    signUpemailField.value.trim().length
+    && signUpvalidEmail(signUpemailField.value) === true
   ) {
-    signUpemailInvalidError.classList.add("hidden");
-    signUpemailField.classList.add("border-green-700");
+    signUpemailInvalidError.classList.add('hidden');
+    signUpemailField.classList.add('border-green-700');
     signUpvalidDomain = true;
   } else if (
-    signUpemailField.value.trim().length &&
-    signUpvalidEmail(signUpemailField.value) !== true
+    signUpemailField.value.trim().length
+    && signUpvalidEmail(signUpemailField.value) !== true
   ) {
-    signUpemailInvalidError.classList.remove("hidden");
+    signUpemailInvalidError.classList.remove('hidden');
   }
 }
 
@@ -555,105 +552,102 @@ function signUpvalidPassword(password, confirmPassword) {
   }
   if (password !== confirmPassword) {
     return false;
-  } else {
-    return true;
   }
+  return true;
 }
 
 const signUpcapsLockReminder = document.getElementById(
-  "signUpcapsLockReminder"
+  'signUpcapsLockReminder',
 );
-signUpForm.addEventListener("keyup", function (e) {
-  if (e.getModifierState("CapsLock")) {
-    signUpcapsLockReminder.classList.remove("hidden");
+signUpForm.addEventListener('keyup', (e) => {
+  if (e.getModifierState('CapsLock')) {
+    signUpcapsLockReminder.classList.remove('hidden');
   } else {
-    signUpcapsLockReminder.classList.add("hidden");
+    signUpcapsLockReminder.classList.add('hidden');
   }
 });
 
-//user can sign up
-signUpForm.addEventListener("submit", function (event) {
+// user can sign up
+signUpForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   let signUpisNameField = false;
   if (signUpnameField.value.trim().length > 0) {
-    signUpnameFieldError.classList.add("hidden");
+    signUpnameFieldError.classList.add('hidden');
     signUpisNameField = true;
-    signUpnameField.classList.remove("border-red-700");
+    signUpnameField.classList.remove('border-red-700');
   } else {
-    signUpnameFieldError.classList.remove("hidden");
-    signUpnameField.classList.add("border-red-700");
+    signUpnameFieldError.classList.remove('hidden');
+    signUpnameField.classList.add('border-red-700');
   }
 
   let signUpisEmailField = false;
   if (signUpemailField.value.trim().length > 0) {
-    signUpemailFieldError.classList.add("hidden");
+    signUpemailFieldError.classList.add('hidden');
     signUpisEmailField = true;
-    signUpemailField.classList.remove("border-red-700");
+    signUpemailField.classList.remove('border-red-700');
   } else {
-    signUpemailFieldError.classList.remove("hidden");
-    signUpemailField.classList.add("border-red-700");
+    signUpemailFieldError.classList.remove('hidden');
+    signUpemailField.classList.add('border-red-700');
   }
 
   let signUpvalidDomain = false;
   if (
-    signUpemailField.value.trim().length &&
-    signUpvalidEmail(signUpemailField.value) === true
+    signUpemailField.value.trim().length
+    && signUpvalidEmail(signUpemailField.value) === true
   ) {
-    signUpemailInvalidError.classList.add("hidden");
+    signUpemailInvalidError.classList.add('hidden');
     signUpvalidDomain = true;
-    signUpemailField.classList.remove("border-red-700");
+    signUpemailField.classList.remove('border-red-700');
   } else if (
-    signUpemailField.value.trim().length &&
-    signUpvalidEmail(signUpemailField.value) !== true
+    signUpemailField.value.trim().length
+    && signUpvalidEmail(signUpemailField.value) !== true
   ) {
-    signUpemailInvalidError.classList.remove("hidden");
-    signUpemailField.classList.add("border-red-700");
+    signUpemailInvalidError.classList.remove('hidden');
+    signUpemailField.classList.add('border-red-700');
   }
 
   let signUpcorrectPassword = false;
   if (signUppasswordField.value.trim().length >= 8) {
-    signUppasswordFieldError.classList.add("hidden");
+    signUppasswordFieldError.classList.add('hidden');
     signUpcorrectPassword = true;
-    signUppasswordField.classList.remove("border-red-700");
+    signUppasswordField.classList.remove('border-red-700');
   } else {
-    signUppasswordFieldError.classList.remove("hidden");
-    signUppasswordField.classList.add("border-red-700");
-    signUppasswordFieldError.innerHTML =
-      "Password of at least 8 letters is required. Please add " +
-      (8 - signUppasswordField.value.length) +
-      " characters.";
+    signUppasswordFieldError.classList.remove('hidden');
+    signUppasswordField.classList.add('border-red-700');
+    signUppasswordFieldError.innerHTML = `Password of at least 8 letters is required. Please add ${
+      8 - signUppasswordField.value.length
+    } characters.`;
   }
 
   let signUpisPasswordRepeated = false;
   if (signUppasswordConfirmField.value.trim().length >= 8) {
-    signUppasswordConfirmFieldError.classList.add("hidden");
+    signUppasswordConfirmFieldError.classList.add('hidden');
     signUpisPasswordRepeated = true;
-    signUppasswordConfirmField.classList.remove("border-red-700");
+    signUppasswordConfirmField.classList.remove('border-red-700');
   } else {
-    signUppasswordConfirmFieldError.classList.remove("hidden");
-    signUppasswordConfirmField.classList.add("border-red-700");
+    signUppasswordConfirmFieldError.classList.remove('hidden');
+    signUppasswordConfirmField.classList.add('border-red-700');
   }
 
   let signUpisPasswordMatching = false;
   signUpisPasswordMatching = signUpvalidPassword(
     signUppasswordField.value,
-    signUppasswordConfirmField.value
+    signUppasswordConfirmField.value,
   ); // true // false
   if (signUpisPasswordMatching) {
-    signUppasswordConfirmFieldError.classList.add("hidden");
+    signUppasswordConfirmFieldError.classList.add('hidden');
     signUpisPasswordMatching = true;
   } else {
-    signUppasswordConfirmFieldError.classList.remove("hidden");
+    signUppasswordConfirmFieldError.classList.remove('hidden');
   }
 
-  let signUpformValidated =
-    signUpisNameField &&
-    signUpisEmailField &&
-    signUpvalidDomain &&
-    signUpcorrectPassword &&
-    signUpisPasswordRepeated &&
-    signUpisPasswordMatching;
+  const signUpformValidated = signUpisNameField
+    && signUpisEmailField
+    && signUpvalidDomain
+    && signUpcorrectPassword
+    && signUpisPasswordRepeated
+    && signUpisPasswordMatching;
 
   if (signUpformValidated) {
     const userData = {
@@ -665,9 +659,9 @@ signUpForm.addEventListener("submit", function (event) {
     async function registerNewUser() {
       try {
         const response = await fetch(SIGNUP_URL, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(userData),
         });
@@ -685,6 +679,6 @@ signUpForm.addEventListener("submit", function (event) {
     }
     registerNewUser();
   } else {
-    console.log("Process failed due to the following error: ", e);
+    console.log('Process failed due to the following error: ', e);
   }
 });

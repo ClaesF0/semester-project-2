@@ -22,8 +22,6 @@ function collectUserName() {
   return null;
 }
 
-
-
 // function which save data to the local storage
 function saveToStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));

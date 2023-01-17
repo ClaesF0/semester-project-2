@@ -1,52 +1,52 @@
-import { collectUserName, getToken } from "../local-storage-related";
+import { collectUserName, getToken } from '../local-storage-related';
 
 const bearerKey = getToken();
 
 function clearStorage() {
   localStorage.clear();
-  location.replace("index.html");
+  location.replace('index.html');
 }
 
 function createHeaderBar() {
-  const navBar = document.getElementById("navBar");
+  const navBar = document.getElementById('navBar');
   const userName = collectUserName();
 
-  const searchButton = document.getElementById("search-button");
-  const searchInput = document.getElementById("search-input");
+  const searchButton = document.getElementById('search-button');
+  const searchInput = document.getElementById('search-input');
 
   // Search for usernames starts here
 
   const searchApiForProfiles = {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${bearerKey}`,
     },
   };
 
   fetch(
-    "https://nf-api.onrender.com/api/v1/auction/profiles/",
-    searchApiForProfiles
+    'https://nf-api.onrender.com/api/v1/auction/profiles/',
+    searchApiForProfiles,
   )
     .then((response) => response.json())
     .then((data) => {
       const people = data;
 
-      const searchInput = document.getElementById("search-input");
-      const list = document.getElementById("list");
+      const searchInput = document.getElementById('search-input');
+      const list = document.getElementById('list');
 
       function setList(group) {
         clearList();
         for (const person of group) {
-          const item = document.createElement("li");
+          const item = document.createElement('li');
 
-          item.classList.add("list-group-item");
+          item.classList.add('list-group-item');
 
-          const a = document.createElement("a");
+          const a = document.createElement('a');
 
           const linkUserProfileFromSearch = `userprofile.html?user_name=${person.name}`;
           a.href = linkUserProfileFromSearch;
 
-          const text = document.createTextNode("user: " + person.name);
+          const text = document.createTextNode(`user: ${person.name}`);
           a.appendChild(text);
           list.appendChild(a);
           item.appendChild(a);
@@ -64,82 +64,78 @@ function createHeaderBar() {
       }
 
       function setNoResults() {
-        const item = document.createElement("li");
-        item.classList.add("list-group-item");
-        const text = document.createTextNode("No matching user found");
+        const item = document.createElement('li');
+        item.classList.add('list-group-item');
+        const text = document.createTextNode('No matching user found');
         item.appendChild(text);
         list.appendChild(item);
       }
 
       function getRelevancy(value, searchTerm) {
-        //maximizing relevancy with origin of amount of search/result match
+        // maximizing relevancy with origin of amount of search/result match
         if (value === searchTerm) {
           return 2;
-        } else if (value.startsWith(searchTerm)) {
+        } if (value.startsWith(searchTerm)) {
           return 1;
-        } else if (value.includes(searchTerm)) {
+        } if (value.includes(searchTerm)) {
           return 0;
         }
       }
 
-      searchInput.addEventListener("input", (event) => {
-        let value = event.target.value;
+      searchInput.addEventListener('input', (event) => {
+        let { value } = event.target;
 
         if (value && value.trim().length > 0) {
-          value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
+          value = value.trim().toLowerCase(); // avoid cAsE sEnsItIvIty IsSueS
 
           setList(
             people
-              .filter((person) => {
-                return person.name.includes(value);
-              })
+              .filter((person) => person.name.includes(value))
 
-              .sort((personA, personB) => {
-                return (
-                  getRelevancy(personB.name, value) -
-                  getRelevancy(personA.name, value)
-                );
-              })
-          ); //her er array som søkes i
+              .sort((personA, personB) => (
+                getRelevancy(personB.name, value)
+                  - getRelevancy(personA.name, value)
+              )),
+          ); // her er array som søkes i
         } else {
           clearList();
         }
       });
-      //Search 1 ends here
+      // Search 1 ends here
     })
     .catch((err) => console.error(err));
 
-  ////////Call for listing data begins/////////
+  /// /////Call for listing data begins/////////
   const searchApiForPosts = {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${bearerKey}`,
     },
   };
 
   fetch(
-    "https://nf-api.onrender.com/api/v1/auction/listings",
-    searchApiForPosts
+    'https://nf-api.onrender.com/api/v1/auction/listings',
+    searchApiForPosts,
   )
     .then((response) => response.json())
     .then((allPostData) => {
       const listings = allPostData;
-      const searchInput = document.getElementById("search-input");
-      const list = document.getElementById("listTwo");
+      const searchInput = document.getElementById('search-input');
+      const list = document.getElementById('listTwo');
 
       function setList(group) {
         clearList();
         for (const post of group) {
-          const item = document.createElement("li");
+          const item = document.createElement('li');
 
-          item.classList.add("list-group-item");
+          item.classList.add('list-group-item');
 
-          const a = document.createElement("a");
+          const a = document.createElement('a');
 
           const linkListingFromSearch = `detailspage.html?item_id=${post.id}?_seller=true&_bids=true`;
           a.href = linkListingFromSearch;
 
-          const title = document.createTextNode("Listing: " + post.title);
+          const title = document.createTextNode(`Listing: ${post.title}`);
           a.appendChild(title);
           list.appendChild(a);
           item.appendChild(a);
@@ -157,51 +153,47 @@ function createHeaderBar() {
       }
 
       function setNoResults() {
-        const item = document.createElement("li");
-        item.classList.add("list-group-item");
-        const text = document.createTextNode("No listing results found");
+        const item = document.createElement('li');
+        item.classList.add('list-group-item');
+        const text = document.createTextNode('No listing results found');
         item.appendChild(text);
         list.appendChild(item);
       }
 
       function getRelevancy(value, searchTerm) {
-        //maximizing relevancy with origin of amount of search/result match
+        // maximizing relevancy with origin of amount of search/result match
         if (value === searchTerm) {
           return 2;
-        } else if (value.startsWith(searchTerm)) {
+        } if (value.startsWith(searchTerm)) {
           return 1;
-        } else if (value.includes(searchTerm)) {
+        } if (value.includes(searchTerm)) {
           return 0;
         }
       }
 
-      searchInput.addEventListener("input", (event) => {
-        let value = event.target.value;
+      searchInput.addEventListener('input', (event) => {
+        let { value } = event.target;
 
         if (value && value.trim().length > 0) {
-          value = value.trim().toLowerCase(); //avoid cAsE sEnsItIvIty IsSueS
+          value = value.trim().toLowerCase(); // avoid cAsE sEnsItIvIty IsSueS
 
           setList(
             listings
-              .filter((post) => {
-                return post.title.toLowerCase().includes(value);
-              })
+              .filter((post) => post.title.toLowerCase().includes(value))
 
-              .sort((postA, postB) => {
-                return (
-                  getRelevancy(postB.title.toLowerCase(), value) -
-                  getRelevancy(postA.title.toLowerCase(), value)
-                );
-              })
-          ); //her er array som søkes i
+              .sort((postA, postB) => (
+                getRelevancy(postB.title.toLowerCase(), value)
+                  - getRelevancy(postA.title.toLowerCase(), value)
+              )),
+          ); // her er array som søkes i
         } else {
           clearList();
         }
       });
-      //Search ends here
+      // Search ends here
     })
     .catch((err) => console.error(err));
-  /////////END OF CALL 2/////////
+  /// //////END OF CALL 2/////////
 
   let headerLinks = `
   <button
@@ -341,12 +333,12 @@ function createHeaderBar() {
   </div>
   -->
   `;
-  const logoutbtn = document.getElementById("logout-btn");
+  const logoutbtn = document.getElementById('logout-btn');
 
   if (logoutbtn) {
-    logoutbtn.addEventListener("click", () => {
+    logoutbtn.addEventListener('click', () => {
       clearStorage();
-      window.location.replace("index.html");
+      window.location.replace('index.html');
     });
   }
 }

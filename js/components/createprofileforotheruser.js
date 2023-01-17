@@ -1,30 +1,31 @@
-import { collectUserName, getToken } from "../local-storage-related";
-import moment from "moment/moment";
-let now = moment(new Date()); //todays date
+import moment from 'moment/moment';
+import { collectUserName, getToken } from '../local-storage-related';
+
+const now = moment(new Date()); // todays date
 
 async function createProfileForOtherUser() {
-  const profileContainer = document.getElementById("profilecontainer");
+  const profileContainer = document.getElementById('profilecontainer');
   const userListingsContainer = document.getElementById(
-    "userListingsContainer"
+    'userListingsContainer',
   );
 
   const token = getToken();
 
   const paramString = window.location.search;
   const searchParam = new URLSearchParams(paramString);
-  const userName = searchParam.get("user_name");
+  const userName = searchParam.get('user_name');
 
   const auth = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   };
 
   const response = await fetch(
-    "https://api.noroff.dev/api/v1/auction/profiles/" + `${userName}`,
-    auth
+    'https://api.noroff.dev/api/v1/auction/profiles/' + `${userName}`,
+    auth,
   );
   if (response.ok) {
   }
@@ -32,16 +33,15 @@ async function createProfileForOtherUser() {
     .json()
     .then((data) => {
       const count = data._count.listings;
-      let avatar = data.avatar;
+      let { avatar } = data;
 
-                if (avatar == undefined || null || "" || !length) {
-                  avatar =
-                    "https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg";
-                }
-                console.log('avatar',avatar);
-                
-      const credits = data.credits;
-      const email = data.email;
+      if (avatar == undefined || null || '' || !length) {
+        avatar = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
+      }
+      console.log('avatar', avatar);
+
+      const { credits } = data;
+      const { email } = data;
       const wins = data.wins.length;
       const profilecontent = `
       
@@ -82,19 +82,19 @@ async function createProfileForOtherUser() {
       <h3 class="text-lg text-center mx-auto">${userName}'s ${data._count.listings} listings:</h3>
       
       `;
-      profileContainer.insertAdjacentHTML("beforeend", profilecontent);
+      profileContainer.insertAdjacentHTML('beforeend', profilecontent);
 
-      const newPicField = document.querySelector("#newPicField");
-      const picErrorField = document.querySelector("#picErrorField");
-      const newPicForm = document.querySelector("#newPicForm");
+      const newPicField = document.querySelector('#newPicField');
+      const picErrorField = document.querySelector('#picErrorField');
+      const newPicForm = document.querySelector('#newPicForm');
       const bearerKey = getToken();
       (async function getAllListingsByUser() {
         const response = await fetch(
-          "https://api.noroff.dev/api/v1/auction/profiles/" +
-            `${userName}` +
-            "/listings" +
-            "?_seller=true&_bids=true",
-          auth
+          'https://api.noroff.dev/api/v1/auction/profiles/'
+            + `${userName}`
+            + '/listings'
+            + '?_seller=true&_bids=true',
+          auth,
         );
         if (response.ok) {
           const items = response
@@ -103,12 +103,10 @@ async function createProfileForOtherUser() {
               const itemsMapped = items.map((item) => {
                 const bidCount = item._count.bids;
                 const bidsArray = item.bids;
-                const highestBid = bidsArray.reduce((prev, current) => {
-                  return prev.amount > current.amount ? prev : current;
-                }, 0);
+                const highestBid = bidsArray.reduce((prev, current) => (prev.amount > current.amount ? prev : current), 0);
                 let price = highestBid.amount;
                 if (bidCount == 0) {
-                  price = "No bids yet!";
+                  price = 'No bids yet!';
                 } else {
                   price = highestBid.amount;
                 }
@@ -125,9 +123,8 @@ async function createProfileForOtherUser() {
                 const { title } = item;
                 const { updated } = item;
                 let mainPic = item.media[0];
-                if (mainPic == undefined || null || "") {
-                  mainPic =
-                    "https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg";
+                if (mainPic == undefined || null || '') {
+                  mainPic = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
                 }
                 const { tags } = item;
 
@@ -160,14 +157,14 @@ async function createProfileForOtherUser() {
                 </div>
                     `;
                 userListingsContainer.insertAdjacentHTML(
-                  "beforeend",
-                  userListings
+                  'beforeend',
+                  userListings,
                 );
               });
             })
             .catch((err) => console.error(err));
         }
-      })();
+      }());
     })
     .catch((err) => console.error(err));
 }
