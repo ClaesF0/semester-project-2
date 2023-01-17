@@ -19,8 +19,8 @@ for (let i = 0; i < pageLinks.length; i++) {
   });
 }
 // pagination end
-
-let apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?&_active=true&'; // default setting should be active stuff
+//
+let apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?&_seller=true&_bids=true&_active=true&'; // default setting should be active stuff
 
 // construct URL start
 
@@ -31,9 +31,9 @@ const selectFilterElement = document.getElementById('selectFilterElement');
 selectFilterElement.addEventListener('change', function () {
   const selectedEndpoint = this.value;
   if (selectedEndpoint === 'all' || undefined) {
-    apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?&_active=true&';
+    apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?&_active=true&_seller=true&_bids=true&';
   } else {
-    apiUrl = `https://nf-api.onrender.com/api/v1/auction/listings?&_active=true&${selectedEndpoint}`;
+    apiUrl = `https://nf-api.onrender.com/api/v1/auction/listings?&_seller=true&_bids=true&_active=true&${selectedEndpoint}`;
     apiUrl = apiUrl.replace(selectedEndpoint, selectedEndpoint);
     // apiUrl += selectedEndpoint
   }
@@ -82,11 +82,20 @@ async function getAllListings(apiUrl) {
     const itemsMapped = items
       .map((item) => {
         const bidCount = item._count.bids;
-        console.log('item',item);
+
+      const bidsArray = item.bids;
+      const highestBid = bidsArray.reduce((prev, current) => (prev.amount > current.amount ? prev : current), 0);
+
+      let currentBid = highestBid.amount;
+      
+
+      if (currentBid == undefined) {
+        currentBid = 0;
+      }
         
         const { description } = item;
         const deadline = item.endsAt;
-        let deadlineMoment = `Ends in ${moment(deadline).fromNow()}`;
+        let deadlineMoment = `Ends ${moment(deadline).fromNow()}`;
 
         const currentDate = moment();
         if (currentDate.isAfter(deadline)) {
@@ -97,16 +106,16 @@ async function getAllListings(apiUrl) {
         const { title } = item;
         let mainPic = item.media[0];
         if (mainPic === undefined || null || '') {
-          mainPic = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" style="display: flex; max-width: 240px; max-height: 240px';
+          mainPic = 'https://cataas.com/cat/says/No image,random cute cat instead" style="display: flex; max-width: 300px; max-height: 300px';
         }
         return `
-                <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 m-3 p-3 shadow-lg bg-white rounded-lg hover:bg-blue-200 sm:flex-grow">
+                <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 p-2 shadow-lg bg-white rounded-lg hover:bg-blue-200 sm:flex-grow">
                     <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
                         <div class="h-60">
                               <img class="mx-auto rounded-lg w-full h-full object-scale-down sm:object-cover" src="${mainPic}" alt=""/>
                         </div>
                         <div>
-                            <p class="text-gray-700 text-md pt-1">Bids: ${bidCount}</p>
+                            <p class="text-teal-700 text-md pt-1">Bids: ${bidCount} Current bid: ${currentBid}</p>
                             <p class="text-gray-700 text-md pt-1">${deadlineMoment}</p> 
                             <p class="text-gray-900 text-xl mb-2">${title}</p>
                         </div>

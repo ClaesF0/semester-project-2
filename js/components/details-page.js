@@ -21,11 +21,12 @@ function createDetailsPage() {
       const bidCount = response._count.bids;
 
       const bidsArray = response.bids;
-
+/*
       const bidderNames = bidsArray.map((object) => object.bidderName);
       const bidID = bidsArray.map((object) => object.id);
       const bidAmount = bidsArray.map((object) => object.amount);
       const bidCreated = bidsArray.map((object) => object.created);
+      */
       document.title = `Auction details for ${response.title}`;
       let bidHistoryList = '';
 
@@ -47,11 +48,11 @@ function createDetailsPage() {
 
       for (let i = 0; i < bidsArray.length; i++) {
         bidHistoryList += `
-      <li class="text-gray-400 text-xs font-small mb-1">
+      <li class="text-gray-700 text-xs font-small mb-1">
       ${getOrdinal(i + 1)} 
       bid was ${bidsArray[i].amount} credits, 
       placed ${moment(bidsArray[i].created).format('MMM Do, k:kk:ss')} 
-      by <a class="text-blue-400" href="userprofile.html?user_name=${
+      by <a class="text-blue-500" href="userprofile.html?user_name=${
   bidsArray[i].bidderName
 }">${bidsArray[i].bidderName} 
       </a></li>`;
@@ -109,7 +110,7 @@ function createDetailsPage() {
         loggedInSection = `
     <!-- START OF SECTION FOR LOGGED IN USERS-->
 <div id="loggedInSection">
-<button type="button" class="px-6
+<button type="button" class="px-10
       py-2.5
       bg-teal-600
       text-white
@@ -128,46 +129,44 @@ function createDetailsPage() {
   Bid
 </button>
 <hr>
-<button id="extraInfoBTN" class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-Extra info
+<button id="extraInfoBTN" class="block mt-4 px-2 py-1 bg-blue-700 text-white font-small text-sm rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+Display details
 </button>
 
-<a class="block mt-4 px-2 py-1 bg-gray-400 text-white font-small text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" 
-href="userprofile.html?user_name=${sellerName}" data-mdb-ripple="true" data-mdb-ripple-color="light">
-All listings by seller → 
-</a>
 </p>
 <div class="collapse" id="collapseExample">
 <div class="block p-6 rounded-lg shadow-lg bg-white">
-  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Seller:
+  <p  class="text-gray-700 text-md font-medium mb-1 flex">Seller:
   <hr>
-  <span class="text-gray-500 text-xs font-medium mb-1 flex">
+  <span class="text-gray-600 text-xs font-medium mb-1 flex">
   <img src="${sellerAvatarURL}" alt=""
   class="rounded-full"
-    style="height: 40px; width: 40px"
+    style="height: 60px; width: 60px"
     alt=""
     loading="lazy">
-  <a class="p-2 text-blue-400" href="userprofile.html?user_name=${sellerName}">
+  <a class="p-2 text-teal-700 text-lg" href="userprofile.html?user_name=${sellerName}">
   ${sellerName}
+  <p class="text-blue-700 text-sm">View ${sellerName}'s other listings</p>
   </a> 
   </span>
-    
-  <a class=" text-gray-500 text-xs font-medium" href="mailto:${sellerEmail}">Get in touch: ${sellerEmail}</a>
+    <div class="text-gray-700">
+  <a class="text-sm font-medium p-1 border-2 border-gray-600 rounded" href="mailto:${sellerEmail}">Send ${sellerName} a mail</a>
   </p>
   <hr>
-  <p  class="text-gray-400 text-xs font-medium mb-1 flex">Item:
-  <p  class="text-gray-400 text-xs font-small mb-1">Unique id: ${itemID}</p>
+  <p  class="text-md font-medium my-1 flex">Item:
+  <p  class="text-xs font-small mb-1">Unique id: ${itemID}</p>
   <hr>
-  <p  class="text-gray-400 text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
+  <p  class="text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
   <hr>
-  <p  class="text-gray-400 text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
+  <p  class="text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
         </p>
         <hr>
         
-        <p class="text-gray-400 text-xs font-medium mb-1 flex">BIDDING HISTORY</p>
+        <p class="text-md font-medium my-1 flex">Bidding history:</p>
         <ul id="bidHistory">
          ${bidHistoryList}
         </ul>
+</div>
       </div>
     </div>
   </div>

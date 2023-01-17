@@ -33,10 +33,12 @@ async function createProfileForOtherUser() {
     .json()
     .then((data) => {
       const count = data._count.listings;
-      let { avatar } = data;
+      let avatar = data.avatar;
+      console.log('data.avatar',data.avatar);
+      
 
-      if (avatar == undefined || null || '' || !length) {
-        avatar = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
+      if (avatar == undefined || null || '' || !avatar.length) {
+        avatar = 'https://cataas.com/cat/says/no picture, have this cute cat instead';
       }
       console.log('avatar', avatar);
 
