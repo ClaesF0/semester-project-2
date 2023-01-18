@@ -101,18 +101,20 @@ async function getAllListings(apiUrl) {
         if (currentDate.isAfter(deadline)) {
           deadlineMoment = 'Listing has ended';
         }
-
+        
         const itemID = item.id;
         const { title } = item;
         let mainPic = item.media[0];
         if (mainPic === undefined || null || '') {
-          mainPic = 'https://cataas.com/cat/says/No image,random cute cat instead" style="display: flex; max-width: 300px; max-height: 300px';
+          mainPic = 'https://cataas.com/cat/says/No image,random cute cat instead" alt="No image uploaded by user, so a cute cat was generated instead" style="display: flex; object-fit: scale-down;';
         }
+
         return `
                 <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 p-2 shadow-lg bg-white rounded-lg hover:bg-blue-200 sm:flex-grow">
                     <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
                         <div class="h-60">
-                              <img class="mx-auto rounded-lg w-full h-full object-scale-down sm:object-cover" src="${mainPic}" alt=""/>
+                              <img id="mainPic" class="mx-auto rounded-lg w-full h-full object-scale-down sm:object-cover" src="${mainPic}" alt="picture for the listing called ${title}" onerror="this.onerror=null;this.src='https://cataas.com/cat/says/No image,random cute cat instead';this.style='display: flex; object-fit: scale-down;'" />
+                              
                         </div>
                         <div>
                             <p class="text-teal-700 text-md pt-1">Bids: ${bidCount} Current bid: ${currentBid}</p>

@@ -49,13 +49,13 @@ async function createProfileForOtherUser() {
       
       <div class="grid my-0 mx-auto w-full sm:w-4/5 grid-cols-2 ">
         <div class="text-center md:text-left">
+        <div class="rounded-full w-60 h-60 mx-auto  md:mx-0">
           <img
             src="${avatar}"
-            class="rounded-full w-auto h-auto mb-4 mx-auto  md:mx-0"
+            class="rounded-full w-60 h-60 mb-4 mx-auto object-cover md:mx-0"
             alt="Avatar"
           />
-
-          
+        </div>
         </div>
         <div class="p-1">
           <div>
@@ -131,32 +131,30 @@ async function createProfileForOtherUser() {
                 const { tags } = item;
 
                 const userListings = `
-                    <hr class="my-2" />
+                <div class="flex sm:w-4/5 md:flex-cols mx-auto ">
                 
-                <div class="flex flex-grow sm:w-4/5 mx-auto">
                 <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
-                    <div class="inline-flex md:flex-nowrap border-t-2 border-grey-500">
-                      <hr />
-                      <div>
-                        <img
-                          id="listingImg"
-                          class="object-scale-down max-h-32"
-                          src="${mainPic}"
-                          alt=""
-                          style="min-width: 8rem"
-                        />
-                      </div>
-                      <span class="p-2 mx-1">
-                        <h3 class="text-medium text-center mx-auto md:text-left px-1">${title}</h3>
-                        <hr />
+                    <div class=" sm:flex border-t-2 border-gray-300 pb-1 pt-4">
+                    <div class="w-auto min-h-60 mx-auto md:mx-0 ">
+                    <img
+                      src="${mainPic}"
+                      class="w-60 h-60 mb-4 mx-auto object-cover md:mx-0 "
+                      alt="Avatar"
+                    />
+                  </div>
+                  <div class="pl-4 sm:w-4/5">
+                      
+                        <h3 class="text-lg font-bold text-center mx-auto md:text-left px-1 text-blue-700">${title}</h3>
                         <p class="text-gray-700 text-base px-1">Bids: ${bidCount} price: ${price}</p>
                         <p class="text-gray-500 text-xs font-medium flex p-1">Created ${deadlineMoment}, on ${createdMoment}, </p>
                         <p class="text-gray-500 text-xs font-medium flex p-1">Description:</p>
                         <p class="text-gray-700 px-1 text-base">${description}</p>
-                      </span>
+                      
+                      </div>
                     </div>
                     </a>
                 </div>
+                <hr class="flex flex-grow sm:w-4/5 mx-auto">
                     `;
                 userListingsContainer.insertAdjacentHTML(
                   'beforeend',
