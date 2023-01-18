@@ -21,12 +21,7 @@ function createDetailsPage() {
       const bidCount = response._count.bids;
 
       const bidsArray = response.bids;
-/*
-      const bidderNames = bidsArray.map((object) => object.bidderName);
-      const bidID = bidsArray.map((object) => object.id);
-      const bidAmount = bidsArray.map((object) => object.amount);
-      const bidCreated = bidsArray.map((object) => object.created);
-      */
+
       document.title = `Auction details for ${response.title}`;
       let bidHistoryList = '';
 
@@ -100,7 +95,7 @@ function createDetailsPage() {
       let loggedInSection = `
     <button
     type="button"
-    class="nav-link px-1 py-1 my-0 mx-auto border-2 border-white bg-green-500 text-white font-medium text-xs leading-tight rounded shadow-md hover:text-black hover:bg-green-400 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+    class="nav-link p-3 my-0 mx-auto border-2 border-white bg-blue-500 text-white font-medium text-md leading-tight rounded-lg shadow-md hover:text-black hover:bg-green-400 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
     data-bs-toggle="modal"
     data-bs-target="#loginModal">
     Log in or sign up to see more details :) 
@@ -176,8 +171,9 @@ Display details
 
       const detailsContainer = document.getElementById('detailsContainer');
       const newPostData = `
-    <div class="grid my-0 mx-auto w-full md:w-3/5 sm:w-4/5 lg:w-full ">
-    <div class="overflow-hidden lg:inline-flex">
+      <div class="md:flex md:flex-wrap md:w-4/5 mx-auto">
+    <div class="grid my-0 mx-auto md:ml-0 w-4/5 md:w-3/5 ">
+    <div class="overflow-hidden">
       <div
         id="carouselDarkVariant"
         class="carousel slide carousel-fade carousel-dark relative"
@@ -185,7 +181,7 @@ Display details
       >
         <!-- Indicators -->
         <div
-          class="carousel-indicators absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4"
+          class="carousel-indicators absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4 "
         >
           <button
             data-bs-target="#carouselDarkVariant"
@@ -208,7 +204,7 @@ Display details
 
         <!-- Inner -->
         <div
-          class="carousel-inner relative sm:w-4/5 flex my-0 mx-auto"
+          class="carousel-inner max-h-[600px] object-scale-down relative sm:w-4/5 flex my-0 mx-auto"
         >
           <!-- Single item -->
           <div
@@ -307,10 +303,10 @@ Display details
         </div>
       </div>
       <br />
-      <div class="relative inline-block min-w-[30%] md:block">
+      <div class="flex relative min-w-[30%] md:w-1/5 md:block ">
       
         <div
-          class="m-1 p-3 rounded-lg shadow-lg hover:shadow-blue-300 bg-white "
+          class="mx-auto p-3 rounded-lg shadow-lg hover:shadow-blue-400 bg-white "
         >
           <h4
             class="text-gray-900 text-xl leading-tight font-medium mb-2 inline-block"
@@ -341,6 +337,7 @@ ${loggedInSection}
       </div>
     </div>
   </div>       
+  </div>
                 `;
 
       detailsContainer.insertAdjacentHTML('beforeend', newPostData);
