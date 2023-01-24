@@ -229,6 +229,5 @@ const queryString = params.toString();
             });
           }
         })
-        .catch((err) => bidError.innerHTML = 'during bidding the following error occured:', err);
     });
 }());

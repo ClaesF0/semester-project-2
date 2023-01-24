@@ -1,10 +1,7 @@
 import { LOGIN_URL, SIGNUP_URL } from '../api-related';
 import {
-  getToken,
   saveToken,
   storeUserSession,
-  collectUserName,
-  clearStorage,
 } from '../local-storage-related';
 
 function createModal() {
@@ -30,7 +27,8 @@ function createModal() {
         <div
           class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md"
         >
-          <p class="text-lg text-center font-medium">Log in</p>
+          <p class="text-lg text-center mx-auto font-medium">Log in</p>
+          <p>CURRENTLY MAINTAINING THIS SECTION</p>
           <button
             type="button"
             class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
@@ -39,16 +37,28 @@ function createModal() {
           ></button>
         </div>
         <span
-          id="errorMessage"
+          id="signInErrorMessage"
           class="text-lg font-medium text-red-600"
         ></span>
         <div>
           <label for="email" class="text-sm font-medium">Email</label>
+          <span
+          id="emailFieldError"
+          class="hidden text-sm ml-4 text-red-600"
+        >
+          An email address is required</span
+        >
+        <span
+          id="emailInvalidError"
+          class="hidden text-sm ml-4 text-red-600"
+        >
+          Enter a valid noroff.no or stud.noroff.no mail adress</span
+        >
           <div class="relative mt-1">
             <input
               type="email"
               id="emailField"
-              class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
+              class="w-full p-4 pr-12 text-sm border-2 border-gray-200 rounded-lg shadow-sm );"
               placeholder="Enter email"
             />
             <span
@@ -69,18 +79,7 @@ function createModal() {
                 />
               </svg>
             </span>
-            <span
-              id="emailFieldError"
-              class="hidden text-sm ml-4 text-red-600"
-            >
-              An email address is required</span
-            >
-            <span
-              id="emailInvalidError"
-              class="hidden text-sm ml-4 text-red-600"
-            >
-              Enter a valid noroff.no or stud.noroff.no mail adress</span
-            >
+
           </div>
         </div>
         <div>
@@ -359,19 +358,51 @@ const passwordField = document.querySelector('#passwordField');
 const emailFieldError = document.querySelector('#emailFieldError');
 const emailInvalidError = document.querySelector('#emailInvalidError');
 const passwordFieldError = document.querySelector('#passwordFieldError');
-const otherErrorField = document.querySelector('#errorMessage');
+const signInErrorMessage = document.querySelector('#signInErrorMessage');
 
 // only noroff adress
 const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
-
+const regExSymbols = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]$/;
 // cooperates with the regular expression
+
+function checkInput(form) {
+  const inputs = form.querySelectorAll("input");
+  inputs.forEach(input => {
+      if (!regExSymbols.test(input.value) && input.value.length != 0) {
+        console.log("Input contains invalid characters");
+        input.classList.add("error");
+        input.nextElementSibling.innerHTML = "Input contains invalid characters";
+      } else {
+        input.classList.remove("error");
+        input.nextElementSibling.innerHTML = "";
+        noInvalidSymbols = true;
+      } if (input.value.length == 0) {
+        input.classList.remove("error");
+        input.nextElementSibling.innerHTML = "";
+      }
+  });
+}
+
+signInForm.addEventListener("input", e => {
+  e.preventDefault();
+  checkInput(signInForm);
+});
+
+
+
+
+
+
+
+
 function validEmail(email) {
   return !!email.match(regEx);
 }
 
-function validDomain() {
+emailField.addEventListener("input", function validDomain() {
   if (emailField.value.trim().length && validEmail(emailField.value) === true) {
     emailInvalidError.classList.add('hidden');
+    emailField.classList.remove('border-red-700');
     emailField.classList.add('border-green-700');
     validDomain = true;
   } else if (
@@ -379,21 +410,36 @@ function validDomain() {
     && validEmail(emailField.value) !== true
   ) {
     emailInvalidError.classList.remove('hidden');
+    emailField.classList.remove('border-green-700');
+    emailField.classList.add('border-red-700');
+  } else if (
+    emailField.value.length == 0
+  ) {
+    emailInvalidError.classList.add('hidden');
+    emailField.classList.remove('border-green-700');
+    emailField.classList.remove('border-red-700');
   }
-}
+});
 
-function validPassword(password, confirmPassword) {
+
+passwordField.addEventListener("input", function validPassword(password, confirmPassword) {
   if (!password) {
+    console.log('passordfeil 1');
     return false;
   }
   if (!confirmPassword) {
+    console.log('passordfeil 2 en bokstav -> ikke bekreftet ennå');
     return false;
   }
   if (password !== confirmPassword) {
+    console.log('passordfeil 3 tomt felt');
     return false;
   }
+  console.log('passord uten feil 1');
   return true;
-}
+});
+
+
 
 const capsLockReminder = document.getElementById('capsLockReminder');
 signInForm.addEventListener('keyup', (e) => {
@@ -480,15 +526,20 @@ if (signInForm) {
             storeUserSession(signInDataToStorage);
             location.reload();
           } else {
-            otherErrorField.innerHTML = `The following error occured: ${data.message}`;
+            const JSONresponse = await response.json();
+            const errorMessage = JSONresponse.errors[length].message;
+            console.log("feil 1", errorMessage)
+            signInErrorMessage.innerHTML = `The following error occured: ${errorMessage}`;
           }
         } catch (e) {
-          console.log(e);
+          console.log("feil 2",data)
+          console.log("e",e);
         }
       }
       signInUser();
     } else {
-      otherErrorField.innerHTML = `The following error occured: ${data.message} and ${e}`;
+      console.log("feil 3")
+      capsLockReminder.innerHTML = `The following error occured: ${data.message} and ${e}`;
     }
   });
 }
