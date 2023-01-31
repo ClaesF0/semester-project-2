@@ -95,7 +95,14 @@ function createDetailsPage() {
       let loggedInSection = `
     <button
     type="button"
-    class="nav-link p-3 my-0 mx-auto border-2 border-white bg-blue-500 text-white font-medium text-md leading-tight rounded-lg shadow-md hover:text-black hover:bg-green-400 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+    class="nav-link p-3 my-0 mx-auto 
+    border-2 border-white bg-blue-500
+     text-white font-medium text-md 
+     leading-tight rounded-lg shadow-md
+      hover:text-black hover:bg-green-400 
+      hover:shadow-lg focus:bg-blue-700 focus:shadow-lg 
+      focus:outline-none focus:ring-0 active:bg-blue-800 
+      active:shadow-lg transition duration-150 ease-in-out"
     data-bs-toggle="modal"
     data-bs-target="#loginModal">
     Log in or sign up to see more details :) 
@@ -130,7 +137,7 @@ Display details
 
 </p>
 <div class="collapse" id="collapseExample">
-<div class="block p-6 rounded-lg shadow-lg bg-white">
+<div class="flex-nowrap p-2 rounded-lg shadow-lg bg-white border-2 border-red-500">
   <p  class="text-gray-700 text-md font-medium mb-1 flex">Seller:
   <hr>
   <span class="text-gray-600 text-xs font-medium mb-1 flex">
@@ -148,12 +155,12 @@ Display details
   <a class="text-sm font-medium p-1 border-2 border-gray-600 rounded" href="mailto:${sellerEmail}">Send ${sellerName} a mail</a>
   </p>
   <hr>
-  <p  class="text-md font-medium my-1 flex">Item:
+  <p  class="text-md font-medium my-1">Item:
   <p  class="text-xs font-small mb-1">Unique id: ${itemID}</p>
   <hr>
-  <p  class="text-xs font-small mb-1">Created: ${created}, ${createdTimestamp}</p>
+  <p  class="text-xs font-small mb-1">Created: ${createdTimestamp}</p>
   <hr>
-  <p  class="text-xs font-small mb-1">Updated: ${updated}, ${updatedTimestamp}</p>
+  <p  class="text-xs font-small mb-1">Updated: ${updatedTimestamp}</p>
         </p>
         <hr>
         
@@ -171,8 +178,8 @@ Display details
 
       const detailsContainer = document.getElementById('detailsContainer');
       const newPostData = `
-      <div class="md:flex md:flex-wrap md:w-4/5 mx-auto">
-    <div class="grid my-0 mx-auto md:ml-0 w-4/5 md:w-3/5 ">
+      <div class="lg:flex lg:flex-wrap lg:w-4/5 mx-auto ">
+    <div class="grid my-0 mx-auto lg:ml-0 w-4/5 md:w-3/5 ">
     <div class="overflow-hidden">
       <div
         id="carouselDarkVariant"
@@ -303,7 +310,7 @@ Display details
         </div>
       </div>
       <br />
-      <div class="flex relative min-w-[30%] md:w-1/5 md:block ">
+      <div class="flex relative border-2 min-w-[40%] lg:w-2/5 lg:block ">
       
         <div
           class="mx-auto p-3 rounded-lg shadow-lg hover:shadow-blue-400 bg-white "

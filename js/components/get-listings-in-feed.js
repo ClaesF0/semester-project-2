@@ -112,14 +112,16 @@ async function getAllListings(apiUrl) {
         return `
                 <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 p-2 shadow-lg bg-white rounded-lg hover:bg-blue-200 sm:flex-grow">
                     <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
+                    <p class="text-gray-900 text-xl mb-2">${title}</p>
                         <div class="h-60">
+                        
                               <img id="mainPic" class="mx-auto rounded-lg w-full h-full object-scale-down sm:object-cover" src="${mainPic}" alt="picture for the listing called ${title}" onerror="this.onerror=null;this.src='https://cataas.com/cat/says/No image,random cute cat instead';this.style='display: flex; object-fit: scale-down;'" />
                               
                         </div>
                         <div>
                             <p class="text-teal-700 text-md pt-1">Bids: ${bidCount} Current bid: ${currentBid}</p>
                             <p class="text-gray-700 text-md pt-1">${deadlineMoment}</p> 
-                            <p class="text-gray-900 text-xl mb-2">${title}</p>
+                            
                         </div>
                     </a>
                 </div>
