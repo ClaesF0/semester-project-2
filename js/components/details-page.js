@@ -1,5 +1,5 @@
-import moment from 'moment/moment';
-import { collectUserName } from '../local-storage-related';
+import moment from "moment/moment";
+import { collectUserName } from "../local-storage-related";
 
 const now = moment(new Date()); // todays date
 
@@ -8,91 +8,162 @@ function createDetailsPage() {
 
   const paramString = window.location.search;
   const searchParam = new URLSearchParams(paramString);
-  const itemID = searchParam.get('item_id');
+  const itemID = searchParam.get("item_id");
 
-  const options = { method: 'GET' };
-  const sellerbidsdetailsURL = 'https://nf-api.onrender.com/api/v1/auction/listings/'
-    + `${itemID}`
-    + '&_bids=true';
+  const options = { method: "GET" };
+  const sellerbidsdetailsURL =
+    "https://nf-api.onrender.com/api/v1/auction/listings/" +
+    `${itemID}` +
+    "&_bids=true";
 
-  fetch(sellerbidsdetailsURL, options).then((response) => response
-    .json()
-    .then((response) => {
-      const bidCount = response._count.bids;
+  fetch(sellerbidsdetailsURL, options).then((response) =>
+    response
+      .json()
+      .then((response) => {
+        const bidCount = response._count.bids;
 
-      const bidsArray = response.bids;
+        const bidsArray = response.bids;
 
-      document.title = `Auction details for ${response.title}`;
-      let bidHistoryList = '';
+        document.title = `Auction details for ${response.title}`;
+        let bidHistoryList = "";
 
-      function getOrdinal(num) {
-        if (num > 10 && num < 14) {
-          return `${num}th`;
-        }
-        switch (num % 10) {
-          case 1:
-            return `${num}st`;
-          case 2:
-            return `${num}nd`;
-          case 3:
-            return `${num}rd`;
-          default:
+        function getOrdinal(num) {
+          if (num > 10 && num < 14) {
             return `${num}th`;
+          }
+          switch (num % 10) {
+            case 1:
+              return `${num}st`;
+            case 2:
+              return `${num}nd`;
+            case 3:
+              return `${num}rd`;
+            default:
+              return `${num}th`;
+          }
         }
-      }
 
-      for (let i = 0; i < bidsArray.length; i++) {
-        bidHistoryList += `
+        for (let i = 0; i < bidsArray.length; i++) {
+          bidHistoryList += `
       <li class="text-gray-700 text-xs font-small mb-1">
       ${getOrdinal(i + 1)} 
       bid was ${bidsArray[i].amount} credits, 
-      placed ${moment(bidsArray[i].created).format('MMM Do, k:kk:ss')} 
+      placed ${moment(bidsArray[i].created).format("MMM Do, k:kk:ss")} 
       by <a class="text-blue-500" href="userprofile.html?user_name=${
-  bidsArray[i].bidderName
-}">${bidsArray[i].bidderName} 
+        bidsArray[i].bidderName
+      }">${bidsArray[i].bidderName} 
       </a></li>`;
-      }
-      let price = '';
-      const highestBid = bidsArray.reduce((prev, current) => (prev.amount > current.amount ? prev : current), 0);
-      price = highestBid.amount;
-      if (bidCount == 0) {
-        price = 'No bids yet!';
-      } else {
+        }
+        let price = "";
+        const highestBid = bidsArray.reduce(
+          (prev, current) => (prev.amount > current.amount ? prev : current),
+          0
+        );
         price = highestBid.amount;
-      }
+        if (bidCount == 0) {
+          price = "No bids yet!";
+        } else {
+          price = highestBid.amount;
+        }
 
-      const { description } = response;
-      const itemID = response.id;
-      const { title } = response;
-      // time
-      const { created } = response;
-      const deadline = response.endsAt;
-      const { updated } = response;
-      const deadLineMoment = `${moment(deadline).fromNow()} from now.`;
-      const updatedTimestamp = moment(updated).fromNow();
-      const createdTimestamp = moment(created).fromNow();
-      // img
-      const imgArrayLength = response.media.length;
-      const imgArray = response.media;
-      let firstPic = response.media[0];
-      let secondPic = response.media[1];
-      let thirdPic = response.media[2];
+        const { description } = response;
+        const itemID = response.id;
+        const { title } = response;
+        // time
+        const { created } = response;
+        const deadline = response.endsAt;
+        const { updated } = response;
+        const deadLineMoment = `${moment(deadline).fromNow()} from now.`;
+        const updatedTimestamp = moment(updated).fromNow();
+        const createdTimestamp = moment(created).fromNow();
+        // img
+        const imgArrayLength = response.media.length;
+        const imgArray = response.media;
+        let firstPic = response.media[0];
+        let secondPic = response.media[1];
+        let thirdPic = response.media[2];
 
-      if (firstPic == undefined || null || '') {
-        firstPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
-      }
-      if (secondPic == undefined || null || '') {
-        secondPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
-      }
-      if (thirdPic == undefined || null || '') {
-        thirdPic = 'https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg';
-      }
+        if (firstPic == undefined || null || "") {
+          firstPic =
+            "https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg";
+        }
+        if (secondPic == undefined || null || "") {
+          secondPic =
+            "https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg";
+        }
+        if (thirdPic == undefined || null || "") {
+          thirdPic =
+            "https://www.escapeauthority.com/wp-content/uploads/2116/11/No-image-found.jpg";
+        }
 
-      const sellerName = response.seller.name;
-      const sellerEmail = response.seller.email;
-      const sellerAvatarURL = response.seller.avatar;
+        const sellerName = response.seller.name;
+        const sellerEmail = response.seller.email;
+        const sellerAvatarURL = response.seller.avatar;
+        const tags = response.tags;
+        console.log("tags", tags);
 
-      let loggedInSection = `
+        //related posts
+        const currentListingId = itemID;
+        const apiUrlForRelated = sellerbidsdetailsURL;
+
+        fetch(apiUrlForRelated)
+          .then((response) => response.json())
+          .then((currentListing) => {
+            console.log("currentlisting", currentListing);
+
+            const { category, tags, keywords, price } = currentListing;
+
+            const similarListingsApiUrl = `https://nf-api.onrender.com/api/v1/auction/listings?_tag=${tags}`;
+
+            return fetch(similarListingsApiUrl)
+              .then((response) => response.json())
+              .then((similarListings) => ({ currentListing, similarListings }));
+          })
+          .then(({ currentListing, similarListings }) => {
+            // JavaScript code to generate a list of links to similar listings
+            const linksHtml = similarListings
+              .map(
+                (listing) => `
+                <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 p-2 shadow-lg bg-white rounded-lg hover:bg-blue-200 sm:flex-grow">
+                    <a href="detailspage.html?item_id=${
+                      listing.id
+                    }?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
+                    <p class="text-gray-900 text-xl mb-2">${listing.title}</p>
+                        <div class="h-60">
+                        
+                              <img id="mainPic" class="mx-auto rounded-lg w-full h-full object-scale-down sm:object-cover" src="${
+                                listing.media[0]
+                              }" alt="picture for the listing called ${
+                  listing.title
+                }" onerror="this.onerror=null;this.src='https://cataas.com/cat/says/No image,random cute cat instead';this.style='display: flex; object-fit: scale-down;'" />
+                              
+                        </div>
+                        <div>
+                            <p class="text-teal-700 text-md pt-1">Bids: ${
+                              listing._count.bids
+                            } 
+                            <p class="text-gray-700 text-md pt-1">Ends in ${Math.floor(
+                              (new Date(listing.endsAt) - new Date()) /
+                                (1000 * 60 * 60 * 24)
+                            )} days</p> 
+                            
+                        </div>
+                    </a>
+                </div>
+            `
+              )
+              .join("");
+
+            const similarListingsContainer =
+              document.getElementById("relatedListings");
+            similarListingsContainer.innerHTML = linksHtml;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        //related posts end
+
+        let loggedInSection = `
     <button
     type="button"
     class="nav-link p-3 my-0 mx-auto 
@@ -108,8 +179,8 @@ function createDetailsPage() {
     Log in or sign up to see more details :) 
     </button>
     `;
-      if (userName) {
-        loggedInSection = `
+        if (userName) {
+          loggedInSection = `
     <!-- START OF SECTION FOR LOGGED IN USERS-->
 <div id="loggedInSection">
 <button type="button" class="px-10
@@ -174,11 +245,11 @@ Display details
   </div>
     <!--END OF SECTION FOR LOGGED IN USERS-->
     `;
-      }
+        }
 
-      const detailsContainer = document.getElementById('detailsContainer');
-      const newPostData = `
-      <div class="lg:flex lg:flex-wrap lg:w-4/5 mx-auto ">
+        const detailsContainer = document.getElementById("detailsContainer");
+        const newPostData = `
+      <div class="md:flex md:flex-wrap lg:w-full mx-auto ">
     <div class="grid my-0 mx-auto lg:ml-0 w-4/5 md:w-3/5 ">
     <div class="overflow-hidden">
       <div
@@ -310,7 +381,7 @@ Display details
         </div>
       </div>
       <br />
-      <div class="flex relative border-2 min-w-[40%] lg:w-2/5 lg:block ">
+      <div class="block w-full md:flex md:relative  md:min-w-[40%] lg:w-2/5 lg:block ">
       
         <div
           class="mx-auto p-3 rounded-lg shadow-lg hover:shadow-blue-400 bg-white "
@@ -345,11 +416,30 @@ ${loggedInSection}
     </div>
   </div>       
   </div>
+  
+  <hr>
+  <div class="flex flex-wrap gap-4 p-2">
+  <div class="listing-details">
+  <h1 class="text-2xl font-bold">Listing Title</h1>
+  <p class="text-gray-600">Listing description goes here...</p>
+
+  <!-- HTML code for the list of similar listings -->
+  <div class="similar-listings mt-8">
+
+    <h2 class="text-lg font-bold mb-4">Similar Listings</h2>
+
+    <ul class="list-none">
+
+    </ul>
+    </div>
+  </div>
+</div>
                 `;
 
-      detailsContainer.insertAdjacentHTML('beforeend', newPostData);
-    })
-    .catch((err) => console.error(err)));
+        detailsContainer.insertAdjacentHTML("beforeend", newPostData);
+      })
+      .catch((err) => console.error(err))
+  );
 }
 
 createDetailsPage();

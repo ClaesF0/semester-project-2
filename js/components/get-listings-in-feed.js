@@ -1,37 +1,80 @@
-import { check, doc } from 'prettier';
+import { check, doc } from "prettier";
 
-import moment from 'moment/moment';
+import moment from "moment/moment";
 
-const cardsContainer = document.getElementById('cardsContainer');
+const tagCTA = document.getElementById("tagCTA");
+const tagElement = document.querySelector(".tag");
 
-const options = { method: 'GET' };
+// Call the API endpoint to retrieve the listings
+fetch("https://nf-api.onrender.com/api/v1/auction/listings")
+  .then((response) => response.json())
+  .then((data) => {
+    // Extract all the tags from the listings
+    const tags = data.reduce((acc, listing) => {
+      return [...acc, ...listing.tags.filter((tag) => tag !== "")];
+    }, []);
+
+    tagElement.addEventListener("click", () => {
+      // Get the tag text
+      const tagText = tagElement.textContent;
+
+      // Make TAG BASED API call
+      fetch(
+        `https://nf-api.onrender.com/api/v1/auction/listings?_tag=${tagText}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Process the data
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+    //TAG BASED API CALL END
+    // Set up an interval to change the tag element every 3 seconds
+    let i = 0;
+    setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * tags.length);
+      tagElement.textContent = tags[randomIndex];
+    }, 4000);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+//end of TAGS CTA
+
+const cardsContainer = document.getElementById("cardsContainer");
+
+const options = { method: "GET" };
 // let now = moment(new Date()); //todays date
 
 // pagination start
-const pagination = document.getElementById('pagination');
-const pageLinks = pagination.getElementsByTagName('a');
+const pagination = document.getElementById("pagination");
+const pageLinks = pagination.getElementsByTagName("a");
 
 for (let i = 0; i < pageLinks.length; i++) {
-  pageLinks[i].addEventListener('click', function (event) {
+  pageLinks[i].addEventListener("click", function (event) {
     event.preventDefault();
     const page = this.innerHTML;
-    console.log(`Navigating to page ${page}`);
   });
 }
 // pagination end
 //
-let apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?&_seller=true&_bids=true&_active=true&'; // default setting should be active stuff
+let apiUrl =
+  "https://nf-api.onrender.com/api/v1/auction/listings?&_seller=true&_bids=true&_active=true&"; // default setting should be active stuff
 
 // construct URL start
 
 // start of selecting endpoint
 
-const selectFilterElement = document.getElementById('selectFilterElement');
+const selectFilterElement = document.getElementById("selectFilterElement");
 
-selectFilterElement.addEventListener('change', function () {
+selectFilterElement.addEventListener("change", function () {
   const selectedEndpoint = this.value;
-  if (selectedEndpoint === 'all' || undefined) {
-    apiUrl = 'https://nf-api.onrender.com/api/v1/auction/listings?&_active=true&_seller=true&_bids=true&';
+  if (selectedEndpoint === "all" || undefined) {
+    apiUrl =
+      "https://nf-api.onrender.com/api/v1/auction/listings?&_active=true&_seller=true&_bids=true&";
   } else {
     apiUrl = `https://nf-api.onrender.com/api/v1/auction/listings?&_seller=true&_bids=true&_active=true&${selectedEndpoint}`;
     apiUrl = apiUrl.replace(selectedEndpoint, selectedEndpoint);
@@ -43,14 +86,14 @@ selectFilterElement.addEventListener('change', function () {
 // end of selecting endpoint
 
 // results per page start
-const resultsSelectorForm = document.getElementById('results-per-page-form');
-const resultsSelector = document.getElementById('results-per-page');
+const resultsSelectorForm = document.getElementById("results-per-page-form");
+const resultsSelector = document.getElementById("results-per-page");
 const resultsPerPage = resultsSelector.value;
 
-resultsSelector.addEventListener('change', async () => {
+resultsSelector.addEventListener("change", async () => {
   const resultsPerPage = resultsSelector.value;
   const limit = `&limit=${resultsPerPage}`;
-  apiUrl = apiUrl.replace(/\&limit=\d+/g, '');
+  apiUrl = apiUrl.replace(/\&limit=\d+/g, "");
   apiUrl += limit;
 
   getAllListings(apiUrl);
@@ -59,20 +102,20 @@ resultsSelector.addEventListener('change', async () => {
 // results per page end
 
 // end of sort by active
-const activeState = '';
-const checkbox = document.getElementById('activeOnly');
+const activeState = "";
+const checkbox = document.getElementById("activeOnly");
 
 function updateURL() {
   if (checkbox.checked && !/\&_active=true/g.test(apiUrl)) {
-    apiUrl += '&_active=true';
+    apiUrl += "&_active=true";
 
     getAllListings(apiUrl);
   } else {
-    apiUrl = apiUrl.replace(/\&_active=true/g, '');
+    apiUrl = apiUrl.replace(/\&_active=true/g, "");
     getAllListings(apiUrl);
   }
 }
-checkbox.addEventListener('change', updateURL);
+checkbox.addEventListener("change", updateURL);
 // end of sort by active
 
 async function getAllListings(apiUrl) {
@@ -83,30 +126,33 @@ async function getAllListings(apiUrl) {
       .map((item) => {
         const bidCount = item._count.bids;
 
-      const bidsArray = item.bids;
-      const highestBid = bidsArray.reduce((prev, current) => (prev.amount > current.amount ? prev : current), 0);
+        const bidsArray = item.bids;
+        const highestBid = bidsArray.reduce(
+          (prev, current) => (prev.amount > current.amount ? prev : current),
+          0
+        );
 
-      let currentBid = highestBid.amount;
-      
+        let currentBid = highestBid.amount;
 
-      if (currentBid == undefined) {
-        currentBid = 0;
-      }
-        
+        if (currentBid == undefined) {
+          currentBid = 0;
+        }
+
         const { description } = item;
         const deadline = item.endsAt;
         let deadlineMoment = `Ends ${moment(deadline).fromNow()}`;
 
         const currentDate = moment();
         if (currentDate.isAfter(deadline)) {
-          deadlineMoment = 'Listing has ended';
+          deadlineMoment = "Listing has ended";
         }
-        
+
         const itemID = item.id;
         const { title } = item;
         let mainPic = item.media[0];
-        if (mainPic === undefined || null || '') {
-          mainPic = 'https://cataas.com/cat/says/No image,random cute cat instead" alt="No image uploaded by user, so a cute cat was generated instead" style="display: flex; object-fit: scale-down;';
+        if (mainPic === undefined || null || "") {
+          mainPic =
+            'https://cataas.com/cat/says/No image,random cute cat instead" alt="No image uploaded by user, so a cute cat was generated instead" style="display: flex; object-fit: scale-down;';
         }
 
         return `
@@ -127,9 +173,9 @@ async function getAllListings(apiUrl) {
                 </div>
             `;
       })
-      .join('');
-    cardsContainer.innerHTML = '';
-    cardsContainer.insertAdjacentHTML('beforeend', itemsMapped);
+      .join("");
+    cardsContainer.innerHTML = "";
+    cardsContainer.insertAdjacentHTML("beforeend", itemsMapped);
   }
 }
 

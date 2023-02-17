@@ -33,9 +33,8 @@ async function createProfileForOtherUser() {
     .json()
     .then((data) => {
       const count = data._count.listings;
-      let avatar = data.avatar;
-      console.log('data.avatar',data.avatar);
-      
+      let { avatar } = data;
+      console.log('data.avatar', data.avatar);
 
       if (avatar == undefined || null || '' || !avatar.length) {
         avatar = 'https://cataas.com/cat/says/no picture, have this cute cat instead';
@@ -105,7 +104,10 @@ async function createProfileForOtherUser() {
               const itemsMapped = items.map((item) => {
                 const bidCount = item._count.bids;
                 const bidsArray = item.bids;
-                const highestBid = bidsArray.reduce((prev, current) => (prev.amount > current.amount ? prev : current), 0);
+                const highestBid = bidsArray.reduce(
+                  (prev, current) => (prev.amount > current.amount ? prev : current),
+                  0,
+                );
                 let price = highestBid.amount;
                 if (bidCount == 0) {
                   price = 'No bids yet!';

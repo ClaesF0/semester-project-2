@@ -1,11 +1,7 @@
 import { LOGIN_URL, SIGNUP_URL } from './api-related';
-import {
-  getToken,
-  saveToken,
-  storeUserSession,
-  collectUserName,
-  clearStorage,
-} from './local-storage-related';
+import { saveToken, storeUserSession } from './local-storage-related';
+
+console.log('LOGINSIGNUP CONNECTED');
 
 // LOG-IN PAGE
 const signInForm = document.querySelector('#signin-form');
@@ -16,6 +12,15 @@ const emailFieldError = document.querySelector('#emailFieldError');
 const emailInvalidError = document.querySelector('#emailInvalidError');
 const passwordFieldError = document.querySelector('#passwordFieldError');
 const otherErrorField = document.querySelector('#errorMessage');
+const capsLockReminder = document.getElementById('capsLockReminder');
+
+signInForm.addEventListener('keyup', (e) => {
+  if (e.getModifierState('CapsLock')) {
+    capsLockReminder.classList.remove('hidden');
+  } else {
+    capsLockReminder.classList.add('hidden');
+  }
+});
 
 // only noroff adress
 const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
@@ -50,15 +55,6 @@ function validPassword(password, confirmPassword) {
   }
   return true;
 }
-
-const capsLockReminder = document.getElementById('capsLockReminder');
-signInForm.addEventListener('keyup', (e) => {
-  if (e.getModifierState('CapsLock')) {
-    capsLockReminder.classList.remove('hidden');
-  } else {
-    capsLockReminder.classList.add('hidden');
-  }
-});
 
 // user can sign in
 if (signInForm) {

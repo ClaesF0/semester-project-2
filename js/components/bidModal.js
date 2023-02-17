@@ -28,7 +28,10 @@ const queryString = params.toString();
     .then((postResponse) => postResponse.json())
     .then((postResponse) => {
       const bidsArray = postResponse.bids;
-      const highestBid = bidsArray.reduce((prev, current) => (prev.amount > current.amount ? prev : current), 0);
+      const highestBid = bidsArray.reduce(
+        (prev, current) => (prev.amount > current.amount ? prev : current),
+        0,
+      );
 
       let currentBid = highestBid.amount;
       const itemIDWithoutFlags = postResponse.id;
@@ -39,12 +42,10 @@ const queryString = params.toString();
 
       if (profileResponse.ok) {
       }
-      const profileDetails = profileResponse
-        .json()
-        .then((profileDetails) => {
-          const modalBiddingContainer = document.getElementById('modalBidding');
-          const balance = profileDetails.credits;
-          const bidModalRendered = `
+      const profileDetails = profileResponse.json().then((profileDetails) => {
+        const modalBiddingContainer = document.getElementById('modalBidding');
+        const balance = profileDetails.credits;
+        const bidModalRendered = `
     <!-- Modal -->
 <form class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
   id="biddingModal" tabindex="-1" aria-labelledby="biddingModalLabel" aria-hidden="true">
@@ -138,96 +139,93 @@ const queryString = params.toString();
   </div>
 </form>
     `;
-          modalBiddingContainer.insertAdjacentHTML(
-            'beforeend',
-            bidModalRendered,
-          );
+        modalBiddingContainer.insertAdjacentHTML('beforeend', bidModalRendered);
 
-          // user can bid
-          if (biddingModal) {
-            // const bidBtn = document.getElementById("bidBtn");
+        // user can bid
+        if (biddingModal) {
+          // const bidBtn = document.getElementById("bidBtn");
 
-            biddingModal.addEventListener('submit', (event) => {
-              event.preventDefault();
+          biddingModal.addEventListener('submit', (event) => {
+            event.preventDefault();
 
-              const noUnderbid = document.getElementById('noUnderbid');
-              const noFunds = document.getElementById('noFunds');
-              const bidError = document.getElementById('bidError');
+            const noUnderbid = document.getElementById('noUnderbid');
+            const noFunds = document.getElementById('noFunds');
+            const bidError = document.getElementById('bidError');
 
-              let isNotUnderbid = false;
-              if (bidInputField.value > currentBid) {
-                noUnderbid.classList.add('hidden');
-                isNotUnderbid = true;
-              } else {
-                noUnderbid.classList.remove('hidden');
-                bidError.innerHTML = `Your bid must be at least ${
-                  currentBid + 1 - bidInputField.value
-                } credits more than what you tried now.`;
-              }
+            let isNotUnderbid = false;
+            if (bidInputField.value > currentBid) {
+              noUnderbid.classList.add('hidden');
+              isNotUnderbid = true;
+            } else {
+              noUnderbid.classList.remove('hidden');
+              bidError.innerHTML = `Your bid must be at least ${
+                currentBid + 1 - bidInputField.value
+              } credits more than what you tried now.`;
+            }
 
-              let isNotInsufficientFunds = false;
-              if (bidInputField.value < balance) {
-                noFunds.classList.add('hidden');
-                isNotInsufficientFunds = true;
-              } else {
-                noFunds.classList.remove('hidden');
-                bidError.innerHTML = `Your bid is ${
-                  bidInputField.value - balance
-                } credits more than your balance :/ `;
-              }
+            let isNotInsufficientFunds = false;
+            if (bidInputField.value < balance) {
+              noFunds.classList.add('hidden');
+              isNotInsufficientFunds = true;
+            } else {
+              noFunds.classList.remove('hidden');
+              bidError.innerHTML = `Your bid is ${
+                bidInputField.value - balance
+              } credits more than your balance :/ `;
+            }
 
-              const bidValidated = isNotUnderbid && isNotInsufficientFunds;
+            const bidValidated = isNotUnderbid && isNotInsufficientFunds;
 
-              const bid = parseInt(bidInputField.value);
-              if (bidValidated) {
-                const newBidData = {
-                  amount: bid,
-                };
+            const bid = parseInt(bidInputField.value);
+            if (bidValidated) {
+              const newBidData = {
+                amount: bid,
+              };
 
-                const PLACE_BID_URL = `${CREATE_LISTING_URL}/${itemIDWithoutFlags}/bids`;
+              const PLACE_BID_URL = `${CREATE_LISTING_URL}/${itemIDWithoutFlags}/bids`;
 
-                async function placeBid() {
-                  try {
-                    const response = await fetch(PLACE_BID_URL, {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${bearerKey}`,
-                      },
-                      body: JSON.stringify(newBidData),
-                    });
+              async function placeBid() {
+                try {
+                  const response = await fetch(PLACE_BID_URL, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${bearerKey}`,
+                    },
+                    body: JSON.stringify(newBidData),
+                  });
 
-                    if (response.ok) {
-                      const JSONresponse = await response.json();
+                  if (response.ok) {
+                    const JSONresponse = await response.json();
 
-                      const bidSuccessMessage = document.getElementById('bidSuccessMessage');
-                      {
-                        bidSuccessMessage.innerHTML = `Your bidding for ${JSONresponse.title} was successful! :))
+                    const bidSuccessMessage = document.getElementById('bidSuccessMessage');
+                    {
+                      bidSuccessMessage.innerHTML = `Your bidding for ${JSONresponse.title} was successful! :))
                           This message will close in 5 seconds`;
-                      }
-
-                      const closeBidModalButton = document.getElementById(
-                        'closeBidModalButton',
-                      );
-                      setTimeout(() => {
-                        closeBidModalButton.click();
-                      }, 5000);
-                    } else {
-                      const JSONresponse = await response.json();
-                      const errorMessage = JSONresponse.errors[length].message;
-
-                      bidError.innerHTML = `Sorry. ${errorMessage} :(`;
                     }
-                  } catch (e) {
-                    console.log('error caught: ', e);
+
+                    const closeBidModalButton = document.getElementById(
+                      'closeBidModalButton',
+                    );
+                    setTimeout(() => {
+                      closeBidModalButton.click();
+                    }, 5000);
+                  } else {
+                    const JSONresponse = await response.json();
+                    const errorMessage = JSONresponse.errors[length].message;
+
+                    bidError.innerHTML = `Sorry. ${errorMessage} :(`;
                   }
+                } catch (e) {
+                  console.log('error caught: ', e);
                 }
-                placeBid();
-              } else {
-                bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
               }
-            });
-          }
-        })
+              placeBid();
+            } else {
+              bidError.innerHTML = `The following error occured: ${data.message} and ${e}`;
+            }
+          });
+        }
+      });
     });
 }());
