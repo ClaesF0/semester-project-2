@@ -17,7 +17,9 @@ fetch("https://nf-api.onrender.com/api/v1/auction/listings")
     tagElement.addEventListener("click", () => {
       // Get the tag text
       const tagText = tagElement.textContent;
+      console.log("tagElement.textContent", tagElement.textContent);
 
+      const tagContainer = document.getElementById("tagContainer");
       // Make TAG BASED API call
       fetch(
         `https://nf-api.onrender.com/api/v1/auction/listings?_tag=${tagText}`
@@ -25,7 +27,7 @@ fetch("https://nf-api.onrender.com/api/v1/auction/listings")
         .then((response) => response.json())
         .then((data) => {
           // Process the data
-          console.log(data);
+          console.log("data from tag", data);
         })
         .catch((error) => {
           console.error(error);
@@ -37,6 +39,11 @@ fetch("https://nf-api.onrender.com/api/v1/auction/listings")
     setInterval(() => {
       const randomIndex = Math.floor(Math.random() * tags.length);
       tagElement.textContent = tags[randomIndex];
+      const tagLink = document.createElement("a");
+      tagLink.href = `/sandbox.html?&_seller=true&_bids=true&_tag=${tagElement.textContent}`;
+      tagLink.textContent = `${tagElement.textContent}`;
+      tagElement.innerHTML = "";
+      tagElement.appendChild(tagLink);
     }, 4000);
   })
   .catch((error) => {
@@ -125,13 +132,11 @@ async function getAllListings(apiUrl) {
     const itemsMapped = items
       .map((item) => {
         const bidCount = item._count.bids;
-
         const bidsArray = item.bids;
         const highestBid = bidsArray.reduce(
           (prev, current) => (prev.amount > current.amount ? prev : current),
           0
         );
-
         let currentBid = highestBid.amount;
 
         if (currentBid == undefined) {
