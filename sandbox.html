@@ -20,26 +20,49 @@
       src="./js/components/get-listings-in-feed.js"
       defer
     ></script>
-    <title>Front page</title>
+    <title>Tags</title>
   </head>
+  <header>
+    <div id="navBar" class=""></div>
+    <div id="top-bar-allocated-space" class="h-3"></div>
+  </header>
+  <div id="modalAccount"></div>
 
-  <body>
-    <div
-      class="cta-banner"
-      style="
-        background-color: #0070c9; /* blue */
-        padding: 15px;
-        text-align: center;
-        color: #f7f7f7; /* light gray */
-        text-decoration: none;
-      "
-    >
-      <p class="text-white m-0">
-        We're now trying out giving you suggestions based on the item you are
-        viewing, to enhance your visit.
-        <a class="underline" href="#">Click here</a> to learn more.
-      </p>
+  <span class="inline-block sm:flex justify-content-evenly">
+    <div>
+      <select
+        class="bg-gray-200 p-2 my-1 rounded-md text-teal-800 text-xl"
+        id="selectFilterElement"
+        class=""
+      >
+        <option value="all" selected="selected">All</option>
+        <option value="sort=title&sortOrder=asc">(A → Z)</option>
+        <option value="sort=title&sortOrder=desc">(Z → A)</option>
+        <option value="sort=created&sortOrder=asc">Oldest first</option>
+        <option value="sort=created&sortOrder=desc">Newest first</option>
+      </select>
     </div>
+    <div>
+      <form id="results-per-page-form">
+        <label for="results-per-page">Results per page:</label>
+        <select
+          class="bg-gray-200 p-2 my-1 rounded-md text-teal-800 text-xl"
+          id="results-per-page"
+          name="results-per-page"
+        >
+          <option value="25" selected="selected">25</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
+        </select>
+      </form>
+    </div>
+    <div>
+      <label for="activeOnly">Show only active listings?</label>
+      <input type="checkbox" id="activeOnly" name="activeOnly" checked />
+    </div>
+  </span>
+  <body>
     <!--Tag posts-->
 
     <div id="tagContainer" class="flex flex-wrap gap-4 p-2">tagContainer</div>
@@ -52,7 +75,22 @@
       const tagContainer = document.getElementById("tagContainer");
 
       tagUrl = `https://nf-api.onrender.com/api/v1/auction/listings?_tag=${tagText}`;
+      // end of sort by active
+      const activeState = "";
+      const checkbox = document.getElementById("activeOnly");
 
+      function updateURL() {
+        if (checkbox.checked && !/\&_active=true/g.test(tagUrl)) {
+          tagUrl += "&_active=true";
+
+          getAllListings(tagUrl);
+        } else {
+          tagUrl = tagUrl.replace(/\&_active=true/g, "");
+          getAllListings(tagUrl);
+        }
+      }
+      checkbox.addEventListener("change", updateURL);
+      // end of sort by active
       async function getAllListings(tagUrl) {
         const response = await fetch(tagUrl, options);
         if (response.ok) {

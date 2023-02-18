@@ -25,10 +25,25 @@
   <body class="">
     <header>
       <div id="navBar" class=""></div>
-      <div id="top-bar-allocated-space" class="h-3"></div>
+      <!--
+        <div id="top-bar-allocated-space" class="h-3"></div>
+      -->
     </header>
     <div id="modalAccount"></div>
 
+    <div
+      class="py-2 sm:h-[180px] bg-gradient-to-b from-teal-700 to-white text-gray-600 sm:text-gray-200 text-center"
+      id="tagCTA"
+    >
+      <p class="text-md sm:text-4xl text-white sm:text-gray-700">
+        E x p l o r e
+      </p>
+      <span class="tag font-semibold" style="cursor: pointer"
+        >tags by quick peeks:</span
+      >
+    </div>
+    <!--Tag posts-->
+    <div id="tagContainer" class="flex flex-wrap gap-4 p-2"></div>
     <span class="inline-block sm:flex justify-content-evenly">
       <div>
         <select
@@ -63,34 +78,13 @@
         <input type="checkbox" id="activeOnly" name="activeOnly" checked />
       </div>
     </span>
-    <div
-      class="cta-banner"
-      style="
-        background-color: #0070c9; /* blue */
-        padding: 15px;
-        text-align: center;
-        color: #f7f7f7; /* light gray */
-        text-decoration: none;
-      "
-    >
-      <p class="text-white m-0">
-        We're now trying out giving you suggestions based on the item you are
-        viewing, to enhance your visit.
-        <a class="underline" href="#">Click here</a> to learn more.
-      </p>
-    </div>
-    <div
-      class="py-2 h-[130px] bg-yellow-500 text-gray-200 text-center"
-      id="tagCTA"
-    >
-      <p class="text-4xl text-gray-700">Explore</p>
-      <span class="tag" style="cursor: pointer">tags by quick peeks:</span>
-    </div>
-    <!--Tag posts-->
-    <div id="tagContainer" class="flex flex-wrap gap-4 p-2"></div>
+
     <!--CARD START-->
 
-    <div id="cardsContainer" class="flex flex-wrap gap-4 p-2"></div>
+    <div
+      id="cardsContainer"
+      class="w-4/5 mx-auto flex flex-wrap gap-4 p-2"
+    ></div>
 
     <!--CARD END-->
     <p>Note: this pagination is work in progress ↓</p>

@@ -1,47 +1,47 @@
-import { collectUserName, getToken } from '../local-storage-related';
+import { collectUserName, getToken } from "../local-storage-related";
 
 const bearerKey = getToken();
 
 function clearStorage() {
   localStorage.clear();
-  location.replace('index.html');
+  location.replace("index.html");
 }
 
 function createHeaderBar() {
-  const navBar = document.getElementById('navBar');
+  const navBar = document.getElementById("navBar");
   const userName = collectUserName();
 
-  const searchButton = document.getElementById('search-button');
-  const searchInput = document.getElementById('search-input');
+  const searchButton = document.getElementById("search-button");
+  const searchInput = document.getElementById("search-input");
 
   // Search for usernames starts here
 
   const searchApiForProfiles = {
-    method: 'GET',
+    method: "GET",
     headers: {
       Authorization: `Bearer ${bearerKey}`,
     },
   };
 
   fetch(
-    'https://nf-api.onrender.com/api/v1/auction/profiles/',
-    searchApiForProfiles,
+    "https://nf-api.onrender.com/api/v1/auction/profiles/",
+    searchApiForProfiles
   )
     .then((response) => response.json())
     .then((data) => {
       const people = data;
 
-      const searchInput = document.getElementById('search-input');
-      const list = document.getElementById('list');
+      const searchInput = document.getElementById("search-input");
+      const list = document.getElementById("list");
 
       function setList(group) {
         clearList();
         for (const person of group) {
-          const item = document.createElement('li');
+          const item = document.createElement("li");
 
-          item.classList.add('list-group-item');
+          item.classList.add("list-group-item");
 
-          const a = document.createElement('a');
+          const a = document.createElement("a");
 
           const linkUserProfileFromSearch = `userprofile.html?user_name=${person.name}`;
           a.href = linkUserProfileFromSearch;
@@ -64,9 +64,9 @@ function createHeaderBar() {
       }
 
       function setNoResults() {
-        const item = document.createElement('li');
-        item.classList.add('list-group-item');
-        const text = document.createTextNode('No matching user found');
+        const item = document.createElement("li");
+        item.classList.add("list-group-item");
+        const text = document.createTextNode("No matching user found");
         item.appendChild(text);
         list.appendChild(item);
       }
@@ -75,14 +75,16 @@ function createHeaderBar() {
         // maximizing relevancy with origin of amount of search/result match
         if (value === searchTerm) {
           return 2;
-        } if (value.startsWith(searchTerm)) {
+        }
+        if (value.startsWith(searchTerm)) {
           return 1;
-        } if (value.includes(searchTerm)) {
+        }
+        if (value.includes(searchTerm)) {
           return 0;
         }
       }
 
-      searchInput.addEventListener('input', (event) => {
+      searchInput.addEventListener("input", (event) => {
         let { value } = event.target;
 
         if (value && value.trim().length > 0) {
@@ -92,10 +94,11 @@ function createHeaderBar() {
             people
               .filter((person) => person.name.includes(value))
 
-              .sort((personA, personB) => (
-                getRelevancy(personB.name, value)
-                  - getRelevancy(personA.name, value)
-              )),
+              .sort(
+                (personA, personB) =>
+                  getRelevancy(personB.name, value) -
+                  getRelevancy(personA.name, value)
+              )
           ); // her er array som søkes i
         } else {
           clearList();
@@ -107,30 +110,30 @@ function createHeaderBar() {
 
   /// /////Call for listing data begins/////////
   const searchApiForPosts = {
-    method: 'GET',
+    method: "GET",
     headers: {
       Authorization: `Bearer ${bearerKey}`,
     },
   };
 
   fetch(
-    'https://nf-api.onrender.com/api/v1/auction/listings',
-    searchApiForPosts,
+    "https://nf-api.onrender.com/api/v1/auction/listings",
+    searchApiForPosts
   )
     .then((response) => response.json())
     .then((allPostData) => {
       const listings = allPostData;
-      const searchInput = document.getElementById('search-input');
-      const list = document.getElementById('listTwo');
+      const searchInput = document.getElementById("search-input");
+      const list = document.getElementById("listTwo");
 
       function setList(group) {
         clearList();
         for (const post of group) {
-          const item = document.createElement('li');
+          const item = document.createElement("li");
 
-          item.classList.add('list-group-item');
+          item.classList.add("list-group-item");
 
-          const a = document.createElement('a');
+          const a = document.createElement("a");
 
           const linkListingFromSearch = `detailspage.html?item_id=${post.id}?_seller=true&_bids=true`;
           a.href = linkListingFromSearch;
@@ -153,9 +156,9 @@ function createHeaderBar() {
       }
 
       function setNoResults() {
-        const item = document.createElement('li');
-        item.classList.add('list-group-item');
-        const text = document.createTextNode('No listing results found');
+        const item = document.createElement("li");
+        item.classList.add("list-group-item");
+        const text = document.createTextNode("No listing results found");
         item.appendChild(text);
         list.appendChild(item);
       }
@@ -164,14 +167,16 @@ function createHeaderBar() {
         // maximizing relevancy with origin of amount of search/result match
         if (value === searchTerm) {
           return 2;
-        } if (value.startsWith(searchTerm)) {
+        }
+        if (value.startsWith(searchTerm)) {
           return 1;
-        } if (value.includes(searchTerm)) {
+        }
+        if (value.includes(searchTerm)) {
           return 0;
         }
       }
 
-      searchInput.addEventListener('input', (event) => {
+      searchInput.addEventListener("input", (event) => {
         let { value } = event.target;
 
         if (value && value.trim().length > 0) {
@@ -181,10 +186,11 @@ function createHeaderBar() {
             listings
               .filter((post) => post.title.toLowerCase().includes(value))
 
-              .sort((postA, postB) => (
-                getRelevancy(postB.title.toLowerCase(), value)
-                  - getRelevancy(postA.title.toLowerCase(), value)
-              )),
+              .sort(
+                (postA, postB) =>
+                  getRelevancy(postB.title.toLowerCase(), value) -
+                  getRelevancy(postA.title.toLowerCase(), value)
+              )
           ); // her er array som søkes i
         } else {
           clearList();
@@ -194,6 +200,10 @@ function createHeaderBar() {
     })
     .catch((err) => console.error(err));
   /// //////END OF CALL 2/////////
+  console.log(
+    'localStorage.getItem("avatar", data.avatar)',
+    localStorage.getItem("avatar")
+  );
 
   let headerLinks = `
   <button
@@ -217,9 +227,9 @@ function createHeaderBar() {
               aria-expanded="false"
             >
               <img
-                src="./img/profileicon.svg"
+                src="${localStorage.getItem("avatar")}"
                 class="rounded-full"
-                style="height: 25px; width: 25px"
+                style="height: 50px; width: 50px"
                 alt=""
                 loading="lazy"
               />
@@ -262,7 +272,7 @@ function createHeaderBar() {
   }
   navBar.innerHTML = `
   <nav
-  class="mx-auto my-0 relative w-full flex items-center justify-between p-2 bg-teal-700 text-gray-200 navbar navbar-expand-lg navbar-light"
+  class="mx-auto my-0 relative w-full flex items-center justify-between p-2 py-5 bg-teal-700 text-gray-200 navbar navbar-expand-lg navbar-light"
 >    
   <div class="mx-auto my-0 container-fluid w-full flex justify-evenly sm:w-4/5 ">
     <a class="text-xl text-white font-semibold p-2" href="index.html">
@@ -276,7 +286,7 @@ function createHeaderBar() {
     <div class="mx-auto my-0">
         <div class="flex justify-center">
           <div class="xl:w-96">
-            <div class="input-group relative flex items-stretch md:w-[400px]">
+            <div class="input-group w-[200px] relative flex items-stretch md:w-[400px]">
               <input id="search-input" type="search" class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-semibold text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
               <button id="search-button" class="btn px-6 bg-teal-500 border-emerald-50 border-2 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center" type="button" >
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="w-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -303,21 +313,21 @@ function createHeaderBar() {
     
 </nav>
 
-  <div class="list-none flex justify-center mx-auto text-md font-normal bg-teal-700 text-white shadow-lg">
+  <div class="  list-none flex justify-center mx-auto text-md font-normal bg-opacity-75 bg-teal-700 text-white shadow-lg ">
   <br>
-  <ul class="bg-teal-700 leading-loose">
+  <ul class="bg-teal-700 mx-auto z-10 absolute leading-loose md:w-[440px]">
   <li id="list" class=""></li>
   <li id="listTwo" class=""></li>
   </ul>
   <br>
   </div>
   `;
-  const logoutbtn = document.getElementById('logout-btn');
+  const logoutbtn = document.getElementById("logout-btn");
 
   if (logoutbtn) {
-    logoutbtn.addEventListener('click', () => {
+    logoutbtn.addEventListener("click", () => {
       clearStorage();
-      window.location.replace('index.html');
+      window.location.replace("index.html");
     });
   }
 }

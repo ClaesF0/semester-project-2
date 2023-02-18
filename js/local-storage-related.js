@@ -1,5 +1,6 @@
-const bearerKey = 'token';
-const userKey = 'user';
+const bearerKey = "token";
+const userKey = "user";
+const avatarKey = "avatar";
 
 function saveToken(token) {
   saveToStorage(bearerKey, token);
@@ -21,6 +22,20 @@ function collectUserName() {
   }
   return null;
 }
+console.log("user", collectUserName());
+console.log("getToken()", getToken());
+
+fetch(`https://api.noroff.dev/api/v1/auction/profiles/${collectUserName()}`, {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${getToken()}`,
+  },
+})
+  .then((response) => response.json())
+  .then((data) => {
+    localStorage.setItem("avatar", data.avatar);
+  })
+  .catch((error) => console.log(error));
 
 // function which save data to the local storage
 function saveToStorage(key, value) {
@@ -52,8 +67,8 @@ function getCreditAmount() {
   return null;
 }
 
-const amountKey = 'amount';
-const creditKey = 'credit';
+const amountKey = "amount";
+const creditKey = "credit";
 
 export {
   getToken,

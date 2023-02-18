@@ -108,7 +108,7 @@ resultsSelector.addEventListener("change", async () => {
 
 // results per page end
 
-// end of sort by active
+// start of sort by active
 const activeState = "";
 const checkbox = document.getElementById("activeOnly");
 
@@ -161,7 +161,7 @@ async function getAllListings(apiUrl) {
         }
 
         return `
-                <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 p-2 shadow-lg bg-white rounded-lg hover:bg-blue-200 sm:flex-grow">
+                <div class="border-2 border-gray-300 w-4/5 mx-auto sm:w-60 sm:h-70 p-2 shadow-md bg-white rounded-lg hover:bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white to-teal-100 hover:scale-110 ease-in duration-500 sm:flex-grow">
                     <a href="detailspage.html?item_id=${itemID}?_seller=true&_bids=true" data-mdb-ripple="true" data-mdb-ripple-color="light">
                     <p class="text-gray-900 text-xl mb-2">${title}</p>
                         <div class="h-60">

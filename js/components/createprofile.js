@@ -1,12 +1,12 @@
-import moment from 'moment/moment';
-import { collectUserName, getToken } from '../local-storage-related';
+import moment from "moment/moment";
+import { collectUserName, getToken } from "../local-storage-related";
 
 const now = moment(new Date()); // todays date
 
 async function createProfile() {
-  const profileContainer = document.getElementById('profilecontainer');
+  const profileContainer = document.getElementById("profilecontainer");
   const userListingsContainer = document.getElementById(
-    'userListingsContainer',
+    "userListingsContainer"
   );
 
   const token = getToken();
@@ -14,16 +14,16 @@ async function createProfile() {
 
   document.title = `${userName}s profile`;
   const auth = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   };
 
   const response = await fetch(
-    'https://api.noroff.dev/api/v1/auction/profiles/' + `${userName}`,
-    auth,
+    "https://api.noroff.dev/api/v1/auction/profiles/" + `${userName}`,
+    auth
   );
   if (response.ok) {
   }
@@ -34,6 +34,7 @@ async function createProfile() {
       const { avatar } = data;
       const { credits } = data;
       const { email } = data;
+
       const wins = data.wins.length;
       const profilecontent = `
       <div class="flex-col md:grid my-0 mx-auto w-full sm:w-4/5 grid-cols-2  ">
@@ -168,13 +169,13 @@ async function createProfile() {
       <h3 class="text-lg text-center mx-auto">${userName} has ${wins} wins and ${data._count.listings} listings</h3>
       
       `;
-      profileContainer.insertAdjacentHTML('beforeend', profilecontent);
+      profileContainer.insertAdjacentHTML("beforeend", profilecontent);
 
-      const newPicField = document.querySelector('#newPicField');
-      const picErrorField = document.querySelector('#picErrorField');
-      const newPicForm = document.querySelector('#newPicForm');
+      const newPicField = document.querySelector("#newPicField");
+      const picErrorField = document.querySelector("#picErrorField");
+      const newPicForm = document.querySelector("#newPicForm");
       const bearerKey = getToken();
-      newPicForm.addEventListener('submit', (event) => {
+      newPicForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
         const newPicData = {
@@ -184,9 +185,9 @@ async function createProfile() {
         async function newProfilePic() {
           try {
             const response = await fetch(USER_LOGIN_ENDPOINT, {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${bearerKey}`,
               },
               body: JSON.stringify(newPicData),
@@ -206,11 +207,11 @@ async function createProfile() {
       })(
         (async function getAllListingsByUser() {
           const response = await fetch(
-            'https://api.noroff.dev/api/v1/auction/profiles/'
-              + `${userName}`
-              + '/listings'
-              + '?_seller=true&_bids=true',
-            auth,
+            "https://api.noroff.dev/api/v1/auction/profiles/" +
+              `${userName}` +
+              "/listings" +
+              "?_seller=true&_bids=true",
+            auth
           );
           if (response.ok) {
             const items = response
@@ -220,12 +221,13 @@ async function createProfile() {
                   const bidCount = item._count.bids;
                   const bidsArray = item.bids;
                   const highestBid = bidsArray.reduce(
-                    (prev, current) => (prev.amount > current.amount ? prev : current),
-                    0,
+                    (prev, current) =>
+                      prev.amount > current.amount ? prev : current,
+                    0
                   );
                   let price = highestBid.amount;
                   if (bidCount == 0) {
-                    price = 'No bids yet!';
+                    price = "No bids yet!";
                   } else {
                     price = highestBid.amount;
                   }
@@ -241,8 +243,9 @@ async function createProfile() {
                   const { title } = item;
                   const { updated } = item;
                   let mainPic = item.media[0];
-                  if (mainPic == undefined || null || '') {
-                    mainPic = 'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg';
+                  if (mainPic == undefined || null || "") {
+                    mainPic =
+                      "https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg";
                   }
                   const { tags } = item;
 
@@ -272,14 +275,14 @@ async function createProfile() {
                 <hr class="my-1 py-1  flex flex-grow sm:w-4/5 mx-auto">
                     `;
                   userListingsContainer.insertAdjacentHTML(
-                    'beforeend',
-                    userListings,
+                    "beforeend",
+                    userListings
                   );
                 });
               })
               .catch((err) => console.error(err));
           }
-        }()),
+        })()
       );
     })
     .catch((err) => console.error(err));
