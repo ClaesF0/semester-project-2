@@ -315,7 +315,7 @@ function createHeaderBar() {
 
   <div class="  list-none flex justify-center mx-auto text-md font-normal bg-opacity-75 bg-teal-700 text-white shadow-lg ">
   <br>
-  <ul class="bg-teal-700 mx-auto z-10 absolute leading-loose md:w-[440px]">
+  <ul class="bg-teal-700 mx-auto z-10 px-4 absolute leading-loose md:w-[440px]">
   <li id="list" class=""></li>
   <li id="listTwo" class=""></li>
   </ul>
