@@ -227,7 +227,7 @@ function createHeaderBar() {
               aria-expanded="false"
             >
               <img
-                src="${localStorage.getItem("avatar")}"
+                src="${localStorage.getItem("avatar")} || ./img/homeicon.svg "
                 class="rounded-full"
                 style="height: 50px; width: 50px"
                 alt=""
