@@ -23,7 +23,7 @@ const otherErrorField = document.getElementById("otherErrorField");
 const newListingTitle = newListingTitleField.value;
 const newListingDate = newListingDateField.value;
 const newListingDescription = newListingDescriptionField.value;
-const newListingTags = newListingTagsField.value;
+//const newListingTags = newListingTagsField.value;
 const newListingPics = newListingPicsField.value;
 
 newListingForm.addEventListener("submit", (event) => {
@@ -48,35 +48,39 @@ newListingForm.addEventListener("submit", (event) => {
 
   const deadLineIso = new Date(newListingDateField.value).toISOString();
 
-  // var tagifyTags = new Tagify(newListingTagsField, {
-  //  originalInputValueFormat: newListingTags => newListingTags.map(item => item.value).join(',')
-  // } )
+  var tagifyTags = new Tagify(newListingTagsField);
+  const tags = tagifyTags.value.map((tag) => tag.value);
+  console.log("tags", tags);
+
+  var tagifyPics = new Tagify(newListingPicsField);
+  const pics = tagifyPics.value.map((pic) => pic.value);
+  console.log("pics", pics);
+
+  //var tagifyTags = new Tagify(newListingTagsField, {
+  //  originalInputValueFormat: (newListingTags) =>
+  //    newListingTags.map((item) => item.value).join(","),
+  //});
   //
+  //console.log("tagifyTags", tagifyTags);
+  //console.table("tagifyTags.value", tagifyTags.value);
   //
-  // console.log("tagifyTags", tagifyTags)
-  // console.table("tagifyTags.value", tagifyTags.value)
-  //
-  // console.log('newListingTags',newListingTags);
-
-  // console.log('STRINGIFY tagifyTags.value',JSON.stringify(tagifyTags.value));
-
-  // console.log('PARSE tagifyTags.value',JSON.parse(tagifyTags.value));
-
-  // const parsedTags = JSON.parse(newListingTags);
-  // const parsedPics = JSON.parse(newListingPics);
-  // console.log('newlistingpicsfield',newListingPicsField);
-
-  // console.log('newListingsPics', newListingPics);
+  //console.log("newListingTags", newListingTags);
+  //console.log("STRINGIFY tagifyTags.value", JSON.stringify(tagifyTags.value));
+  //console.log("PARSE tagifyTags.value", JSON.parse(tagifyTags.value));
+  //const parsedTags = JSON.parse(newListingTags);
+  //const parsedPics = JSON.parse(newListingPics);
+  console.log("newlistingpicsfield", newListingPicsField);
+  console.log("newListingsPics", newListingPics);
 
   const newListingValidated = isnewListingTitle && isnewListingDate;
 
   if (newListingValidated) {
     console.log("Validated newListing success");
     const newListingData = {
-      title: newListingTitle,
-      description: newListingDescription,
-      // "tags": newListingTags,
-      // "media": newListingPics,
+      title: newListingTitleField.value,
+      description: newListingDescription.value,
+      tags: tags,
+      media: pics,
       endsAt: newListingDateField.value,
     };
     const bearerKey = getToken();
