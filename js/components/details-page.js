@@ -420,13 +420,11 @@ ${loggedInSection}
   <hr>
   <div class="flex flex-wrap gap-4 p-2">
   <div class="listing-details">
-  <h1 class="text-2xl font-bold">Listing Title</h1>
-  <p class="text-gray-600">Listing description goes here...</p>
 
   <!-- HTML code for the list of similar listings -->
   <div class="similar-listings mt-8">
 
-    <h2 class="text-lg font-bold mb-4">Similar Listings</h2>
+    <h2 class="text-2xl font-bold mb-4">Similar Listings</h2>
 
     <ul class="list-none">
 

@@ -64,8 +64,12 @@
   </span>
   <body>
     <!--Tag posts-->
+    <h1 class="text-2xl text-center">
+      All items with the tag
+      <h1 id="heading" class="text-2xl text-center"></h1>
+    </h1>
+    <div id="tagContainer" class="flex flex-wrap gap-4 p-2"></div>
 
-    <div id="tagContainer" class="flex flex-wrap gap-4 p-2">tagContainer</div>
     <script>
       const options = { method: "GET" };
       const paramString = window.location.search;
@@ -98,6 +102,8 @@
           console.log("items", items);
           const itemsMapped = items
             .map((item) => {
+              const heading = document.getElementById("heading");
+              heading.innerText = tagText;
               const bidCount = item._count.bids;
               const bidsArray = item.bids;
               //const highestBid = bidsArray.reduce(

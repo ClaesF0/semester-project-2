@@ -200,10 +200,6 @@ function createHeaderBar() {
     })
     .catch((err) => console.error(err));
   /// //////END OF CALL 2/////////
-  console.log(
-    'localStorage.getItem("avatar", data.avatar)',
-    localStorage.getItem("avatar")
-  );
 
   let headerLinks = `
   <button

@@ -22,8 +22,6 @@ function collectUserName() {
   }
   return null;
 }
-console.log("user", collectUserName());
-console.log("getToken()", getToken());
 
 fetch(`https://api.noroff.dev/api/v1/auction/profiles/${collectUserName()}`, {
   method: "GET",
