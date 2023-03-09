@@ -147,7 +147,7 @@ async function createProfile() {
 
           <span class="gap-1 md:inline-flex text-center">
             <div class="flex p-1 bg-gray-100 w-30 h-12 rounded-sm w-fit">
-              <img src="./img/wallet.svg" alt="" class="h-10" />
+              <img src="../wallet.svg" alt="" class="h-10" />
               <p class="py-2" id="currentBalance">${credits} Credits</p>
               
             </div>
@@ -155,7 +155,7 @@ async function createProfile() {
           
           <a href="createlisting.html" data-mdb-ripple="true" data-mdb-ripple-color="light">
             <button class="flex p-1 bg-orange-300 w-30 h-12 rounded-full">
-              <img src="./img/gavel.svg" alt="" class="px-2 h-9" />
+              <img src="../gavel.svg" alt="" class="px-2 h-9" />
               <p class="py-2" id="">New Listing</p>
             </button>
             </a>

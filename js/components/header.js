@@ -227,7 +227,7 @@ function createHeaderBar() {
               aria-expanded="false"
             >
               <img
-                src="${localStorage.getItem("avatar")} || ./img/homeicon.svg "
+                src="${localStorage.getItem("avatar")} || ../profileicon.svg "
                 class="rounded-full"
                 style="height: 50px; width: 50px"
                 alt=""
@@ -276,7 +276,7 @@ function createHeaderBar() {
 >    
   <div class="mx-auto my-0 container-fluid w-full flex justify-evenly sm:w-4/5 ">
     <a class="text-xl text-white font-semibold p-2" href="index.html">
-        <img src="./img/homeicon.svg" alt=""
+        <img src="../homeicon.svg" alt=""
         class=""
             style="height: 30px; width: 30px"
             alt=""

@@ -208,7 +208,7 @@ Display details
 
 </p>
 <div class="collapse" id="collapseExample">
-<div class="flex-nowrap p-2 rounded-lg shadow-lg bg-white border-2 border-red-500">
+<div class="flex-nowrap p-2 rounded-lg shadow-lg bg-white">
   <p  class="text-gray-700 text-md font-medium mb-1 flex">Seller:
   <hr>
   <span class="text-gray-600 text-xs font-medium mb-1 flex">
