@@ -23,7 +23,8 @@ const otherErrorField = document.getElementById("otherErrorField");
 const newListingTitle = newListingTitleField.value;
 const newListingDate = newListingDateField.value;
 const newListingDescription = newListingDescriptionField.value;
-//const newListingTags = newListingTagsField.value;
+
+const newListingTags = newListingTagsField.value;
 const newListingPics = newListingPicsField.value;
 
 newListingForm.addEventListener("submit", (event) => {
@@ -70,21 +71,25 @@ newListingForm.addEventListener("submit", (event) => {
   //const parsedTags = JSON.parse(newListingTags);
   //const parsedPics = JSON.parse(newListingPics);
   console.log("newlistingpicsfield", newListingPicsField);
-  console.log("newListingsPics", newListingPics);
+  console.log("pics", pics);
+  console.log("tags", tags);
+  console.log("newListingTitle", newListingTitle);
+  console.log("newListingDescription", newListingDescription);
 
   const newListingValidated = isnewListingTitle && isnewListingDate;
 
   if (newListingValidated) {
     console.log("Validated newListing success");
     const newListingData = {
-      title: newListingTitleField.value,
-      description: newListingDescription.value,
+      title: newListingTitle,
+      description: newListingDescription,
       tags: tags,
       media: pics,
-      endsAt: newListingDateField.value,
+      endsAt: deadLineIso,
     };
+    //newListingDateField.value,
     const bearerKey = getToken();
-
+    console.log("newListingData", newListingData);
     // const USER_LOGIN_ENDPOINT = `${LOGIN_URL}`;
 
     async function createListing() {
