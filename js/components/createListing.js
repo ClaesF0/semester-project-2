@@ -4,7 +4,7 @@ import { getToken } from "../local-storage-related";
 import { CREATE_LISTING_URL } from "../api-related";
 
 const newListingForm = document.getElementById("newListingForm");
-
+const errorParagraph = document.getElementById("errorParagraph");
 const newListingTitleField = document.getElementById("newListingTitleField");
 const newListingDateField = document.getElementById("newListingDateField");
 const newListingDescriptionField = document.getElementById(
@@ -107,25 +107,24 @@ newListingForm.addEventListener("submit", (event) => {
           const data = await response.json();
           console.log("SUCCESS POSTING NEW LISTING data fra respons:", data);
           console.log("response suksess", response);
-          console.log("returned ID from response", response.id);
 
           const detailsPageURL = `detailspage.html?item_id=${data.id}?_seller=true&_bids=true`;
           location.replace(detailsPageURL);
         } else {
-          // const errorfromserver = "Error while communicating with server:" + await response.json();
-          const errorMessage = "something went wrong";
-          console.log("respons failure", response);
-          console.log("HERE IS BODY FROM UNSUCCESSFUL", response);
+          const ERROR = await response.json();
+          console.log("ERROR.errors[0].message", ERROR.errors[0].message);
 
-          throw new Error(errorMessage, response.json());
-          // console.log('error from server when creating new post:', errorfromserver);
+          errorParagraph.innerHTML = `The following error occured: ${ERROR.errors[0].message}`;
+
+          //throw new Error(errorMessage, response.json());
         }
       } catch (e) {
-        console.log(e);
+        console.log("dette er e.statusText", e);
       }
     }
     createListing();
   } else {
+    errorParagraph.innerHTML = `The following error occured: ${data.message} and ${e}`;
     otherErrorField.innerHTML = `The following error occured: ${data.message} and ${e}`;
   }
 });

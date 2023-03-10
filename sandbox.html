@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./img/gavel.svg" />
+    <link rel="icon" type="image/svg+xml" href="../gavel.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/main.js" defer></script>
     <script type="module" src="./js/local-storage-related.js" defer></script>
@@ -27,8 +27,8 @@
     <div id="top-bar-allocated-space" class="h-3"></div>
   </header>
   <div id="modalAccount"></div>
-
-  <span class="inline-block sm:flex justify-content-evenly">
+  <span class="hidden">
+    <!--<span class="inline-block sm:flex justify-content-evenly">-->
     <div>
       <select
         class="bg-gray-200 p-2 my-1 rounded-md text-teal-800 text-xl"
@@ -66,7 +66,10 @@
     <!--Tag posts-->
     <h1 class="text-2xl text-center">
       All items with the tag
-      <h1 id="heading" class="text-2xl text-center"></h1>
+      <h1
+        id="heading"
+        class="text-3xl text-center font-semibold text-teal-800"
+      ></h1>
     </h1>
     <div id="tagContainer" class="flex flex-wrap gap-4 p-2"></div>
 
@@ -106,6 +109,7 @@
               heading.innerText = tagText;
               const bidCount = item._count.bids;
               const bidsArray = item.bids;
+
               //const highestBid = bidsArray.reduce(
               //  (prev, current) =>
               //    prev.amount > current.amount ? prev : current,
@@ -116,8 +120,8 @@
               //if (currentBid == undefined) {
               //  currentBid = 0;
               //}
-
-              const { description } = item;
+              //
+              //const { description } = item;
               const deadline = item.endsAt;
               //let deadlineMoment = `Ends ${moment(deadline).fromNow()}`;
 
@@ -144,8 +148,8 @@
   
                           </div>
                           <div>
-                              <p class="text-teal-700 text-md pt-1">Bids: ${bidCount} Current bid: currentBid</p>
-                              <p class="text-gray-700 text-md pt-1">deadlineMoment</p>
+                              <p class="text-teal-700 text-md pt-1">Bids: ${bidCount} Current bid: </p>
+                              <p class="text-gray-700 text-md pt-1">${deadline}</p>
   
                           </div>
                       </a>
