@@ -417,11 +417,12 @@ ${loggedInSection}
   </div>       
   </div>
   <hr>
+  <h2 class="text-2xl w-full font-bold my-4 text-center">Similar Listings:</h2>
+        <hr>
   <div class="flex flex-wrap gap-4 p-2">
   <div class="listing-details">
   <!-- HTML code for the list of similar listings -->
   <div class="similar-listings mt-8">
-    <h2 class="text-2xl font-bold mb-4">Similar Listings</h2>
     <ul class="list-none">
     </ul>
     </div>
