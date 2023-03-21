@@ -1,4 +1,4 @@
-##Summary:
+## Summary:
 The goal of the project was to create an auction website using the skills learned over the past three semesters. An auction site was to be launched where users could add items to be bid on and bid on items put up for auction by other users. When a new user joined the website, they were given 1000 credits to use on the site. They could get credits by selling items and use credit by buying items. Non-registered users could search through the listings, but only registered users could make bids on listings.
 
 The project only covered the front-end application for the API, and all API functionality was managed by an existing application. The API used for the project could be found under Auction EndPoints in the Noroff API documentation.
@@ -11,7 +11,7 @@ The project used approved resources, including CSS processors such as SASS/SCSS 
 
 In the end, the project was delivered in the Moodle delivery window using the required template format. All final changes were merged into the default branch main or master, and the readme.md file described the project thoroughly, including how to set up and run the project locally and any special instructions for testers.
 
-##Quick start:
+## Quick start:
 https://tailwind-elements.com/quick-start/
 
 For this project you need to be familiar with:
